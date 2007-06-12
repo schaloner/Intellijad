@@ -24,4 +24,17 @@ public class ExclusionTableModel extends DefaultTableModel
     {
         return i == 0 ? String.class : Boolean.class;
     }
+
+    /**
+     * Add an exclusion to the table model.
+     *
+     * @param packageName the name of the package to exclude
+     * @param recursive   true iff all subpackages should also be excluded
+     */
+    public void addExclusion(String packageName,
+                             boolean recursive)
+    {
+        this.addRow(new Object[]{packageName,
+                                 recursive});
+    }
 }

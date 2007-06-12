@@ -2,39 +2,54 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 import net.stevechaloner.intellijad.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
+import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class DecompileDialog extends JDialog {
+public class DecompileDialog extends JDialog
+{
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JComboBox comboBox1;
     private JTabbedPane tabbedPane1;
     private JButton applyButton;
-    private JComboBox labelComboBox;
+    private JLabel confirmDecompileLabel;
+    private JCheckBox excludePackageCheckBox;
+    private JCheckBox excludeRecursivelyCheckBox;
 
     private final Project project;
 
     private final DecompilationChoiceListener listener;
 
-    public DecompileDialog(@NotNull Project project,
-                           @NotNull final DecompilationChoiceListener listener) {
+    private final String packageName;
+
+    public DecompileDialog(@NotNull String className,
+                           @NotNull String packageName,
+                           @NotNull Project project,
+                           @NotNull final DecompilationChoiceListener listener)
+    {
+        this.packageName = packageName;
         this.listener = listener;
         this.project = project;
 
@@ -42,81 +57,113 @@ public class DecompileDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        confirmDecompileLabel.setText(IntelliJadResourceBundle.message("message.confirm-decompile",
+                                                                       className));
+        excludePackageCheckBox.setText(IntelliJadResourceBundle.message("config.exclude-package",
+                                                                        packageName));
+        excludeRecursivelyCheckBox.setText(IntelliJadResourceBundle.message("config.exclude-recursively"));
+        excludePackageCheckBox.addChangeListener(new ChangeListener()
+        {
+
+            public void stateChanged(ChangeEvent e)
+            {
+                excludeRecursivelyCheckBox.setEnabled(excludePackageCheckBox.isSelected());
+            }
+        });
+
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);
         comboBox1.addItem(NavigationTriggeredDecompile.ASK);
         comboBox1.addItem(NavigationTriggeredDecompile.NEVER);
-        Config config = getComponent(ConfigComponent.class).getConfig();
-        if (config != null) {
-            comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()));
-        }
 
-        labelComboBox.addItem(NavigationTriggeredDecompile.ALWAYS);
-        labelComboBox.addItem(NavigationTriggeredDecompile.ASK);
-        labelComboBox.addItem(NavigationTriggeredDecompile.NEVER);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        buttonOK.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 onOK();
             }
         });
 
-        applyButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        applyButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 onApply();
             }
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        buttonCancel.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 onCancel();
             }
         });
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+        addWindowListener(new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent e)
+            {
                 onCancel();
             }
         });
 
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        contentPane.registerKeyboardAction(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 onCancel();
             }
         },
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
-                        0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                                           KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
+                                                                  0),
+                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onApply() {
+    private void onApply()
+    {
         Config config = getComponent(ConfigComponent.class).getConfig();
-        if (config != null) {
+        if (config != null)
+        {
             NavigationTriggeredDecompile option = (NavigationTriggeredDecompile) comboBox1.getSelectedItem();
             config.setConfirmNavigationTriggeredDecompile(option.getName());
+
+            if (excludePackageCheckBox.isSelected())
+            {
+                ExclusionTableModel tableModel = config.getExclusionTableModel();
+                tableModel.addExclusion(packageName,
+                                        excludeRecursivelyCheckBox.isSelected());
+            }
         }
     }
 
-    private void onOK() {
+    private void onOK()
+    {
         onApply();
         listener.decompile();
         dispose();
     }
 
-    private void onCancel() {
+    private void onCancel()
+    {
         dispose();
     }
 
-    public void setData(Config data) {
+    public void setData(Config data)
+    {
         System.out.println("DecompileDialog.setData");
+        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
+        excludeRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
         comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
     }
 
-    public void getData(Config data) {
+    public void getData(Config data)
+    {
         data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName());
     }
 
-    public boolean isModified(Config data) {
+    public boolean isModified(Config data)
+    {
         return !((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName().equals(data.getConfirmNavigationTriggeredDecompile());
     }
 
@@ -126,7 +173,8 @@ public class DecompileDialog extends JDialog {
      * @param clazz the component class
      * @return the required component
      */
-    private <C> C getComponent(Class<C> clazz) {
+    private <C> C getComponent(Class<C> clazz)
+    {
         return project.getComponent(clazz);
     }
 }

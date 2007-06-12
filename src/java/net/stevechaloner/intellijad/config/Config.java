@@ -83,9 +83,6 @@ public class Config implements DOMable
      */
     private final DOMable domable;
 
-//    private final DOMableTableModel exclusionTableModel = new DOMableTableModel("exclusions",
-//                                                                                new ExclusionTableModel());
-
     /**
      * The properties.
      */
@@ -880,6 +877,19 @@ public class Config implements DOMable
     public List<CommandLinePropertyDescriptor> getCommandLinePropertyDescriptors()
     {
         return commandLinePropertyDescriptors;
+    }
+
+    public String renderCommandLinePropertyDescriptors()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (CommandLinePropertyDescriptor pd : commandLinePropertyDescriptors)
+        {
+            sb.append(pd.getOption(ruleContext,
+                                   propertyContainer.get(pd)));
+        }
+
+        return sb.toString();
     }
 
     public ExclusionTableModel getExclusionTableModel()

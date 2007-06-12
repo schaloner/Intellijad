@@ -10,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Steve Chaloner
  */
-public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutablePropertyDescriptor<T> implements CommandLinePropertyDescriptor<T> {
+public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutablePropertyDescriptor<T> implements CommandLinePropertyDescriptor<T>
+{
     /**
      * Render type.
      */
@@ -26,11 +27,12 @@ public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutableProperty
      *
      * @param name the name of the property
      */
-    public ImmutableCommandLinePropertyDescriptor(String name) {
+    public ImmutableCommandLinePropertyDescriptor(String name)
+    {
         this(name,
-                null,
-                RenderRuleFactory.getDefaultRenderRule(),
-                RenderType.NAME_ONLY);
+             null,
+             RenderRuleFactory.getDefaultRenderRule(),
+             RenderType.NAME_ONLY);
     }
 
     /**
@@ -40,11 +42,12 @@ public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutableProperty
      * @param renderRule the rule to control rendering of this property
      */
     public ImmutableCommandLinePropertyDescriptor(String name,
-                                                  RenderRule renderRule) {
+                                                  RenderRule renderRule)
+    {
         this(name,
-                null,
-                renderRule,
-                RenderType.NAME_ONLY);
+             null,
+             renderRule,
+             RenderType.NAME_ONLY);
     }
 
     /**
@@ -58,34 +61,40 @@ public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutableProperty
     public ImmutableCommandLinePropertyDescriptor(String name,
                                                   T defaultValue,
                                                   RenderRule renderRule,
-                                                  RenderType renderType) {
+                                                  RenderType renderType)
+    {
         super(name,
-                defaultValue);
+              defaultValue);
         this.renderType = renderType;
         this.renderRule = renderRule;
     }
 
     // javadoc inherited
-    public RenderRule getRenderRule() {
+    public RenderRule getRenderRule()
+    {
         return renderRule;
     }
 
     // javadoc inherited
     public String getOption(@NotNull RuleContext ruleContext,
-                            DOMable<T> domable) {
+                            DOMable<T> domable)
+    {
         String s = "";
         if (renderRule.evaluate(ruleContext,
-                domable)) {
+                                domable))
+        {
             StringBuilder sb = new StringBuilder();
-            switch (renderType) {
+            switch (renderType)
+            {
                 case NAME_ONLY:
-                    sb.append('-').append(getName());
+                    sb.append('-').append(getName()).append(' ');
                     break;
                 case VALUE:
-                    sb.append(' ');
-                    // fall through...
+                    sb.append('-').append(getName()).append(' ').append(getValue(domable)).append(' ');
+                    break;
                 case VALUE_NO_SPACE:
-                    sb.append(getValue(domable));
+                    sb.append('-').append(getName());
+                    sb.append(getValue(domable)).append(' ');
                     break;
             }
             s = sb.toString();

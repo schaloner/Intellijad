@@ -2,106 +2,104 @@ package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import net.stevechaloner.intellijad.actions.DecompileDialog;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
-import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
+import net.stevechaloner.intellijad.util.PluginHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import java.io.File;
 
 public class IntelliJad implements ProjectComponent,
-        FileEditorManagerListener,
-        DecompilationChoiceListener {
+                                   DecompilationChoiceListener
+{
 
     public static final String COMPONENT_NAME = "net.stevechaloner.idea";
 
+    private final FileEditorManagerListener navigationListener;
+
     private final Project project;
 
-    public IntelliJad(Project project) {
+    public IntelliJad(Project project)
+    {
         this.project = project;
+        navigationListener = new NavigationDecompileListener(project,
+                                                             this);
     }
 
-    public void fileOpened(FileEditorManager source,
-                           VirtualFile file) {
-        // no-op
-    }
-
-    public void fileClosed(FileEditorManager source,
-                           VirtualFile file) {
-        // no-op
-    }
-
-    public void selectionChanged(FileEditorManagerEvent event) {
-
-        selectedFileChanged(event);
-    }
-
-    public void selectedFileChanged(final FileEditorManagerEvent e) {
-        VirtualFile file = e.getNewFile();
-        if (file != null && "class".equals(file.getExtension())) {
-            ConfigComponent configComponent = getComponent(ConfigComponent.class);
-            if (configComponent != null) {
-                Config config = configComponent.getConfig();
-                if (config != null) {
-                    switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile())) {
-                        case ALWAYS:
-                            decompile();
-                            break;
-                        case ASK:
-                            DecompileDialog dialog = new DecompileDialog(project,
-                                    this);
-                            dialog.pack();
-                            dialog.setVisible(true);
-                            break;
-                        case NEVER:
-                            JOptionPane.showMessageDialog(new JLabel(),
-                                    "NEVER");
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
+    // javadoc inherited
     @NotNull
-    public String getComponentName() {
+    public String getComponentName()
+    {
         return COMPONENT_NAME;
     }
 
-
-    public void projectOpened() {
-        FileEditorManager.getInstance(project).addFileEditorManagerListener(this);
+    // javadoc inherited
+    public void projectOpened()
+    {
+        FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
     }
 
-    public void projectClosed() {
-        FileEditorManager.getInstance(project).removeFileEditorManagerListener(this);
+    // javadoc inherited
+    public void projectClosed()
+    {
+        FileEditorManager.getInstance(project).removeFileEditorManagerListener(navigationListener);
     }
 
-    public void initComponent() {
+    // javadoc inherited
+    public void initComponent()
+    {
     }
 
-    public void disposeComponent() {
+    // javadoc inherited
+    public void disposeComponent()
+    {
     }
 
-    /**
-     * Get the required component.
-     * todo move this to a helper class
-     *
-     * @param clazz the component class
-     * @return the required component
-     */
-    private <C> C getComponent(Class<C> clazz) {
-        return project.getComponent(clazz);
+    // javadoc inherited
+    public void decompile()
+    {
+        ConfigComponent configComponent = PluginHelper.getComponent(project,
+                                                                    ConfigComponent.class);
+        Config config = configComponent.getConfig();
+        StringBuilder sb = new StringBuilder();
+        String jadPath = config.getJadPath();
+        try
+        {
+            validateJadPath(jadPath);
+            sb.append(jadPath).append(' ');
+            sb.append(config.renderCommandLinePropertyDescriptors());
+            System.out.println(sb.toString());
+        }
+        catch (IllegalArgumentException e)
+        {
+            JOptionPane.showMessageDialog(new JLabel(),
+                                          e.getMessage());
+        }
     }
 
-
-    public void decompile() {
-        System.out.println("IntelliJad.decompile");
+    private void validateJadPath(String path) throws IllegalArgumentException
+    {
+        if (path == null || path.trim().length() == 0)
+        {
+            throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.unspecified-jad-path"));
+        }
+        else
+        {
+            File f = new File(path);
+            if (!f.exists())
+            {
+                throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.non-existant-jad-path",
+                                                                                    path));
+            }
+            else if (!f.isFile())
+            {
+                throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.invalid-jad-path",
+                                                                                    path));
+            }
+        }
     }
 }

@@ -80,8 +80,8 @@ public class ConfigForm
     public ConfigForm(final Project project)
     {
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ALWAYS);
-        navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ASK);
+        navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
 
         classCountToUseSpinner.setModel(createSpinnerModel());
         packFieldsWithTheSpinner.setModel(createSpinnerModel());
@@ -144,8 +144,25 @@ public class ConfigForm
                 addExclusion();
             }
         });
+        actionRemoveExclusionButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                if (exclusionTableModel != null)
+                {
+                    int selectedRow = exclusionTable.getSelectedRow();
+                    if (selectedRow != -1)
+                    {
+                        exclusionTableModel.removeRow(selectedRow);
+                    }
+                }
+            }
+        });
     }
 
+    /**
+     * Exclude a package from decompilation.
+     */
     private void addExclusion()
     {
         if (exclusionTableModel != null)
@@ -187,6 +204,8 @@ public class ConfigForm
         spacesForIndentationSpinner.setValue(data.getIndentation());
         displayLongsUsingRadixSpinner.setValue(data.getLongRadix());
         displayIntegersUsingRadixSpinner.setValue(data.getIntRadix());
+        navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
+        decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
     }
 
     public void setData(Config data)
