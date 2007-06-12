@@ -1,0 +1,27 @@
+<idea-plugin>
+    <name>IntellIJad</name>
+    <description>Jad Java Decompiler plugin</description>
+    <version>0.1</version>
+    <vendor>Steve Chaloner</vendor>
+    <idea-version since-build="6180"/>
+
+    <project-components>
+        <component>
+            <implementation-class>net.stevechaloner.intellijad.IntelliJad</implementation-class>
+        </component>
+        <component>
+            <implementation-class>net.stevechaloner.intellijad.config.ConfigComponent</implementation-class>
+        </component>
+    </project-components>
+
+    <actions>
+        <action id="Decompile"
+                class="net.stevechaloner.intellijad.actions.DecompileAction"
+                text="Decompile"
+                description="Decompile classfile">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
+        </action>
+    </actions>
+</idea-plugin>
+
