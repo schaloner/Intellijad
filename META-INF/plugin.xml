@@ -5,6 +5,13 @@
     <vendor>Steve Chaloner</vendor>
     <idea-version since-build="6180"/>
 
+    <application-components>
+        <component>
+            <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>
+            <interface-class>com.intellij.openapi.vfs.VirtualFileSystem</interface-class>
+        </component>
+    </application-components>
+
     <project-components>
         <component>
             <implementation-class>net.stevechaloner.intellijad.IntelliJad</implementation-class>

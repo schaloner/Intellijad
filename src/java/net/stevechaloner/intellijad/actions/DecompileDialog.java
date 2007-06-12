@@ -1,12 +1,13 @@
 package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
-import net.stevechaloner.intellijad.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
+import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.util.PluginHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,14 +44,13 @@ public class DecompileDialog extends JDialog
 
     private final DecompilationChoiceListener listener;
 
-    private final String packageName;
+    private final DecompilationDescriptor decompilationDescriptor;
 
-    public DecompileDialog(@NotNull String className,
-                           @NotNull String packageName,
+    public DecompileDialog(@NotNull DecompilationDescriptor decompilationDescriptor,
                            @NotNull Project project,
                            @NotNull final DecompilationChoiceListener listener)
     {
-        this.packageName = packageName;
+        this.decompilationDescriptor = decompilationDescriptor;
         this.listener = listener;
         this.project = project;
 
@@ -59,9 +59,9 @@ public class DecompileDialog extends JDialog
         getRootPane().setDefaultButton(buttonOK);
 
         confirmDecompileLabel.setText(IntelliJadResourceBundle.message("message.confirm-decompile",
-                                                                       className));
+                                                                       decompilationDescriptor.getClassName()));
         excludePackageCheckBox.setText(IntelliJadResourceBundle.message("config.exclude-package",
-                                                                        packageName));
+                                                                        decompilationDescriptor.getPackageName()));
         excludeRecursivelyCheckBox.setText(IntelliJadResourceBundle.message("config.exclude-recursively"));
         excludePackageCheckBox.addChangeListener(new ChangeListener()
         {
@@ -138,7 +138,7 @@ public class DecompileDialog extends JDialog
             if (excludePackageCheckBox.isSelected())
             {
                 ExclusionTableModel tableModel = config.getExclusionTableModel();
-                tableModel.addExclusion(packageName,
+                tableModel.addExclusion(decompilationDescriptor.getPackageName(),
                                         excludeRecursivelyCheckBox.isSelected());
             }
         }
@@ -147,7 +147,7 @@ public class DecompileDialog extends JDialog
     private void onOK()
     {
         onApply();
-        listener.decompile();
+        listener.decompile(decompilationDescriptor);
         dispose();
     }
 

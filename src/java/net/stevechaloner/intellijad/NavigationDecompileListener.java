@@ -10,6 +10,8 @@ import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
+import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.util.PluginHelper;
 import net.stevechaloner.intellijad.util.SwingUtil;
 
@@ -57,6 +59,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
                 Config config = configComponent.getConfig();
                 if (config != null)
                 {
+                    DecompilationDescriptor dd = DecompilationDescriptor.create(file);
                     boolean excluded = isExcluded(config,
                                                   file);
                     switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
@@ -64,14 +67,13 @@ public class NavigationDecompileListener implements FileEditorManagerListener
                         case ALWAYS:
                             if (!excluded)
                             {
-                                decompilationListener.decompile();
+                                decompilationListener.decompile(dd);
                             }
                             break;
                         case ASK:
                             if (!excluded)
                             {
-                                DecompileDialog dialog = new DecompileDialog(file.getNameWithoutExtension(),
-                                                                             getPackageName(file),
+                                DecompileDialog dialog = new DecompileDialog(dd,
                                                                              project,
                                                                              decompilationListener);
                                 dialog.pack();

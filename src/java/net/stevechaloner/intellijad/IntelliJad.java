@@ -6,6 +6,11 @@ import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
+import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.Decompiler;
+import net.stevechaloner.intellijad.decompilers.DiskDecompiler;
+import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
 import net.stevechaloner.intellijad.util.PluginHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +65,7 @@ public class IntelliJad implements ProjectComponent,
     }
 
     // javadoc inherited
-    public void decompile()
+    public void decompile(DecompilationDescriptor decompilationDescriptor)
     {
         ConfigComponent configComponent = PluginHelper.getComponent(project,
                                                                     ConfigComponent.class);
@@ -72,13 +77,36 @@ public class IntelliJad implements ProjectComponent,
             validateJadPath(jadPath);
             sb.append(jadPath).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
-            System.out.println(sb.toString());
+            if (config.isDecompileToMemory())
+            {
+                decompileToMemory();
+            }
+            else
+            {
+                decompileToDisk();
+            }
         }
         catch (IllegalArgumentException e)
         {
             JOptionPane.showMessageDialog(new JLabel(),
                                           e.getMessage());
         }
+    }
+
+    /**
+     *
+     */
+    private void decompileToDisk()
+    {
+        Decompiler decompiler = new DiskDecompiler();
+    }
+
+    /**
+     *
+     */
+    private void decompileToMemory()
+    {
+        Decompiler decompiler = new MemoryDecompiler();
     }
 
     private void validateJadPath(String path) throws IllegalArgumentException
