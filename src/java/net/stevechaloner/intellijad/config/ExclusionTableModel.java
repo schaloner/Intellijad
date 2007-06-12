@@ -7,8 +7,10 @@ import javax.swing.table.DefaultTableModel;
 /**
  * @author Steve Chaloner
  */
-class ExcludesTableModel extends DefaultTableModel {
-    ExcludesTableModel() {
+public class ExclusionTableModel extends DefaultTableModel
+{
+    public ExclusionTableModel()
+    {
         setColumnCount(2);
         setColumnIdentifiers(new String[]
                 {
@@ -18,7 +20,8 @@ class ExcludesTableModel extends DefaultTableModel {
     }
 
 
-    public Class<?> getColumnClass(int i) {
+    public Class<?> getColumnClass(int i)
+    {
         return i == 0 ? String.class : Boolean.class;
     }
 }

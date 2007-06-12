@@ -4,6 +4,7 @@ import net.stevechaloner.idea.util.properties.DOMable;
 import net.stevechaloner.idea.util.properties.DOMableCollectionContentType;
 import net.stevechaloner.idea.util.properties.DOMableGeneric;
 import net.stevechaloner.idea.util.properties.DOMablePropertyContainer;
+import net.stevechaloner.idea.util.properties.DOMableTableModel;
 import net.stevechaloner.idea.util.properties.ImmutablePropertyDescriptor;
 import net.stevechaloner.idea.util.properties.PropertyContainer;
 import net.stevechaloner.idea.util.properties.PropertyDescriptor;
@@ -20,7 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Config implements DOMable {
+/**
+ * @author Steve Chaloner
+ */
+public class Config implements DOMable
+{
     private static final CommandLinePropertyDescriptor<Boolean> ANNOTATE = createBooleanProperty("a");
     private static final CommandLinePropertyDescriptor<Boolean> ANNOTATE_FULLY = createBooleanProperty("af");
     private static final CommandLinePropertyDescriptor<Boolean> CLEAR_PREFIXES = createBooleanProperty("clear");
@@ -31,6 +36,7 @@ public class Config implements DOMable {
     private static final PropertyDescriptor<Boolean> DECOMPILE_TO_MEMORY = new ImmutablePropertyDescriptor<Boolean>("decompile-to-memory");
     private static final CommandLinePropertyDescriptor<Boolean> DEFAULT_INITIALIZERS = createBooleanProperty("i");
     private static final CommandLinePropertyDescriptor<Boolean> DISASSEMBLER_ONLY = createBooleanProperty("dis");
+    private static final PropertyDescriptor<ExclusionTableModel> EXCLUSION_TABLE_MODEL = new ImmutablePropertyDescriptor<ExclusionTableModel>("exclusion-table-model");
     private static final CommandLinePropertyDescriptor<Boolean> FIELDS_FIRST = createBooleanProperty("ff");
     private static final CommandLinePropertyDescriptor<String> FILE_EXTENSION = createStringProperty("s", "java");
     private static final CommandLinePropertyDescriptor<Boolean> FULLY_QUALIFIED_NAMES = createBooleanProperty("f");
@@ -77,6 +83,9 @@ public class Config implements DOMable {
      */
     private final DOMable domable;
 
+//    private final DOMableTableModel exclusionTableModel = new DOMableTableModel("exclusions",
+//                                                                                new ExclusionTableModel());
+
     /**
      * The properties.
      */
@@ -86,7 +95,8 @@ public class Config implements DOMable {
 
     private final RuleContext ruleContext;
 
-    public Config(RuleContext ruleContext) {
+    public Config(RuleContext ruleContext)
+    {
         this.ruleContext = ruleContext;
         ruleContext.setConfig(this);
 
@@ -142,6 +152,10 @@ public class Config implements DOMable {
         registerBooleanProperty(VERBOSE, dpc);
         registerStringProperty(JAD_PATH, dpc);
 
+        dpc.put(EXCLUSION_TABLE_MODEL,
+                new DOMableTableModel(EXCLUSION_TABLE_MODEL.getName(),
+                                      new ExclusionTableModel()));
+
         this.domable = dpc;
         this.propertyContainer = dpc;
 
@@ -152,11 +166,12 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerBooleanProperty(PropertyDescriptor<Boolean> pd,
-                                         DOMablePropertyContainer dpc) {
+                                         DOMablePropertyContainer dpc)
+    {
         dpc.put(pd,
                 new DOMableGeneric<Boolean>(pd.getName(),
-                        ConverterFactory.getBooleanConverter(),
-                        DOMableCollectionContentType.BOOLEAN));
+                                            ConverterFactory.getBooleanConverter(),
+                                            DOMableCollectionContentType.BOOLEAN));
     }
 
     /**
@@ -164,11 +179,12 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerBooleanProperty(CommandLinePropertyDescriptor<Boolean> clpd,
-                                         DOMablePropertyContainer dpc) {
+                                         DOMablePropertyContainer dpc)
+    {
         dpc.put(clpd,
                 new DOMableGeneric<Boolean>(clpd.getName(),
-                        ConverterFactory.getBooleanConverter(),
-                        DOMableCollectionContentType.BOOLEAN));
+                                            ConverterFactory.getBooleanConverter(),
+                                            DOMableCollectionContentType.BOOLEAN));
         ruleContext.addProperty(clpd);
         commandLinePropertyDescriptors.add(clpd);
     }
@@ -178,11 +194,12 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerIntegerProperty(PropertyDescriptor<Integer> pd,
-                                         DOMablePropertyContainer dpc) {
+                                         DOMablePropertyContainer dpc)
+    {
         dpc.put(pd,
                 new DOMableGeneric<Integer>(pd.getName(),
-                        ConverterFactory.getIntegerConverter(),
-                        DOMableCollectionContentType.INTEGER));
+                                            ConverterFactory.getIntegerConverter(),
+                                            DOMableCollectionContentType.INTEGER));
     }
 
     /**
@@ -190,11 +207,12 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerIntegerProperty(CommandLinePropertyDescriptor<Integer> clpd,
-                                         DOMablePropertyContainer dpc) {
+                                         DOMablePropertyContainer dpc)
+    {
         dpc.put(clpd,
                 new DOMableGeneric<Integer>(clpd.getName(),
-                        ConverterFactory.getIntegerConverter(),
-                        DOMableCollectionContentType.INTEGER));
+                                            ConverterFactory.getIntegerConverter(),
+                                            DOMableCollectionContentType.INTEGER));
         ruleContext.addProperty(clpd);
         commandLinePropertyDescriptors.add(clpd);
     }
@@ -204,11 +222,12 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerStringProperty(PropertyDescriptor<String> pd,
-                                        DOMablePropertyContainer dpc) {
+                                        DOMablePropertyContainer dpc)
+    {
         dpc.put(pd,
                 new DOMableGeneric<String>(pd.getName(),
-                        ConverterFactory.getStringConverter(),
-                        DOMableCollectionContentType.STRING));
+                                           ConverterFactory.getStringConverter(),
+                                           DOMableCollectionContentType.STRING));
     }
 
     /**
@@ -216,484 +235,589 @@ public class Config implements DOMable {
      * @param dpc
      */
     private void registerStringProperty(CommandLinePropertyDescriptor<String> clpd,
-                                        DOMablePropertyContainer dpc) {
+                                        DOMablePropertyContainer dpc)
+    {
         dpc.put(clpd,
                 new DOMableGeneric<String>(clpd.getName(),
-                        ConverterFactory.getStringConverter(),
-                        DOMableCollectionContentType.STRING));
+                                           ConverterFactory.getStringConverter(),
+                                           DOMableCollectionContentType.STRING));
         ruleContext.addProperty(clpd);
         commandLinePropertyDescriptors.add(clpd);
     }
 
-    public String getConfirmNavigationTriggeredDecompile() {
+    public String getConfirmNavigationTriggeredDecompile()
+    {
         return CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE.getValue(propertyContainer.get(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE));
     }
 
-    public void setConfirmNavigationTriggeredDecompile(String confirmNavigationTriggeredDecompile) {
+    public void setConfirmNavigationTriggeredDecompile(String confirmNavigationTriggeredDecompile)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE);
         value.setValue(confirmNavigationTriggeredDecompile);
     }
 
-    public boolean isReadOnly() {
+    public boolean isReadOnly()
+    {
         return READ_ONLY.getValue(propertyContainer.get(READ_ONLY));
     }
 
-    public void setReadOnly(boolean readOnly) {
+    public void setReadOnly(boolean readOnly)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(READ_ONLY);
         value.setValue(readOnly);
     }
 
-    public boolean isAnnotate() {
+    public boolean isAnnotate()
+    {
         return ANNOTATE.getValue(propertyContainer.get(ANNOTATE));
     }
 
-    public void setAnnotate(boolean annotate) {
+    public void setAnnotate(boolean annotate)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(ANNOTATE);
         value.setValue(annotate);
     }
 
-    public boolean isAnnotateFully() {
+    public boolean isAnnotateFully()
+    {
         return ANNOTATE_FULLY.getValue(propertyContainer.get(ANNOTATE_FULLY));
     }
 
-    public void setAnnotateFully(boolean annotateFully) {
+    public void setAnnotateFully(boolean annotateFully)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(ANNOTATE_FULLY);
         value.setValue(annotateFully);
     }
 
-    public boolean isRedundantBraces() {
+    public boolean isRedundantBraces()
+    {
         return REDUNDANT_BRACES.getValue(propertyContainer.get(REDUNDANT_BRACES));
     }
 
-    public void setRedundantBraces(boolean redundantBraces) {
+    public void setRedundantBraces(boolean redundantBraces)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(REDUNDANT_BRACES);
         value.setValue(redundantBraces);
     }
 
-    public boolean isClearPrefixes() {
+    public boolean isClearPrefixes()
+    {
         return CLEAR_PREFIXES.getValue(propertyContainer.get(CLEAR_PREFIXES));
     }
 
-    public void setClearPrefixes(boolean clearPrefixes) {
+    public void setClearPrefixes(boolean clearPrefixes)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(CLEAR_PREFIXES);
         value.setValue(clearPrefixes);
     }
 
-    public String getOutputDirectory() {
+    public String getOutputDirectory()
+    {
         return OUTPUT_DIRECTORY.getValue(propertyContainer.get(OUTPUT_DIRECTORY));
     }
 
-    public void setOutputDirectory(String outputDirectory) {
+    public void setOutputDirectory(String outputDirectory)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(OUTPUT_DIRECTORY);
         value.setValue(outputDirectory);
     }
 
-    public boolean isDead() {
+    public boolean isDead()
+    {
         return DEAD.getValue(propertyContainer.get(DEAD));
     }
 
-    public void setDead(boolean dead) {
+    public void setDead(boolean dead)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(DEAD);
         value.setValue(dead);
     }
 
-    public boolean isDissassemblerOnly() {
+    public boolean isDissassemblerOnly()
+    {
         return DISASSEMBLER_ONLY.getValue(propertyContainer.get(DISASSEMBLER_ONLY));
     }
 
-    public void setDissassemblerOnly(boolean dissassemblerOnly) {
+    public void setDissassemblerOnly(boolean dissassemblerOnly)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(DISASSEMBLER_ONLY);
         value.setValue(dissassemblerOnly);
     }
 
-    public boolean isFullyQualifiedNames() {
+    public boolean isFullyQualifiedNames()
+    {
         return FULLY_QUALIFIED_NAMES.getValue(propertyContainer.get(FULLY_QUALIFIED_NAMES));
     }
 
-    public void setFullyQualifiedNames(boolean fullyQualifiedNames) {
+    public void setFullyQualifiedNames(boolean fullyQualifiedNames)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(FULLY_QUALIFIED_NAMES);
         value.setValue(fullyQualifiedNames);
     }
 
-    public boolean isFieldsFirst() {
+    public boolean isFieldsFirst()
+    {
         return FIELDS_FIRST.getValue(propertyContainer.get(FIELDS_FIRST));
     }
 
-    public void setFieldsFirst(boolean fieldsFirst) {
+    public void setFieldsFirst(boolean fieldsFirst)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(FIELDS_FIRST);
         value.setValue(fieldsFirst);
     }
 
-    public boolean isDefaultInitializers() {
+    public boolean isDefaultInitializers()
+    {
         return DEFAULT_INITIALIZERS.getValue(propertyContainer.get(DEFAULT_INITIALIZERS));
     }
 
-    public void setDefaultInitializers(boolean defaultInitializers) {
+    public void setDefaultInitializers(boolean defaultInitializers)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(DEFAULT_INITIALIZERS);
         value.setValue(defaultInitializers);
     }
 
-    public Integer getMaxStringLength() {
+    public Integer getMaxStringLength()
+    {
         return LIMIT_MAX_STRING_LENGTH.getValue(propertyContainer.get(LIMIT_MAX_STRING_LENGTH));
     }
 
-    public void setMaxStringLength(Integer maxStringLength) {
+    public void setMaxStringLength(Integer maxStringLength)
+    {
         DOMableGeneric<Integer> value = (DOMableGeneric<Integer>) propertyContainer.get(LIMIT_MAX_STRING_LENGTH);
         value.setValue(maxStringLength);
     }
 
-    public boolean isLineNumbersAsComments() {
+    public boolean isLineNumbersAsComments()
+    {
         return LINE_NUMBERS_AS_COMMENTS.getValue(propertyContainer.get(LINE_NUMBERS_AS_COMMENTS));
     }
 
-    public void setLineNumbersAsComments(boolean lineNumbersAsComments) {
+    public void setLineNumbersAsComments(boolean lineNumbersAsComments)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(LINE_NUMBERS_AS_COMMENTS);
         value.setValue(lineNumbersAsComments);
     }
 
-    public Integer getLongRadix() {
+    public Integer getLongRadix()
+    {
         return LIMIT_LONG_RADIX.getValue(propertyContainer.get(LIMIT_LONG_RADIX));
     }
 
-    public void setLongRadix(Integer longRadix) {
+    public void setLongRadix(Integer longRadix)
+    {
         DOMableGeneric<Integer> value = (DOMableGeneric<Integer>) propertyContainer.get(LIMIT_LONG_RADIX);
         value.setValue(longRadix);
     }
 
-    public boolean isSplitStringsAtNewline() {
+    public boolean isSplitStringsAtNewline()
+    {
         return SPLIT_STRINGS_AT_NEWLINE.getValue(propertyContainer.get(SPLIT_STRINGS_AT_NEWLINE));
     }
 
-    public void setSplitStringsAtNewline(boolean splitStringsAtNewline) {
+    public void setSplitStringsAtNewline(boolean splitStringsAtNewline)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(SPLIT_STRINGS_AT_NEWLINE);
         value.setValue(splitStringsAtNewline);
     }
 
-    public boolean isNoconv() {
+    public boolean isNoconv()
+    {
         return NOCONV.getValue(propertyContainer.get(NOCONV));
     }
 
-    public void setNoconv(boolean noconv) {
+    public void setNoconv(boolean noconv)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOCONV);
         value.setValue(noconv);
     }
 
-    public boolean isNocast() {
+    public boolean isNocast()
+    {
         return NOCAST.getValue(propertyContainer.get(NOCAST));
     }
 
-    public void setNocast(boolean nocast) {
+    public void setNocast(boolean nocast)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOCAST);
         value.setValue(nocast);
     }
 
-    public boolean isNoclass() {
+    public boolean isNoclass()
+    {
         return NOCLASS.getValue(propertyContainer.get(NOCLASS));
     }
 
-    public void setNoclass(boolean noclass) {
+    public void setNoclass(boolean noclass)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOCLASS);
         value.setValue(noclass);
     }
 
-    public boolean isNocode() {
+    public boolean isNocode()
+    {
         return NOCODE.getValue(propertyContainer.get(NOCODE));
     }
 
-    public void setNocode(boolean nocode) {
+    public void setNocode(boolean nocode)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOCODE);
         value.setValue(nocode);
     }
 
-    public boolean isNoctor() {
+    public boolean isNoctor()
+    {
         return NOCTOR.getValue(propertyContainer.get(NOCTOR));
     }
 
-    public void setNoctor(boolean noctor) {
+    public void setNoctor(boolean noctor)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOCTOR);
         value.setValue(noctor);
     }
 
-    public boolean isNodos() {
+    public boolean isNodos()
+    {
         return NODOS.getValue(propertyContainer.get(NODOS));
     }
 
-    public void setNodos(boolean nodos) {
+    public void setNodos(boolean nodos)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NODOS);
         value.setValue(nodos);
     }
 
-    public boolean isNofd() {
+    public boolean isNofd()
+    {
         return NOFD.getValue(propertyContainer.get(NOFD));
     }
 
-    public void setNofd(boolean nofd) {
+    public void setNofd(boolean nofd)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOFD);
         value.setValue(nofd);
     }
 
-    public boolean isNoinner() {
+    public boolean isNoinner()
+    {
         return NOINNER.getValue(propertyContainer.get(NOINNER));
     }
 
-    public void setNoinner(boolean noinner) {
+    public void setNoinner(boolean noinner)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOINNER);
         value.setValue(noinner);
     }
 
-    public boolean isNolvt() {
+    public boolean isNolvt()
+    {
         return NOLVT.getValue(propertyContainer.get(NOLVT));
     }
 
-    public void setNolvt(boolean nolvt) {
+    public void setNolvt(boolean nolvt)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NOLVT);
         value.setValue(nolvt);
     }
 
-    public boolean isNonlb() {
+    public boolean isNonlb()
+    {
         return NONLB.getValue(propertyContainer.get(NONLB));
     }
 
-    public void setNonlb(boolean nonlb) {
+    public void setNonlb(boolean nonlb)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(NONLB);
         value.setValue(nonlb);
 
     }
 
-    public Integer getIntRadix() {
+    public Integer getIntRadix()
+    {
         return LIMIT_INT_RADIX.getValue(propertyContainer.get(LIMIT_INT_RADIX));
     }
 
-    public void setIntRadix(Integer intRadix) {
+    public void setIntRadix(Integer intRadix)
+    {
         DOMableGeneric<Integer> value = (DOMableGeneric<Integer>) propertyContainer.get(LIMIT_INT_RADIX);
         value.setValue(intRadix);
     }
 
-    public String getFileExtension() {
+    public String getFileExtension()
+    {
         return FILE_EXTENSION.getValue(propertyContainer.get(FILE_EXTENSION));
     }
 
-    public void setFileExtension(String fileExtension) {
+    public void setFileExtension(String fileExtension)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(FILE_EXTENSION);
         value.setValue(fileExtension == null ? FILE_EXTENSION.getDefault() : fileExtension);
     }
 
-    public boolean isSafe() {
+    public boolean isSafe()
+    {
         return SAFE.getValue(propertyContainer.get(SAFE));
     }
 
-    public void setSafe(boolean safe) {
+    public void setSafe(boolean safe)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(SAFE);
         value.setValue(safe);
     }
 
-    public boolean isSpaceAfterKeyword() {
+    public boolean isSpaceAfterKeyword()
+    {
         return SPACE_AFTER_KEYWORD.getValue(propertyContainer.get(SPACE_AFTER_KEYWORD));
     }
 
-    public void setSpaceAfterKeyword(boolean spaceAfterKeyword) {
+    public void setSpaceAfterKeyword(boolean spaceAfterKeyword)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(SPACE_AFTER_KEYWORD);
         value.setValue(spaceAfterKeyword);
     }
 
-    public Integer getIndentation() {
+    public Integer getIndentation()
+    {
         return LIMIT_INDENTATION.getValue(propertyContainer.get(LIMIT_INDENTATION));
     }
 
-    public void setIndentation(Integer indentation) {
+    public void setIndentation(Integer indentation)
+    {
         DOMableGeneric<Integer> value = (DOMableGeneric<Integer>) propertyContainer.get(LIMIT_INDENTATION);
         value.setValue(indentation);
     }
 
-    public boolean isUseTabs() {
+    public boolean isUseTabs()
+    {
         return USE_TABS.getValue(propertyContainer.get(USE_TABS));
     }
 
-    public void setUseTabs(boolean useTabs) {
+    public void setUseTabs(boolean useTabs)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(SAFE);
         value.setValue(useTabs);
     }
 
-    public String getPrefixPackages() {
+    public String getPrefixPackages()
+    {
         return PREFIX_PACKAGES.getValue(propertyContainer.get(PREFIX_PACKAGES));
     }
 
-    public void setPrefixPackages(String prefixPackages) {
+    public void setPrefixPackages(String prefixPackages)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_PACKAGES);
         value.setValue(prefixPackages);
     }
 
-    public String getPrefixNumericalClasses() {
+    public String getPrefixNumericalClasses()
+    {
         return PREFIX_NUMERICAL_CLASSES.getValue(propertyContainer.get(PREFIX_NUMERICAL_CLASSES));
     }
 
-    public void setPrefixNumericalClasses(String prefixNumericalClasses) {
+    public void setPrefixNumericalClasses(String prefixNumericalClasses)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_NUMERICAL_CLASSES);
         value.setValue(prefixNumericalClasses);
     }
 
-    public String getPrefixUnusedExceptions() {
+    public String getPrefixUnusedExceptions()
+    {
         return PREFIX_UNUSED_EXCEPTIONS.getValue(propertyContainer.get(PREFIX_UNUSED_EXCEPTIONS));
     }
 
-    public void setPrefixUnusedExceptions(String prefixUnusedExceptions) {
+    public void setPrefixUnusedExceptions(String prefixUnusedExceptions)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_UNUSED_EXCEPTIONS);
         value.setValue(prefixUnusedExceptions);
     }
 
-    public String getPrefixNumericalFields() {
+    public String getPrefixNumericalFields()
+    {
         return PREFIX_NUMERICAL_FIELDS.getValue(propertyContainer.get(PREFIX_NUMERICAL_FIELDS));
     }
 
-    public void setPrefixNumericalFields(String prefixNumericalFields) {
+    public void setPrefixNumericalFields(String prefixNumericalFields)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_NUMERICAL_FIELDS);
         value.setValue(prefixNumericalFields);
     }
 
-    public String getPrefixNumericalLocals() {
+    public String getPrefixNumericalLocals()
+    {
         return PREFIX_NUMERICAL_LOCALS.getValue(propertyContainer.get(PREFIX_NUMERICAL_LOCALS));
     }
 
-    public void setPrefixNumericalLocals(String prefixNumericalLocals) {
+    public void setPrefixNumericalLocals(String prefixNumericalLocals)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_NUMERICAL_LOCALS);
         value.setValue(prefixNumericalLocals);
     }
 
-    public String getPrefixNumericalMethods() {
+    public String getPrefixNumericalMethods()
+    {
         return PREFIX_NUMERICAL_METHODS.getValue(propertyContainer.get(PREFIX_NUMERICAL_METHODS));
     }
 
-    public void setPrefixNumericalMethods(String prefixNumericalMethods) {
+    public void setPrefixNumericalMethods(String prefixNumericalMethods)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_NUMERICAL_METHODS);
         value.setValue(prefixNumericalMethods);
     }
 
-    public String getPrefixNumericalParameters() {
+    public String getPrefixNumericalParameters()
+    {
         return PREFIX_NUMERICAL_PARAMETERS.getValue(propertyContainer.get(PREFIX_NUMERICAL_PARAMETERS));
     }
 
-    public void setPrefixNumericalParameters(String prefixNumericalParameters) {
+    public void setPrefixNumericalParameters(String prefixNumericalParameters)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(PREFIX_NUMERICAL_PARAMETERS);
         value.setValue(prefixNumericalParameters);
     }
 
-    public Integer getPackFields() {
+    public Integer getPackFields()
+    {
         return LIMIT_PACK_FIELDS.getValue(propertyContainer.get(LIMIT_PACK_FIELDS));
     }
 
-    public void setPackFields(Integer packFields) {
+    public void setPackFields(Integer packFields)
+    {
         DOMableGeneric<Integer> value = (DOMableGeneric<Integer>) propertyContainer.get(LIMIT_PACK_FIELDS);
         value.setValue(packFields);
 
     }
 
-    public boolean isSort() {
+    public boolean isSort()
+    {
         return SORT.getValue(propertyContainer.get(SORT));
     }
 
-    public void setSort(boolean sort) {
+    public void setSort(boolean sort)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(SORT);
         value.setValue(sort);
     }
 
-    public boolean isVerbose() {
+    public boolean isVerbose()
+    {
         return VERBOSE.getValue(propertyContainer.get(VERBOSE));
     }
 
-    public void setVerbose(boolean verbose) {
+    public void setVerbose(boolean verbose)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(VERBOSE);
         value.setValue(verbose);
     }
 
-    public boolean isOverwrite() {
+    public boolean isOverwrite()
+    {
         return OVERWRITE.getValue(propertyContainer.get(OVERWRITE));
     }
 
-    public void setOverwrite(boolean overwrite) {
+    public void setOverwrite(boolean overwrite)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(OVERWRITE);
         value.setValue(overwrite);
     }
 
-    public boolean isStatistics() {
+    public boolean isStatistics()
+    {
         return STATISTICS.getValue(propertyContainer.get(STATISTICS));
     }
 
-    public void setStatistics(boolean statistics) {
+    public void setStatistics(boolean statistics)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(STATISTICS);
         value.setValue(statistics);
     }
 
-    public boolean isRestorePackages() {
+    public boolean isRestorePackages()
+    {
         return RESTORE_PACKAGES.getValue(propertyContainer.get(RESTORE_PACKAGES));
     }
 
-    public void setRestorePackages(boolean restorePackages) {
+    public void setRestorePackages(boolean restorePackages)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(RESTORE_PACKAGES);
         value.setValue(restorePackages);
     }
 
-    public boolean isPipe() {
+    public boolean isPipe()
+    {
         return PIPE.getValue(propertyContainer.get(PIPE));
     }
 
-    public void setPipe(boolean pipe) {
+    public void setPipe(boolean pipe)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(PIPE);
         value.setValue(pipe);
     }
 
-    public String getJadPath() {
+    public String getJadPath()
+    {
         return JAD_PATH.getValue(propertyContainer.get(JAD_PATH));
     }
 
-    public void setJadPath(String jadPath) {
+    public void setJadPath(String jadPath)
+    {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(JAD_PATH);
         value.setValue(jadPath);
     }
 
-    public boolean isDecompileToMemory() {
+    public boolean isDecompileToMemory()
+    {
         return DECOMPILE_TO_MEMORY.getValue(propertyContainer.get(DECOMPILE_TO_MEMORY));
     }
 
-    public void setDecompileToMemory(boolean decompileToMemory) {
+    public void setDecompileToMemory(boolean decompileToMemory)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(DECOMPILE_TO_MEMORY);
         value.setValue(decompileToMemory);
     }
 
-    public boolean isCreateOutputDirectory() {
+    public boolean isCreateOutputDirectory()
+    {
         return CREATE_OUTPUT_DIRECTORY.getValue(propertyContainer.get(CREATE_OUTPUT_DIRECTORY));
     }
 
-    public void setCreateOutputDirectory(boolean create) {
+    public void setCreateOutputDirectory(boolean create)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(CREATE_OUTPUT_DIRECTORY);
         value.setValue(create);
     }
 
-    public boolean isAlwaysExcludeRecursively() {
+    public boolean isAlwaysExcludeRecursively()
+    {
         return ALWAYS_EXCLUDE_RECURSIVELY.getValue(propertyContainer.get(ALWAYS_EXCLUDE_RECURSIVELY));
     }
 
-    public void setAlwaysExcludeRecursively(boolean alwaysExcludeRecursively) {
+    public void setAlwaysExcludeRecursively(boolean alwaysExcludeRecursively)
+    {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(ALWAYS_EXCLUDE_RECURSIVELY);
         value.setValue(alwaysExcludeRecursively);
     }
 
     @NotNull
-    public String getName() {
+    public String getName()
+    {
         return domable.getName();
     }
 
     @NotNull
-    public Element write() {
+    public Element write()
+    {
         return domable.write();
     }
 
     // javadoc inherited
-    public void read(@NotNull Element element) {
+    public void read(@NotNull Element element)
+    {
         domable.read(element);
     }
 
     // javadoc inherited
-    public Object getValue() {
+    public Object getValue()
+    {
         return null;
     }
 
@@ -703,9 +827,10 @@ public class Config implements DOMable {
      * @param name the name of the property
      * @return the property
      */
-    private static CommandLinePropertyDescriptor<String> createStringProperty(@NotNull String name) {
+    private static CommandLinePropertyDescriptor<String> createStringProperty(@NotNull String name)
+    {
         return createStringProperty(name,
-                null);
+                                    null);
     }
 
     /**
@@ -716,11 +841,12 @@ public class Config implements DOMable {
      * @return the property
      */
     private static CommandLinePropertyDescriptor<String> createStringProperty(@NotNull String name,
-                                                                              @Nullable String defaultValue) {
+                                                                              @Nullable String defaultValue)
+    {
         return new ImmutableCommandLinePropertyDescriptor<String>(name,
-                defaultValue,
-                RenderRuleFactory.getRenderRule(StringRules.NOT_EMPTY),
-                RenderType.VALUE);
+                                                                  defaultValue,
+                                                                  RenderRuleFactory.getRenderRule(StringRules.NOT_EMPTY),
+                                                                  RenderType.VALUE);
     }
 
     /**
@@ -729,9 +855,10 @@ public class Config implements DOMable {
      * @param name the name of the property
      * @return the property
      */
-    private static CommandLinePropertyDescriptor<Boolean> createBooleanProperty(@NotNull String name) {
+    private static CommandLinePropertyDescriptor<Boolean> createBooleanProperty(@NotNull String name)
+    {
         return new ImmutableCommandLinePropertyDescriptor<Boolean>(name,
-                RenderRuleFactory.getRenderRule(BooleanRules.TRUE));
+                                                                   RenderRuleFactory.getRenderRule(BooleanRules.TRUE));
     }
 
     /**
@@ -742,14 +869,21 @@ public class Config implements DOMable {
      * @return the property
      */
     private static CommandLinePropertyDescriptor<Integer> createIntegerProperty(@NotNull String name,
-                                                                                @Nullable Integer defaultValue) {
+                                                                                @Nullable Integer defaultValue)
+    {
         return new ImmutableCommandLinePropertyDescriptor<Integer>(name,
-                defaultValue,
-                RenderRuleFactory.getRenderRule(IntegerRules.NON_NEGATIVE),
-                RenderType.VALUE_NO_SPACE);
+                                                                   defaultValue,
+                                                                   RenderRuleFactory.getRenderRule(IntegerRules.NON_NEGATIVE),
+                                                                   RenderType.VALUE_NO_SPACE);
     }
 
-    public List<CommandLinePropertyDescriptor> getCommandLinePropertyDescriptors() {
+    public List<CommandLinePropertyDescriptor> getCommandLinePropertyDescriptors()
+    {
         return commandLinePropertyDescriptors;
+    }
+
+    public ExclusionTableModel getExclusionTableModel()
+    {
+        return EXCLUSION_TABLE_MODEL.getValue(propertyContainer.get(EXCLUSION_TABLE_MODEL));
     }
 }
