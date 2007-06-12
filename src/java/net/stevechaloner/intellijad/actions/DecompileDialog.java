@@ -7,6 +7,7 @@ import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ConfigComponent;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
+import net.stevechaloner.intellijad.util.PluginHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;
@@ -71,9 +72,15 @@ public class DecompileDialog extends JDialog
             }
         });
 
+        ConfigComponent cc = PluginHelper.getComponent(project,
+                                                       ConfigComponent.class);
+        Config config = cc.getConfig();
+        excludeRecursivelyCheckBox.setSelected(config.isAlwaysExcludeRecursively());
+
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);
         comboBox1.addItem(NavigationTriggeredDecompile.ASK);
         comboBox1.addItem(NavigationTriggeredDecompile.NEVER);
+        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()));
 
         buttonOK.addActionListener(new ActionListener()
         {
@@ -147,19 +154,6 @@ public class DecompileDialog extends JDialog
     private void onCancel()
     {
         dispose();
-    }
-
-    public void setData(Config data)
-    {
-        System.out.println("DecompileDialog.setData");
-        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
-        excludeRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
-        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
-    }
-
-    public void getData(Config data)
-    {
-        data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName());
     }
 
     public boolean isModified(Config data)

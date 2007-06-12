@@ -205,7 +205,6 @@ public class ConfigForm
         displayLongsUsingRadixSpinner.setValue(data.getLongRadix());
         displayIntegersUsingRadixSpinner.setValue(data.getIntRadix());
         navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
-        decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
     }
 
     public void setData(Config data)
@@ -250,6 +249,7 @@ public class ConfigForm
         data.setIndentation((Integer) spacesForIndentationSpinner.getValue());
         data.setLongRadix((Integer) displayLongsUsingRadixSpinner.getValue());
         data.setIntRadix((Integer) displayIntegersUsingRadixSpinner.getValue());
+        data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
     }
 
     public void getData(Config data)
