@@ -1,6 +1,7 @@
 package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
@@ -21,13 +22,31 @@ import java.io.File;
 public class IntelliJad implements ProjectComponent,
                                    DecompilationChoiceListener
 {
-
+    /**
+     *
+     */
     public static final String COMPONENT_NAME = "net.stevechaloner.idea";
 
+    /**
+     *
+     */
+    public static final String INTELLIJAD = "IntelliJad";
+
+    /**
+     * The listener for navigation-based events.
+     */
     private final FileEditorManagerListener navigationListener;
 
+    /**
+     * The project.
+     */
     private final Project project;
 
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param project the current project
+     */
     public IntelliJad(Project project)
     {
         this.project = project;
@@ -57,11 +76,13 @@ public class IntelliJad implements ProjectComponent,
     // javadoc inherited
     public void initComponent()
     {
+        // no-op
     }
 
     // javadoc inherited
     public void disposeComponent()
     {
+        // no-op
     }
 
     // javadoc inherited
@@ -88,13 +109,16 @@ public class IntelliJad implements ProjectComponent,
         }
         catch (IllegalArgumentException e)
         {
+            getLogger().error(e);
             JOptionPane.showMessageDialog(new JLabel(),
                                           e.getMessage());
         }
     }
 
     /**
-     * @param decompilationDescriptor
+     * Decompile the chosen class to disk.
+     *
+     * @param decompilationDescriptor a description of the class to decompile
      */
     private void decompileToDisk(DecompilationDescriptor decompilationDescriptor)
     {
@@ -104,7 +128,9 @@ public class IntelliJad implements ProjectComponent,
     }
 
     /**
-     * @param decompilationDescriptor
+     * Decompile the chosen class to memory.
+     *
+     * @param decompilationDescriptor a description of the class to decompile
      */
     private void decompileToMemory(DecompilationDescriptor decompilationDescriptor)
     {
@@ -113,6 +139,12 @@ public class IntelliJad implements ProjectComponent,
                              null);
     }
 
+    /**
+     * Validate the path to Jad as valid.
+     *
+     * @param path the path to Jad
+     * @throws IllegalArgumentException if the supplied path is incorrect
+     */
     private void validateJadPath(String path) throws IllegalArgumentException
     {
         if (path == null || path.trim().length() == 0)
@@ -133,5 +165,15 @@ public class IntelliJad implements ProjectComponent,
                                                                                     path));
             }
         }
+    }
+
+    /**
+     * Get the logger for this plugin.
+     *
+     * @return the logger
+     */
+    public static Logger getLogger()
+    {
+        return Logger.getInstance(INTELLIJAD);
     }
 }
