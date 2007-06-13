@@ -1,6 +1,7 @@
 package net.stevechaloner.intellijad.config;
 
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -31,10 +32,28 @@ public class ExclusionTableModel extends DefaultTableModel
      * @param packageName the name of the package to exclude
      * @param recursive   true iff all subpackages should also be excluded
      */
-    public void addExclusion(String packageName,
+    public void addExclusion(@NotNull String packageName,
                              boolean recursive)
     {
-        this.addRow(new Object[]{packageName,
-                                 recursive});
+
+        if (!containsPackage(packageName))
+        {
+            this.addRow(new Object[]{packageName,
+                                     recursive});
+        }
+    }
+
+    /**
+     * @param packageName
+     * @return
+     */
+    public boolean containsPackage(@NotNull String packageName)
+    {
+        boolean containsPackage = false;
+        for (int i = 0; !containsPackage && i < getRowCount(); i++)
+        {
+            containsPackage = packageName.equals(getValueAt(i, 0));
+        }
+        return containsPackage;
     }
 }

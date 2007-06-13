@@ -4,5 +4,6 @@ package net.stevechaloner.intellijad.decompilers;
  */
 public interface Decompiler
 {
-    void decompile(DecompilerContext context);
+    void decompile(DecompilationDescriptor decompilationDescriptor,
+                   DecompilerContext context);
 }

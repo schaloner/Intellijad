@@ -20,27 +20,27 @@ import java.util.StringTokenizer;
  */
 public class MemoryVirtualFileSystem extends VirtualFileSystem implements ApplicationComponent
 {
-
+    /**
+     *
+     */
     private final Map<String, MemoryVirtualFile> files = new HashMap<String, MemoryVirtualFile>();
 
-    public MemoryVirtualFileSystem()
-    {
-        MemoryVirtualFile root = new MemoryVirtualFile("root");
-        addFile(root);
-    }
-
-
+    /**
+     * @param file
+     */
     public void addFile(MemoryVirtualFile file)
     {
         files.put(file.getName(),
                   file);
     }
 
+    // javadoc inherited
     public String getProtocol()
     {
         return "mem";
     }
 
+    // javadoc inherited
     @Nullable
     public VirtualFile findFileByPath(String string)
     {
@@ -48,27 +48,32 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return files.get(s);
     }
 
+    // javadoc inherited
     public void refresh(boolean b)
     {
     }
 
+    // javadoc inherited
     @Nullable
     public VirtualFile refreshAndFindFileByPath(String string)
     {
         return files.get(string);
     }
 
+    // javadoc inherited
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
     }
 
+    // javadoc inherited
     protected void deleteFile(Object object,
                               VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
     }
 
+    // javadoc inherited
     protected void moveFile(Object object,
                             VirtualFile virtualFile,
                             VirtualFile virtualFile1) throws IOException
@@ -78,6 +83,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile1);
     }
 
+    // javadoc inherited
     protected void renameFile(Object object,
                               VirtualFile virtualFile,
                               String string) throws IOException
@@ -87,6 +93,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile);
     }
 
+    // javadoc inherited
     protected MemoryVirtualFile createChildFile(Object object,
                                                 VirtualFile virtualFile,
                                                 String string) throws IOException
@@ -96,6 +103,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
+    // javadoc inherited
     protected MemoryVirtualFile createChildDirectory(Object object,
                                                      VirtualFile virtualFile,
                                                      String string) throws IOException
@@ -105,7 +113,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
-
+    // javadoc inherited
     @NonNls
     @NotNull
     public String getComponentName()
@@ -113,15 +121,23 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return "MemoryFileSystem";
     }
 
+    // javadoc inherited
     public void initComponent()
     {
+        MemoryVirtualFile root = new MemoryVirtualFile("root");
+        addFile(root);
     }
 
+    // javadoc inherited
     public void disposeComponent()
     {
+        files.clear();
     }
 
-
+    /**
+     * @param packageName
+     * @return
+     */
     public MemoryVirtualFile getFileByPackage(String packageName)
     {
         StringTokenizer st = new StringTokenizer(packageName, ".");
@@ -134,6 +150,11 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                                 files.get("root"));
     }
 
+    /**
+     * @param names
+     * @param parent
+     * @return
+     */
     private MemoryVirtualFile getFileByPackage(List<String> names,
                                                MemoryVirtualFile parent)
     {

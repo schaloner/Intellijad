@@ -79,11 +79,11 @@ public class IntelliJad implements ProjectComponent,
             sb.append(config.renderCommandLinePropertyDescriptors());
             if (config.isDecompileToMemory())
             {
-                decompileToMemory();
+                decompileToMemory(decompilationDescriptor);
             }
             else
             {
-                decompileToDisk();
+                decompileToDisk(decompilationDescriptor);
             }
         }
         catch (IllegalArgumentException e)
@@ -94,19 +94,23 @@ public class IntelliJad implements ProjectComponent,
     }
 
     /**
-     *
+     * @param decompilationDescriptor
      */
-    private void decompileToDisk()
+    private void decompileToDisk(DecompilationDescriptor decompilationDescriptor)
     {
         Decompiler decompiler = new DiskDecompiler();
+        decompiler.decompile(decompilationDescriptor,
+                             null);
     }
 
     /**
-     *
+     * @param decompilationDescriptor
      */
-    private void decompileToMemory()
+    private void decompileToMemory(DecompilationDescriptor decompilationDescriptor)
     {
         Decompiler decompiler = new MemoryDecompiler();
+        decompiler.decompile(decompilationDescriptor,
+                             null);
     }
 
     private void validateJadPath(String path) throws IllegalArgumentException

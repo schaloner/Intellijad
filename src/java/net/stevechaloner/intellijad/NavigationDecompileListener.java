@@ -61,7 +61,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
                 {
                     DecompilationDescriptor dd = DecompilationDescriptor.create(file);
                     boolean excluded = isExcluded(config,
-                                                  file);
+                                                  dd);
                     switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
                     {
                         case ALWAYS:
@@ -91,46 +91,28 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         }
     }
 
+    /**
+     * Checks the exclusion settings to see if the class is eligable for decompilation.
+     *
+     * @param config                  the plugin configuration
+     * @param decompilationDescriptor the descriptor of the target class
+     * @return true if the class should not be decompiled
+     */
     private boolean isExcluded(Config config,
-                               VirtualFile file)
+                               DecompilationDescriptor decompilationDescriptor)
     {
         ExclusionTableModel exclusionModel = config.getExclusionTableModel();
-        String packageName = getPackageName(file);
-        boolean exclude = false;
+        String packageName = decompilationDescriptor.getPackageName();
+        boolean exclude = exclusionModel.containsPackage(packageName);
         for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
         {
             String pn = (String) exclusionModel.getValueAt(i, 0);
             if (pn != null)
             {
-                exclude = packageName.equals(pn) || (packageName.startsWith(pn) && (Boolean) exclusionModel.getValueAt(i, 1));
+                exclude = packageName.startsWith(pn) && (Boolean) exclusionModel.getValueAt(i, 1);
             }
         }
         return exclude;
-    }
-
-    private String getPackageName(VirtualFile file)
-    {
-        String path = file.getPath();
-        int index = path.indexOf("!");
-        String packageName = null;
-        if (index != -1)
-        {
-            String virtualPath = path.substring(index + 1);
-            if (virtualPath != null && virtualPath.length() > 0)
-            {
-                if (virtualPath.charAt(0) == '/')
-                {
-                    virtualPath = virtualPath.substring(1);
-                }
-                int lastIndex = virtualPath.lastIndexOf("/");
-                if (lastIndex != -1)
-                {
-                    virtualPath = virtualPath.substring(0, lastIndex);
-                }
-                packageName = virtualPath.replaceAll("/", ".");
-            }
-        }
-        return packageName;
     }
 
     // javadoc inherited

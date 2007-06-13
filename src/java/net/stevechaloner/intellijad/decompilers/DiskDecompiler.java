@@ -6,7 +6,9 @@ package net.stevechaloner.intellijad.decompilers;
 public class DiskDecompiler implements Decompiler
 {
     // javadoc inherited
-    public void decompile(DecompilerContext context)
+    public void decompile(DecompilationDescriptor decompilationDescriptor,
+                          DecompilerContext context)
     {
+        System.out.println("DiskDecompiler.decompile");
     }
 }

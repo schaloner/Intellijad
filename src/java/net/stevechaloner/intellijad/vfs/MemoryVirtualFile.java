@@ -54,7 +54,7 @@ public class MemoryVirtualFile extends VirtualFile
         this.content = content;
         this.isDirectory = isDirectory;
 
-        getMemoryVFS().addFile(this);
+//        getMemoryVFS().addFile(this);
     }
 
     @NotNull
@@ -79,7 +79,8 @@ public class MemoryVirtualFile extends VirtualFile
 
     public String getPath()
     {
-        return "mem://" + name;
+        VirtualFile parent = getParent();
+        return "mem://" + ((parent == null) ? name : parent.getPath() + name);
     }
 
     public boolean isWritable()
