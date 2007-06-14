@@ -21,12 +21,19 @@ import java.util.StringTokenizer;
 public class MemoryVirtualFileSystem extends VirtualFileSystem implements ApplicationComponent
 {
     /**
-     *
+     * The protocol name.
+     */
+    public static final String PROTOCOL = "intellijad";
+
+    /**
+     * The files.
      */
     private final Map<String, MemoryVirtualFile> files = new HashMap<String, MemoryVirtualFile>();
 
     /**
-     * @param file
+     * Add a file to the file system.
+     *
+     * @param file the file to add
      */
     public void addFile(MemoryVirtualFile file)
     {
@@ -37,7 +44,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     // javadoc inherited
     public String getProtocol()
     {
-        return "mem";
+        return PROTOCOL;
     }
 
     // javadoc inherited
@@ -135,8 +142,12 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     }
 
     /**
-     * @param packageName
-     * @return
+     * For a given package, e.g. net.stevechaloner.intellijad, get the file corresponding
+     * to the last element, e.g. intellijad.  If the file or any part of the directory tree
+     * does not exist, it is created dynamically.
+     *
+     * @param packageName the name of the package
+     * @return the file corresponding to the final location of the package
      */
     public MemoryVirtualFile getFileByPackage(String packageName)
     {
@@ -151,9 +162,12 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     }
 
     /**
-     * @param names
-     * @param parent
-     * @return
+     * Recursively search for, and if necessary create, the final file in the
+     * name list.
+     *
+     * @param names  the name list
+     * @param parent the parent file
+     * @return a file corresponding to the last entry in the name list
      */
     private MemoryVirtualFile getFileByPackage(List<String> names,
                                                MemoryVirtualFile parent)

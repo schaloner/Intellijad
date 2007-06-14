@@ -87,8 +87,8 @@ public class ConfigForm
         packFieldsWithTheSpinner.setModel(createSpinnerModel());
         splitStringsIntoPiecesSpinner.setModel(createSpinnerModel());
         spacesForIndentationSpinner.setModel(createSpinnerModel());
-        displayLongsUsingRadixSpinner.setModel(createSpinnerModel());
-        displayIntegersUsingRadixSpinner.setModel(createSpinnerModel());
+        displayLongsUsingRadixSpinner.setModel(new SpinnerRadixModel());
+        displayIntegersUsingRadixSpinner.setModel(new SpinnerRadixModel());
 
         button1.addActionListener(new FileSelectionAction(project,
                                                           outputDirectoryTextField,
@@ -414,5 +414,74 @@ public class ConfigForm
             return true;
         }
         return false;
+    }
+
+    private class SpinnerRadixModel extends SpinnerNumberModel
+    {
+        SpinnerRadixModel()
+        {
+            this(10);
+        }
+
+        SpinnerRadixModel(int value)
+        {
+            super(value,
+                  8,
+                  16,
+                  2);
+        }
+
+
+        public void setValue(Object object)
+        {
+            int value = ((Number) object).intValue();
+            if (value != 8 && value != 10 && value != 16)
+            {
+                object = 10;
+            }
+            super.setValue(object);
+        }
+
+        public Object getNextValue()
+        {
+            Number number = getNumber();
+            Integer next;
+            switch (number.intValue())
+            {
+                case 8:
+                    next = 10;
+                    break;
+                case 10:
+                    next = 16;
+                    break;
+                case 16:
+                    next = 8;
+                    break;
+                default:
+                    next = 8;
+            }
+            return next;
+        }
+
+        public Object getPreviousValue()
+        {
+            Number number = getNumber();
+            Integer previous;
+            switch (number.intValue())
+            {
+                case 8:
+                    previous = 16;
+                    break;
+                case 10:
+                    previous = 8;
+                    break;
+                case 16:
+                    previous = 10;
+                    break;
+                default:
+                    previous = 8;
+            }
+            return previous;
+        }
     }
 }

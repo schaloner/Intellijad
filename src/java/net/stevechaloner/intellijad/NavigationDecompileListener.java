@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.intellijad.actions.DecompileDialog;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.config.ConfigComponent;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
@@ -52,41 +51,34 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     {
         if (file != null && "class".equals(file.getExtension()))
         {
-            ConfigComponent configComponent = PluginHelper.getComponent(project,
-                                                                        ConfigComponent.class);
-            if (configComponent != null)
+            Config config = PluginHelper.getConfig(project);
+            DecompilationDescriptor dd = new DecompilationDescriptor(file);
+            boolean excluded = isExcluded(config,
+                                          dd);
+            switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
             {
-                Config config = configComponent.getConfig();
-                if (config != null)
-                {
-                    DecompilationDescriptor dd = DecompilationDescriptor.create(file);
-                    boolean excluded = isExcluded(config,
-                                                  dd);
-                    switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
+                case ALWAYS:
+                    if (!excluded)
                     {
-                        case ALWAYS:
-                            if (!excluded)
-                            {
-                                decompilationListener.decompile(dd);
-                            }
-                            break;
-                        case ASK:
-                            if (!excluded)
-                            {
-                                DecompileDialog dialog = new DecompileDialog(dd,
-                                                                             project,
-                                                                             decompilationListener);
-                                dialog.pack();
-                                SwingUtil.center(dialog);
-                                dialog.setVisible(true);
-                            }
-                            break;
-                        case NEVER:
-                            JOptionPane.showMessageDialog(new JLabel(),
-                                                          "NEVER");
-                            break;
+                        decompilationListener.decompile(dd);
                     }
-                }
+                    break;
+                case ASK:
+                    if (!excluded)
+                    {
+                        DecompileDialog dialog = new DecompileDialog(dd,
+                                                                     project,
+                                                                     decompilationListener);
+                        dialog.pack();
+                        SwingUtil.center(dialog);
+                        dialog.setAlwaysOnTop(true);
+                        dialog.setVisible(true);
+                    }
+                    break;
+                case NEVER:
+                    JOptionPane.showMessageDialog(new JLabel(),
+                                                  "NEVER");
+                    break;
             }
         }
     }

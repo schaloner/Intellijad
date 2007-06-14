@@ -8,34 +8,42 @@ import com.intellij.openapi.vfs.VirtualFile;
  */
 public class DecompilationDescriptor
 {
+    private VirtualFile classFile;
+    private String fqName;
     private String className;
     private String extension;
     private String packageName;
+    private String packageNameAsPath;
     private String path;
     private String pathToFile;
     private VirtualFile jarFile;
 
     /**
-     * @param className
-     * @param extension
-     * @param packageName
-     * @param path
-     * @param pathToFile
-     * @param jarFile
+     * @param file
      */
-    private DecompilationDescriptor(String className,
-                                    String extension,
-                                    String packageName,
-                                    String path,
-                                    String pathToFile,
-                                    VirtualFile jarFile)
+    public DecompilationDescriptor(VirtualFile file)
     {
-        this.className = className;
-        this.extension = extension;
-        this.packageName = packageName;
-        this.path = path;
-        this.pathToFile = pathToFile;
-        this.jarFile = jarFile;
+        this.classFile = file;
+        this.fqName = getFullyQualifiedName(file);
+        this.className = file.getNameWithoutExtension();
+        this.extension = file.getExtension();
+        this.packageName = getPackageName(file);
+        this.packageNameAsPath = getPackageNameAsPath(file);
+        this.path = file.getPath();
+        this.pathToFile = getPathToFile(file);
+        this.jarFile = getJarFile(file);
+    }
+
+    // javadoc unnecessary
+    public VirtualFile getClassFile()
+    {
+        return classFile;
+    }
+
+    // javadoc unnecessary
+    public String getFullyQualifiedName()
+    {
+        return fqName;
     }
 
     // javadoc unnecessary
@@ -63,6 +71,12 @@ public class DecompilationDescriptor
     }
 
     // javadoc unnecessary
+    public String getPackageNameAsPath()
+    {
+        return packageNameAsPath;
+    }
+
+    // javadoc unnecessary
     public VirtualFile getJarFile()
     {
         return jarFile;
@@ -72,17 +86,6 @@ public class DecompilationDescriptor
     public String getPathToFile()
     {
         return pathToFile;
-    }
-
-    public static DecompilationDescriptor create(VirtualFile file)
-    {
-        String path = file.getPath();
-        return new DecompilationDescriptor(file.getNameWithoutExtension(),
-                                           file.getExtension(),
-                                           getPackageName(file),
-                                           path,
-                                           getPathToFile(file),
-                                           getJarFile(file));
     }
 
     /**
@@ -146,6 +149,59 @@ public class DecompilationDescriptor
                     virtualPath = virtualPath.substring(0, lastIndex);
                 }
                 packageName = virtualPath.replaceAll("/", ".");
+            }
+        }
+        return packageName;
+    }
+
+    private static String getFullyQualifiedName(VirtualFile file)
+    {
+        String path = file.getPath();
+        int index = path.indexOf("!");
+        String packageName = null;
+        if (index != -1)
+        {
+            String virtualPath = path.substring(index + 1);
+            if (virtualPath != null && virtualPath.length() > 0)
+            {
+                if (virtualPath.charAt(0) == '/')
+                {
+                    virtualPath = virtualPath.substring(1);
+                }
+                if (virtualPath.endsWith(".class"))
+                {
+                    virtualPath = virtualPath.substring(0, virtualPath.length() - ".class".length());
+                }
+                packageName = virtualPath.replaceAll("/", ".");
+            }
+        }
+        return packageName;
+    }
+
+    /**
+     * @param file
+     * @return
+     */
+    private static String getPackageNameAsPath(VirtualFile file)
+    {
+        String path = file.getPath();
+        int index = path.indexOf("!");
+        String packageName = null;
+        if (index != -1)
+        {
+            String virtualPath = path.substring(index + 1);
+            if (virtualPath != null && virtualPath.length() > 0)
+            {
+                if (virtualPath.charAt(0) == '/')
+                {
+                    virtualPath = virtualPath.substring(1);
+                }
+                int lastIndex = virtualPath.lastIndexOf("/");
+                if (lastIndex != -1)
+                {
+                    virtualPath = virtualPath.substring(0, lastIndex + 1);
+                }
+                packageName = virtualPath;
             }
         }
         return packageName;

@@ -1,31 +1,41 @@
 package net.stevechaloner.intellijad;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.config.ConfigComponent;
+import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.Decompiler;
 import net.stevechaloner.intellijad.decompilers.DiskDecompiler;
 import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
 import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ *
+ */
 public class IntelliJad implements ProjectComponent,
                                    DecompilationChoiceListener
 {
     /**
      *
      */
-    public static final String COMPONENT_NAME = "net.stevechaloner.idea";
+    public static final String COMPONENT_NAME = "net.stevechaloner.intellijad.IntelliJad";
 
     /**
      *
@@ -43,6 +53,11 @@ public class IntelliJad implements ProjectComponent,
     private final Project project;
 
     /**
+     * The reporting console.
+     */
+    private final IntelliJadConsole console;
+
+    /**
      * Initialises a new instance of this class.
      *
      * @param project the current project
@@ -50,6 +65,7 @@ public class IntelliJad implements ProjectComponent,
     public IntelliJad(Project project)
     {
         this.project = project;
+        this.console = new IntelliJadConsole(project);
         navigationListener = new NavigationDecompileListener(project,
                                                              this);
     }
@@ -65,12 +81,37 @@ public class IntelliJad implements ProjectComponent,
     public void projectOpened()
     {
         FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
+        project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
+                            new ArrayList<Library>());
     }
 
     // javadoc inherited
     public void projectClosed()
     {
         FileEditorManager.getInstance(project).removeFileEditorManagerListener(navigationListener);
+        console.disposeConsole();
+
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                List<Library> list = project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES);
+                for (Library library : list)
+                {
+                    Library.ModifiableModel model = library.getModifiableModel();
+                    VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
+                    for (VirtualFile file : files)
+                    {
+                        if (file instanceof MemoryVirtualFile && file.getParent() == null)
+                        {
+                            model.removeRoot(file.getUrl(),
+                                             OrderRootType.SOURCES);
+                        }
+                    }
+                    model.commit();
+                }
+            }
+        });
     }
 
     // javadoc inherited
@@ -86,85 +127,65 @@ public class IntelliJad implements ProjectComponent,
     }
 
     // javadoc inherited
-    public void decompile(DecompilationDescriptor decompilationDescriptor)
+    public void decompile(DecompilationDescriptor descriptor)
     {
-        ConfigComponent configComponent = PluginHelper.getComponent(project,
-                                                                    ConfigComponent.class);
-        Config config = configComponent.getConfig();
-        StringBuilder sb = new StringBuilder();
+        Config config = PluginHelper.getConfig(project);
         String jadPath = config.getJadPath();
-        try
+        console.openConsole();
+        if (validateJadPath(jadPath))
         {
-            validateJadPath(jadPath);
+            StringBuilder sb = new StringBuilder();
             sb.append(jadPath).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
-            if (config.isDecompileToMemory())
+            DecompilationContext context = new DecompilationContext(project,
+                                                                    console,
+                                                                    sb.toString());
+            Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new DiskDecompiler();
+            try
             {
-                decompileToMemory(decompilationDescriptor);
+                decompiler.decompile(descriptor,
+                                     context);
+                FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
             }
-            else
+            catch (DecompilationException e)
             {
-                decompileToDisk(decompilationDescriptor);
+                console.appendToConsole(e.getMessage());
             }
         }
-        catch (IllegalArgumentException e)
-        {
-            getLogger().error(e);
-            JOptionPane.showMessageDialog(new JLabel(),
-                                          e.getMessage());
-        }
-    }
-
-    /**
-     * Decompile the chosen class to disk.
-     *
-     * @param decompilationDescriptor a description of the class to decompile
-     */
-    private void decompileToDisk(DecompilationDescriptor decompilationDescriptor)
-    {
-        Decompiler decompiler = new DiskDecompiler();
-        decompiler.decompile(decompilationDescriptor,
-                             null);
-    }
-
-    /**
-     * Decompile the chosen class to memory.
-     *
-     * @param decompilationDescriptor a description of the class to decompile
-     */
-    private void decompileToMemory(DecompilationDescriptor decompilationDescriptor)
-    {
-        Decompiler decompiler = new MemoryDecompiler();
-        decompiler.decompile(decompilationDescriptor,
-                             null);
     }
 
     /**
      * Validate the path to Jad as valid.
      *
      * @param path the path to Jad
-     * @throws IllegalArgumentException if the supplied path is incorrect
+     * @return true iff the path is ok
      */
-    private void validateJadPath(String path) throws IllegalArgumentException
+    private boolean validateJadPath(String path)
     {
+        String message = null;
         if (path == null || path.trim().length() == 0)
         {
-            throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.unspecified-jad-path"));
+            message = IntelliJadResourceBundle.message("error.unspecified-jad-path");
         }
         else
         {
             File f = new File(path);
             if (!f.exists())
             {
-                throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.non-existant-jad-path",
-                                                                                    path));
+                message = IntelliJadResourceBundle.message("error.non-existant-jad-path",
+                                                           path);
             }
             else if (!f.isFile())
             {
-                throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.invalid-jad-path",
-                                                                                    path));
+                message = IntelliJadResourceBundle.message("error.invalid-jad-path",
+                                                           path);
             }
         }
+        if (message != null)
+        {
+            console.appendToConsole(message);
+        }
+        return message == null;
     }
 
     /**

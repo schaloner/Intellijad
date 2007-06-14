@@ -1,23 +1,103 @@
 package net.stevechaloner.intellijad.console;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowManager;
+import net.stevechaloner.intellijad.util.PluginHelper;
+import org.jetbrains.annotations.NotNull;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Steve Chaloner
  */
 public class IntelliJadConsole
 {
+    private static final String TOOL_WINDOW_ID = "IntelliJad Console";
+    private static final String NEWLINE = System.getProperty("line.separator");
+
+    /**
+     * An empty implementation of {@link Runnable} for use with tool windows.
+     */
+    private static final Runnable EMPTY_RUNNABLE = new Runnable()
+    {
+        public void run()
+        {
+        }
+    };
+
     private JTabbedPane tabbedPane1;
-    private JPanel panel1;
+    private JPanel root;
     private JTextArea consoleTextArea;
-    private JTextArea inputTextArea;
-    private JTextArea outputTextArea;
+    private JToggleButton clearAndCloseOnSuccess;
+    private JButton button1;
+    private JToolBar toolbar;
+
+    private final Project project;
+
+    public IntelliJadConsole(@NotNull final Project project)
+    {
+        this.project = project;
+
+        toolbar.setFloatable(false);
+        clearAndCloseOnSuccess.setSelected(PluginHelper.getConfig(project).isClearAndCloseConsoleOnSuccess());
+        clearAndCloseOnSuccess.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                PluginHelper.getConfig(project).setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
+            }
+        });
+        button1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                clearConsoleContent();
+                closeConsole();
+            }
+        });
+    }
+
+    /**
+     * Opens the console.
+     */
+    public void openConsole()
+    {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindow window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
+        if (window == null)
+        {
+            window = toolWindowManager.registerToolWindow(IntelliJadConsole.TOOL_WINDOW_ID,
+                                                          getRoot(),
+                                                          ToolWindowAnchor.BOTTOM);
+        }
+        window.show(EMPTY_RUNNABLE);
+    }
+
+    /**
+     * Closes the console.
+     */
+    public void closeConsole()
+    {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindow window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
+        if (window != null)
+        {
+            window.hide(EMPTY_RUNNABLE);
+        }
+    }
 
     /**
      * Sets the content of the console.
@@ -58,7 +138,7 @@ public class IntelliJadConsole
         try
         {
             document.insertString(document.getLength(),
-                                  content,
+                                  content + NEWLINE,
                                   null);
         }
         catch (BadLocationException e)
@@ -68,58 +148,25 @@ public class IntelliJadConsole
     }
 
     /**
-     * Sets the content of the output view.
+     * Get the root component of the view.
      *
-     * @param content the content
+     * @return the root component
      */
-    public void setOutputContent(String content)
+    public JComponent getRoot()
     {
-        outputTextArea.setText(content);
+        return root;
     }
 
-    /**
-     * Gets the content of the output view.
-     *
-     * @return the content
-     */
-    public String getOutputContent()
+    public void disposeConsole()
     {
-        return outputTextArea.getText();
-    }
-
-    /**
-     * Clears the output view.
-     */
-    public void clearOutputContent()
-    {
-        setOutputContent("");
-    }
-
-    /**
-     * Sets the content of the input view.
-     *
-     * @param content the content
-     */
-    public void setInputContent(String content)
-    {
-        inputTextArea.setText(content);
-    }
-
-    /**
-     * Gets the content of the input view.
-     *
-     * @return the content
-     */
-    public String getInputContent()
-    {
-        return inputTextArea.getText();
-    }
-
-    /**
-     * Clears the input view.
-     */
-    public void clearInputContent()
-    {
-        setInputContent("");
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        try
+        {
+            toolWindowManager.unregisterToolWindow(TOOL_WINDOW_ID);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // ignore - this can occur due to lazy initialization
+        }
     }
 }

@@ -32,6 +32,7 @@ public class Config implements DOMable
     private static final PropertyDescriptor<String> CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE = new ImmutablePropertyDescriptor<String>("confirm-navigation-triggered-decompile");
     private static final PropertyDescriptor<Boolean> CREATE_OUTPUT_DIRECTORY = new ImmutablePropertyDescriptor<Boolean>("create-output-directory");
     private static final PropertyDescriptor<Boolean> ALWAYS_EXCLUDE_RECURSIVELY = new ImmutablePropertyDescriptor<Boolean>("always-exclude-recursively");
+    private static final PropertyDescriptor<Boolean> CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS = new ImmutablePropertyDescriptor<Boolean>("clear-and-close-console-on-success");
     private static final CommandLinePropertyDescriptor<Boolean> DEAD = createBooleanProperty("dead");
     private static final PropertyDescriptor<Boolean> DECOMPILE_TO_MEMORY = new ImmutablePropertyDescriptor<Boolean>("decompile-to-memory");
     private static final CommandLinePropertyDescriptor<Boolean> DEFAULT_INITIALIZERS = createBooleanProperty("i");
@@ -103,6 +104,7 @@ public class Config implements DOMable
         registerBooleanProperty(CLEAR_PREFIXES, dpc);
         registerBooleanProperty(CREATE_OUTPUT_DIRECTORY, dpc);
         registerStringProperty(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE, dpc);
+        registerBooleanProperty(CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS, dpc);
         registerBooleanProperty(ALWAYS_EXCLUDE_RECURSIVELY, dpc);
         registerBooleanProperty(DEAD, dpc);
         registerBooleanProperty(DECOMPILE_TO_MEMORY, dpc);
@@ -794,6 +796,18 @@ public class Config implements DOMable
         value.setValue(alwaysExcludeRecursively);
     }
 
+    public boolean isClearAndCloseConsoleOnSuccess()
+    {
+        return CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS.getValue(propertyContainer.get(CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS));
+    }
+
+    public void setClearAndCloseConsoleOnSuccess(boolean clearAndClose)
+    {
+        System.out.println("Config.setClearAndCloseConsoleOnSuccess: " + clearAndClose);
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS);
+        value.setValue(clearAndClose);
+    }
+
     @NotNull
     public String getName()
     {
@@ -895,5 +909,20 @@ public class Config implements DOMable
     public ExclusionTableModel getExclusionTableModel()
     {
         return EXCLUSION_TABLE_MODEL.getValue(propertyContainer.get(EXCLUSION_TABLE_MODEL));
+    }
+
+    public List<String> getArguments()
+    {
+        List<String> arguments = new ArrayList<String>();
+        for (CommandLinePropertyDescriptor pd : commandLinePropertyDescriptors)
+        {
+            String option = pd.getOption(ruleContext,
+                                         propertyContainer.get(pd));
+            if (option != null)
+            {
+                arguments.add(option);
+            }
+        }
+        return arguments;
     }
 }

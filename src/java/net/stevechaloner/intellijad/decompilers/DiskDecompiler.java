@@ -7,8 +7,8 @@ public class DiskDecompiler implements Decompiler
 {
     // javadoc inherited
     public void decompile(DecompilationDescriptor decompilationDescriptor,
-                          DecompilerContext context)
+                          DecompilationContext context) throws DecompilationException
     {
-        System.out.println("DiskDecompiler.decompile");
+        throw new DecompilationException(new UnsupportedOperationException());
     }
 }
