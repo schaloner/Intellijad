@@ -198,7 +198,6 @@ public class ConfigForm
     {
         exclusionTableModel = data.getExclusionTableModel();
         exclusionTable.setModel(exclusionTableModel);
-//        classCountToUseSpinner.setValue(data.get);
         packFieldsWithTheSpinner.setValue(data.getPackFields());
         splitStringsIntoPiecesSpinner.setValue(data.getMaxStringLength());
         spacesForIndentationSpinner.setValue(data.getIndentation());
@@ -243,7 +242,6 @@ public class ConfigForm
 
     private void getUnboundData(Config data)
     {
-//        classCountToUseSpinner.setValue(data.get);
         data.setPackFields((Integer) packFieldsWithTheSpinner.getValue());
         data.setMaxStringLength((Integer) splitStringsIntoPiecesSpinner.getValue());
         data.setIndentation((Integer) spacesForIndentationSpinner.getValue());
