@@ -6,6 +6,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -30,7 +32,8 @@ import java.util.List;
  *
  */
 public class IntelliJad implements ProjectComponent,
-                                   DecompilationChoiceListener
+                                   DecompilationChoiceListener,
+                                   ProjectManagerListener
 {
     /**
      *
@@ -80,9 +83,55 @@ public class IntelliJad implements ProjectComponent,
     // javadoc inherited
     public void projectOpened()
     {
+        ProjectManager.getInstance().addProjectManagerListener(this);
         FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
                             new ArrayList<Library>());
+    }
+
+
+    public void projectOpened(Project project)
+    {
+        // no-op
+    }
+
+    public boolean canCloseProject(Project project)
+    {
+        // no-op
+        return true;
+    }
+
+    public void projectClosed(Project project)
+    {
+        // no-op
+    }
+
+    public void projectClosing(Project project)
+    {
+        if (this.project.equals(project))
+        {
+            ApplicationManager.getApplication().runWriteAction(new Runnable()
+            {
+                public void run()
+                {
+                    List<Library> list = IntelliJad.this.project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES);
+                    for (Library library : list)
+                    {
+                        Library.ModifiableModel model = library.getModifiableModel();
+                        VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
+                        for (VirtualFile file : files)
+                        {
+                            if (file instanceof MemoryVirtualFile && file.getParent() == null)
+                            {
+                                model.removeRoot(file.getUrl(),
+                                                 OrderRootType.SOURCES);
+                            }
+                        }
+                        model.commit();
+                    }
+                }
+            });
+        }
     }
 
     // javadoc inherited
@@ -90,28 +139,7 @@ public class IntelliJad implements ProjectComponent,
     {
         FileEditorManager.getInstance(project).removeFileEditorManagerListener(navigationListener);
         console.disposeConsole();
-
-        ApplicationManager.getApplication().runWriteAction(new Runnable()
-        {
-            public void run()
-            {
-                List<Library> list = project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES);
-                for (Library library : list)
-                {
-                    Library.ModifiableModel model = library.getModifiableModel();
-                    VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
-                    for (VirtualFile file : files)
-                    {
-                        if (file instanceof MemoryVirtualFile && file.getParent() == null)
-                        {
-                            model.removeRoot(file.getUrl(),
-                                             OrderRootType.SOURCES);
-                        }
-                    }
-                    model.commit();
-                }
-            }
-        });
+        ProjectManager.getInstance().removeProjectManagerListener(this);
     }
 
     // javadoc inherited
@@ -143,9 +171,14 @@ public class IntelliJad implements ProjectComponent,
             Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new DiskDecompiler();
             try
             {
-                decompiler.decompile(descriptor,
-                                     context);
-                FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
+                VirtualFile decompiledFile = decompiler.decompile(descriptor,
+                                                                  context);
+                if (decompiledFile != null)
+                {
+                    FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
+                    FileEditorManager.getInstance(project).openFile(decompiledFile,
+                                                                    true);
+                }
             }
             catch (DecompilationException e)
             {

@@ -1,14 +1,25 @@
 package net.stevechaloner.intellijad.decompilers;
 
+import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.ByteArrayOutputStream;
+
 /**
  * @author Steve Chaloner
  */
-public class DiskDecompiler implements Decompiler
+public class DiskDecompiler extends AbstractDecompiler
 {
     // javadoc inherited
-    public void decompile(DecompilationDescriptor decompilationDescriptor,
-                          DecompilationContext context) throws DecompilationException
+    protected VirtualFile processOutput(DecompilationDescriptor descriptor,
+                                        DecompilationContext context,
+                                        ByteArrayOutputStream content) throws DecompilationException
     {
         throw new DecompilationException(new UnsupportedOperationException());
+    }
+
+    // javadoc inherited
+    protected void updateCommand(StringBuilder builder)
+    {
+        builder.append(" -o ");
     }
 }

@@ -11,6 +11,7 @@ import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginHelper;
 import net.stevechaloner.intellijad.util.SwingUtil;
 
@@ -52,7 +53,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         if (file != null && "class".equals(file.getExtension()))
         {
             Config config = PluginHelper.getConfig(project);
-            DecompilationDescriptor dd = new DecompilationDescriptor(file);
+            DecompilationDescriptor dd = DecompilationDescriptorFactory.create(file);
             boolean excluded = isExcluded(config,
                                           dd);
             switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))

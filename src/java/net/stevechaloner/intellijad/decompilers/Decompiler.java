@@ -1,9 +1,11 @@
 package net.stevechaloner.intellijad.decompilers;
 
+import com.intellij.openapi.vfs.VirtualFile;
+
 /**
  */
 public interface Decompiler
 {
-    void decompile(DecompilationDescriptor decompilationDescriptor,
-                   DecompilationContext context) throws DecompilationException;
+    VirtualFile decompile(DecompilationDescriptor decompilationDescriptor,
+                          DecompilationContext context) throws DecompilationException;
 }
