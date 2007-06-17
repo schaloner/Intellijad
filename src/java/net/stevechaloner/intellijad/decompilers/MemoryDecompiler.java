@@ -9,6 +9,7 @@ import com.intellij.openapi.roots.libraries.LibraryUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
@@ -30,11 +31,11 @@ public class MemoryDecompiler extends AbstractDecompiler
         vfs.addFile(file);
 
         Project project = context.getProject();
-        final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
-                                                           project);
         MemoryVirtualFile showdom = vfs.getFileByPackage(descriptor.getPackageName());
         showdom.addChild(file);
 
+        final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
+                                                           project);
         if (lib != null)
         {
             ApplicationManager.getApplication().runWriteAction(new Runnable()
@@ -61,6 +62,15 @@ public class MemoryDecompiler extends AbstractDecompiler
 
 
             project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(lib);
+            context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
+                                                                                  descriptor.getClassName(),
+                                                                                  lib.getName()));
+        }
+        else
+        {
+            context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.library-not-found-for-class",
+                                                                                  descriptor.getClassName()));
+
         }
 
         return file;

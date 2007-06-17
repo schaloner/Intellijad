@@ -42,7 +42,6 @@ public class ConfigForm
     private JTextField parametersWithNumericalNamesTextField;
     private JTextField allPackagesTextField;
     private JTextField unusedExceptionNamesTextField;
-    private JSpinner classCountToUseSpinner;
     private JSpinner packFieldsWithTheSpinner;
     private JSpinner splitStringsIntoPiecesSpinner;
     private JSpinner spacesForIndentationSpinner;
@@ -83,7 +82,6 @@ public class ConfigForm
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ASK);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
 
-        classCountToUseSpinner.setModel(createSpinnerModel());
         packFieldsWithTheSpinner.setModel(createSpinnerModel());
         splitStringsIntoPiecesSpinner.setModel(createSpinnerModel());
         spacesForIndentationSpinner.setModel(createSpinnerModel());

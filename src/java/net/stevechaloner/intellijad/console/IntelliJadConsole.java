@@ -5,27 +5,54 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
+import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.util.PluginHelper;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @author Steve Chaloner
  */
 public class IntelliJadConsole
 {
+    /**
+     * The display logo.
+     */
+    private static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-12.png"));
+
+    /**
+     * The tool window ID.
+     */
     private static final String TOOL_WINDOW_ID = "IntelliJad Console";
+
+    /**
+     * The system-dependent newline character.
+     */
     private static final String NEWLINE = System.getProperty("line.separator");
 
     /**
@@ -35,6 +62,19 @@ public class IntelliJadConsole
     {
         public void run()
         {
+            // no-op
+        }
+    };
+
+    /**
+     * An empty implementation of {@link ClipboardOwner} for use with the system clipboard.
+     */
+    private static final ClipboardOwner EMPTY_CLIPBOARD_OWNER = new ClipboardOwner()
+    {
+        public void lostOwnership(Clipboard clipboard,
+                                  Transferable transferable)
+        {
+            // no-op
         }
     };
 
@@ -42,11 +82,19 @@ public class IntelliJadConsole
     private JPanel root;
     private JTextArea consoleTextArea;
     private JToggleButton clearAndCloseOnSuccess;
-    private JButton button1;
+    private JButton closeButton;
     private JToolBar toolbar;
 
+    /**
+     * The project.
+     */
     private final Project project;
 
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param project the project
+     */
     public IntelliJadConsole(@NotNull final Project project)
     {
         this.project = project;
@@ -60,14 +108,56 @@ public class IntelliJadConsole
                 PluginHelper.getConfig(project).setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
             }
         });
-        button1.addActionListener(new ActionListener()
+        closeButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                closeConsole();
+            }
+        });
+
+        final JPopupMenu menu = new JPopupMenu();
+        JMenuItem item = menu.add(new AbstractAction()
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
                 clearConsoleContent();
-                closeConsole();
             }
         });
+        item.setText(IntelliJadResourceBundle.message("action.clear"));
+        item = menu.add(new AbstractAction()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(new StringSelection(consoleTextArea.getText()),
+                                      EMPTY_CLIPBOARD_OWNER);
+            }
+        });
+        item.setText(IntelliJadResourceBundle.message("action.copy-content"));
+        consoleTextArea.addMouseListener(new MouseAdapter()
+        {
+            public void mouseReleased(MouseEvent e)
+            {
+                maybeShowPopup(e);
+            }
+
+            public void mousePressed(MouseEvent e)
+            {
+                maybeShowPopup(e);
+            }
+
+            private void maybeShowPopup(MouseEvent e)
+            {
+                if (e.isPopupTrigger())
+                {
+                    menu.show(e.getComponent(),
+                              e.getX(),
+                              e.getY());
+                }
+            }
+        });
+        consoleTextArea.setBackground(Color.white);
     }
 
     /**
@@ -83,6 +173,7 @@ public class IntelliJadConsole
                                                           getRoot(),
                                                           ToolWindowAnchor.BOTTOM);
         }
+        window.setIcon(LOGO);
         window.show(EMPTY_RUNNABLE);
     }
 

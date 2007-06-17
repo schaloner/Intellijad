@@ -44,8 +44,10 @@ public class ExclusionTableModel extends DefaultTableModel
     }
 
     /**
-     * @param packageName
-     * @return
+     * Checks if the package is already specified in the model.
+     *
+     * @param packageName the name of the package
+     * @return true iff the model already contains the package
      */
     public boolean containsPackage(@NotNull String packageName)
     {

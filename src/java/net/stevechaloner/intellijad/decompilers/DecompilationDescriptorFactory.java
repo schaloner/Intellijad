@@ -2,85 +2,89 @@ package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.vfs.VirtualFile;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Factory for creating {@link DecompilationDescriptor}s based on a virtual file representing the target class.
+ *
  * @author Steve Chaloner
  */
 public class DecompilationDescriptorFactory
 {
     private static final Pattern JARRED_CLASS_PATTERN = Pattern.compile("[.[^!]]*!(.*)");
-    private static final Pattern JAR_FILE_PATTERN = Pattern.compile("[.[^!]]*!");
     private static final Pattern PACKAGE_AND_CLASS_PATTERN = Pattern.compile("!(.*)");
     private static final Pattern CLASS_PATTERN = Pattern.compile("/\\w*\\.class");
 
-    public static DecompilationDescriptor create(VirtualFile file)
+    /**
+     * Creates a {@link DecompilationDescriptor} for the target.
+     *
+     * @param target the class to decompile
+     * @return a decompilation descriptor for the target
+     */
+    public static DecompilationDescriptor create(@NotNull VirtualFile target)
     {
-        String path = file.getPath();
+        String path = target.getPath();
         Matcher isJarFile = JARRED_CLASS_PATTERN.matcher(path);
-        DecompilationDescriptor dd = null;
+        DecompilationDescriptor dd;
         if (isJarFile.matches())
         {
-            dd = new DecompilationDescriptor(file,
+            dd = new DecompilationDescriptor(target,
                                              getFullyQualifiedName(path),
-                                             file.getNameWithoutExtension(),
-                                             file.getExtension(),
                                              getPackageName(path),
                                              getPackageNameAsPath(path),
                                              path,
-                                             getPathToFile(path),
-                                             getJarFile(file));
+                                             getJarFile(target));
         }
         else
         {
-            System.out.println("not a jar file");
+            throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.not-in-jar-file",
+                                                                                target.getPath()));
         }
         return dd;
     }
 
     /**
-     * @param file
-     * @return
+     * Gets the jar file containing the target class.
+     *
+     * @param file the file representing the target class
+     * @return the jar file
      */
-    private static VirtualFile getJarFile(VirtualFile file)
+    @NotNull
+    private static VirtualFile getJarFile(@NotNull VirtualFile file)
     {
-        VirtualFile jarFile = null;
-        if (file != null)
+        VirtualFile jarFile;
+        if (file.getFileType() == StdFileTypes.ARCHIVE)
         {
-            if (file.getFileType() == StdFileTypes.ARCHIVE)
+            jarFile = file;
+        }
+        else
+        {
+            VirtualFile parent = file.getParent();
+            if (parent != null)
             {
-                jarFile = file;
+                jarFile = getJarFile(parent);
             }
             else
             {
-                jarFile = getJarFile(file.getParent());
+                throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.no-jar-in-path",
+                                                                                    file.getPath()));
             }
         }
         return jarFile;
     }
 
     /**
-     * @param path
-     * @return
+     * Gets the package name of the target class.
+     *
+     * @param path the path to the target class
+     * @return the package name
      */
-    private static String getPathToFile(String path)
-    {
-        Matcher jarFileMatcher = JAR_FILE_PATTERN.matcher(path);
-        String pathToFile = null;
-        if (jarFileMatcher.lookingAt())
-        {
-            pathToFile = path.substring(0, jarFileMatcher.toMatchResult().end() - 1);
-        }
-        return pathToFile;
-    }
-
-    /**
-     * @param path
-     * @return
-     */
-    private static String getPackageName(String path)
+    @NotNull
+    private static String getPackageName(@NotNull String path)
     {
         Matcher classMatcher = CLASS_PATTERN.matcher(path);
         String packageName = null;
@@ -97,7 +101,7 @@ public class DecompilationDescriptorFactory
                 }
             }
         }
-        return packageName;
+        return packageName == null ? "" : packageName;
     }
 
     /**
@@ -106,7 +110,8 @@ public class DecompilationDescriptorFactory
      * @param path the path to extract the FQ name from
      * @return the FQ name
      */
-    private static String getFullyQualifiedName(String path)
+    @NotNull
+    private static String getFullyQualifiedName(@NotNull String path)
     {
         Matcher packageAndClassMatcher = PACKAGE_AND_CLASS_PATTERN.matcher(path);
         String fqName = null;
@@ -116,21 +121,24 @@ public class DecompilationDescriptorFactory
             fqName = fqName.substring(0, fqName.length() - ".class".length());
             fqName = fqName.replaceAll("/", ".");
         }
-        return fqName;
+        return fqName == null ? "" : fqName;
     }
 
     /**
-     * @param path
-     * @return
+     * Gets the package name as a path, e.g. net/stevechaloner/intellijad.  Note this always ends in /.
+     *
+     * @param path the path of the target class
+     * @return the package name as a string
      */
-    private static String getPackageNameAsPath(String path)
+    @NotNull
+    private static String getPackageNameAsPath(@NotNull String path)
     {
         String packageName = getPackageName(path);
-        packageName = packageName == null ? null : packageName.replaceAll("\\.", "/");
+        packageName = packageName.replaceAll("\\.", "/");
         if (!packageName.endsWith("/"))
         {
             packageName = packageName + "/";
         }
-        return packageName;
+        return packageName == null ? "" : packageName;
     }
 }

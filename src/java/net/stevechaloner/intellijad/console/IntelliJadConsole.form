@@ -40,6 +40,7 @@
                       <disabledTextColor color="-16777216"/>
                       <dragEnabled value="false"/>
                       <editable value="false"/>
+                      <enabled value="true"/>
                     </properties>
                   </component>
                 </children>
@@ -62,7 +63,7 @@
                       <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.clear-and-close-console-on-success"/>
                     </properties>
                   </component>
-                  <component id="db5d8" class="javax.swing.JButton" binding="button1" default-binding="true">
+                  <component id="db5d8" class="javax.swing.JButton" binding="closeButton">
                     <constraints/>
                     <properties>
                       <icon value="actions/cancel.png"/>
