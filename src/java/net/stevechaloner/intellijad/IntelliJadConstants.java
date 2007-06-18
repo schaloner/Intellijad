@@ -11,4 +11,6 @@ import java.util.List;
 public class IntelliJadConstants
 {
     public static final Key<List<Library>> GENERATED_SOURCE_LIBRARIES = new Key<List<Library>>("generated-source-libraries");
+
+    public static final Key<NavigationDecompileListener> DECOMPILE_LISTENER = new Key<NavigationDecompileListener>("decompile-listener");
 }

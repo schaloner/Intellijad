@@ -72,7 +72,7 @@ public class DecompileDialog extends JDialog
             }
         });
 
-        Config config = PluginHelper.getConfig(project);
+        Config config = PluginHelper.getConfig();
         excludeRecursivelyCheckBox.setSelected(config.isAlwaysExcludeRecursively());
 
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);

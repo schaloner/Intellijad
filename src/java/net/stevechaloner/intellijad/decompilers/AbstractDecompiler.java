@@ -87,7 +87,7 @@ abstract class AbstractDecompiler implements Decompiler
                                                        context,
                                                        output);
                         // todo this doesn't belong here
-                        if (PluginHelper.getConfig(context.getProject()).isClearAndCloseConsoleOnSuccess())
+                        if (PluginHelper.getConfig().isClearAndCloseConsoleOnSuccess())
                         {
                             context.getConsole().clearConsoleContent();
                             context.getConsole().closeConsole();

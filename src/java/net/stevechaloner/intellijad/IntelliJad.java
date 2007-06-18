@@ -1,10 +1,9 @@
 package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
@@ -31,7 +30,7 @@ import java.util.List;
 /**
  *
  */
-public class IntelliJad implements ProjectComponent,
+public class IntelliJad implements ApplicationComponent,
                                    DecompilationChoiceListener,
                                    ProjectManagerListener
 {
@@ -46,32 +45,9 @@ public class IntelliJad implements ProjectComponent,
     public static final String INTELLIJAD = "IntelliJad";
 
     /**
-     * The listener for navigation-based events.
-     */
-    private final FileEditorManagerListener navigationListener;
-
-    /**
-     * The project.
-     */
-    private final Project project;
-
-    /**
      * The reporting console.
      */
-    private final IntelliJadConsole console;
-
-    /**
-     * Initialises a new instance of this class.
-     *
-     * @param project the current project
-     */
-    public IntelliJad(Project project)
-    {
-        this.project = project;
-        this.console = new IntelliJadConsole(project);
-        navigationListener = new NavigationDecompileListener(project,
-                                                             this);
-    }
+    private IntelliJadConsole console;
 
     // javadoc inherited
     @NotNull
@@ -80,19 +56,17 @@ public class IntelliJad implements ProjectComponent,
         return COMPONENT_NAME;
     }
 
-    // javadoc inherited
-    public void projectOpened()
-    {
-        ProjectManager.getInstance().addProjectManagerListener(this);
-        FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
-        project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
-                            new ArrayList<Library>());
-    }
-
-
     public void projectOpened(Project project)
     {
-        // no-op
+        console = new IntelliJadConsole();
+        project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
+                            new ArrayList<Library>());
+
+        NavigationDecompileListener navigationListener = new NavigationDecompileListener(project,
+                                                                                         this);
+        FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
+        project.putUserData(IntelliJadConstants.DECOMPILE_LISTENER,
+                            navigationListener);
     }
 
     public boolean canCloseProject(Project project)
@@ -103,61 +77,54 @@ public class IntelliJad implements ProjectComponent,
 
     public void projectClosed(Project project)
     {
-        // no-op
-    }
-
-    public void projectClosing(Project project)
-    {
-        if (this.project.equals(project))
-        {
-            ApplicationManager.getApplication().runWriteAction(new Runnable()
-            {
-                public void run()
-                {
-                    List<Library> list = IntelliJad.this.project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES);
-                    for (Library library : list)
-                    {
-                        Library.ModifiableModel model = library.getModifiableModel();
-                        VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
-                        for (VirtualFile file : files)
-                        {
-                            if (file instanceof MemoryVirtualFile && file.getParent() == null)
-                            {
-                                model.removeRoot(file.getUrl(),
-                                                 OrderRootType.SOURCES);
-                            }
-                        }
-                        model.commit();
-                    }
-                }
-            });
-        }
-    }
-
-    // javadoc inherited
-    public void projectClosed()
-    {
-        FileEditorManager.getInstance(project).removeFileEditorManagerListener(navigationListener);
+        NavigationDecompileListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
+        FileEditorManager.getInstance(project).removeFileEditorManagerListener(listener);
         console.disposeConsole();
-        ProjectManager.getInstance().removeProjectManagerListener(this);
+    }
+
+    public void projectClosing(final Project project)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                List<Library> list = project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES);
+                for (Library library : list)
+                {
+                    Library.ModifiableModel model = library.getModifiableModel();
+                    VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
+                    for (VirtualFile file : files)
+                    {
+                        if (file instanceof MemoryVirtualFile && file.getParent() == null)
+                        {
+                            model.removeRoot(file.getUrl(),
+                                             OrderRootType.SOURCES);
+                        }
+                    }
+                    model.commit();
+                }
+            }
+        });
     }
 
     // javadoc inherited
     public void initComponent()
     {
-        // no-op
+        ProjectManager.getInstance().addProjectManagerListener(this);
     }
 
     // javadoc inherited
     public void disposeComponent()
     {
-        // no-op
+        ProjectManager.getInstance().removeProjectManagerListener(this);
     }
 
     // javadoc inherited
     public void decompile(DecompilationDescriptor descriptor)
     {
-        Config config = PluginHelper.getConfig(project);
+        Config config = PluginHelper.getConfig();
+        Project project = PluginHelper.getProject();
+
         String jadPath = config.getJadPath();
         console.openConsole();
         if (validateJadPath(jadPath))

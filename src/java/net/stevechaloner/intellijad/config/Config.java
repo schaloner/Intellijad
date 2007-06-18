@@ -78,6 +78,7 @@ public class Config implements DOMable
     private static final CommandLinePropertyDescriptor<Boolean> STATISTICS = createBooleanProperty("stat");
     private static final CommandLinePropertyDescriptor<Boolean> USE_TABS = createBooleanProperty("t");
     private static final CommandLinePropertyDescriptor<Boolean> VERBOSE = createBooleanProperty("v");
+    private static final PropertyDescriptor<Boolean> USE_PROJECT_SPECIFIC_SETTINGS = new ImmutablePropertyDescriptor<Boolean>("use-project-specific-settings");
 
     /**
      * The persistence model.
@@ -150,6 +151,7 @@ public class Config implements DOMable
         registerBooleanProperty(USE_TABS, dpc);
         registerBooleanProperty(VERBOSE, dpc);
         registerStringProperty(JAD_PATH, dpc);
+        registerBooleanProperty(USE_PROJECT_SPECIFIC_SETTINGS, dpc);
 
         dpc.put(EXCLUSION_TABLE_MODEL,
                 new DOMableTableModel(EXCLUSION_TABLE_MODEL.getName(),
@@ -803,9 +805,19 @@ public class Config implements DOMable
 
     public void setClearAndCloseConsoleOnSuccess(boolean clearAndClose)
     {
-        System.out.println("Config.setClearAndCloseConsoleOnSuccess: " + clearAndClose);
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS);
         value.setValue(clearAndClose);
+    }
+
+    public boolean isUseProjectSpecificSettings()
+    {
+        return USE_PROJECT_SPECIFIC_SETTINGS.getValue(propertyContainer.get(USE_PROJECT_SPECIFIC_SETTINGS));
+    }
+
+    public void setUseProjectSpecificSettings(boolean useProjectSpecificSettings)
+    {
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(USE_PROJECT_SPECIFIC_SETTINGS);
+        value.setValue(useProjectSpecificSettings);
     }
 
     @NotNull

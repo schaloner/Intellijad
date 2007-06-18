@@ -1,14 +1,12 @@
 package net.stevechaloner.intellijad.console;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.util.PluginHelper;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -85,79 +83,72 @@ public class IntelliJadConsole
     private JButton closeButton;
     private JToolBar toolbar;
 
-    /**
-     * The project.
-     */
-    private final Project project;
+    private boolean initialised = false;
 
-    /**
-     * Initialises a new instance of this class.
-     *
-     * @param project the project
-     */
-    public IntelliJadConsole(@NotNull final Project project)
+    private void jitInit()
     {
-        this.project = project;
-
-        toolbar.setFloatable(false);
-        clearAndCloseOnSuccess.setSelected(PluginHelper.getConfig(project).isClearAndCloseConsoleOnSuccess());
-        clearAndCloseOnSuccess.addActionListener(new ActionListener()
+        if (!initialised)
         {
-            public void actionPerformed(ActionEvent actionEvent)
+            toolbar.setFloatable(false);
+            clearAndCloseOnSuccess.setSelected(PluginHelper.getConfig().isClearAndCloseConsoleOnSuccess());
+            clearAndCloseOnSuccess.addActionListener(new ActionListener()
             {
-                PluginHelper.getConfig(project).setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
-            }
-        });
-        closeButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                closeConsole();
-            }
-        });
-
-        final JPopupMenu menu = new JPopupMenu();
-        JMenuItem item = menu.add(new AbstractAction()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                clearConsoleContent();
-            }
-        });
-        item.setText(IntelliJadResourceBundle.message("action.clear"));
-        item = menu.add(new AbstractAction()
-        {
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(new StringSelection(consoleTextArea.getText()),
-                                      EMPTY_CLIPBOARD_OWNER);
-            }
-        });
-        item.setText(IntelliJadResourceBundle.message("action.copy-content"));
-        consoleTextArea.addMouseListener(new MouseAdapter()
-        {
-            public void mouseReleased(MouseEvent e)
-            {
-                maybeShowPopup(e);
-            }
-
-            public void mousePressed(MouseEvent e)
-            {
-                maybeShowPopup(e);
-            }
-
-            private void maybeShowPopup(MouseEvent e)
-            {
-                if (e.isPopupTrigger())
+                public void actionPerformed(ActionEvent actionEvent)
                 {
-                    menu.show(e.getComponent(),
-                              e.getX(),
-                              e.getY());
+                    PluginHelper.getConfig().setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
                 }
-            }
-        });
-        consoleTextArea.setBackground(Color.white);
+            });
+            closeButton.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    closeConsole();
+                }
+            });
+
+            final JPopupMenu menu = new JPopupMenu();
+            JMenuItem item = menu.add(new AbstractAction()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    clearConsoleContent();
+                }
+            });
+            item.setText(IntelliJadResourceBundle.message("action.clear"));
+            item = menu.add(new AbstractAction()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(new StringSelection(consoleTextArea.getText()),
+                                          EMPTY_CLIPBOARD_OWNER);
+                }
+            });
+            item.setText(IntelliJadResourceBundle.message("action.copy-content"));
+            consoleTextArea.addMouseListener(new MouseAdapter()
+            {
+                public void mouseReleased(MouseEvent e)
+                {
+                    maybeShowPopup(e);
+                }
+
+                public void mousePressed(MouseEvent e)
+                {
+                    maybeShowPopup(e);
+                }
+
+                private void maybeShowPopup(MouseEvent e)
+                {
+                    if (e.isPopupTrigger())
+                    {
+                        menu.show(e.getComponent(),
+                                  e.getX(),
+                                  e.getY());
+                    }
+                }
+            });
+            consoleTextArea.setBackground(Color.white);
+        }
     }
 
     /**
@@ -165,7 +156,8 @@ public class IntelliJadConsole
      */
     public void openConsole()
     {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        jitInit();
+        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
         ToolWindow window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
         if (window == null)
         {
@@ -182,7 +174,7 @@ public class IntelliJadConsole
      */
     public void closeConsole()
     {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
         ToolWindow window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
         if (window != null)
         {
@@ -250,14 +242,17 @@ public class IntelliJadConsole
 
     public void disposeConsole()
     {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        try
+        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
+        if (toolWindowManager != null)
         {
-            toolWindowManager.unregisterToolWindow(TOOL_WINDOW_ID);
-        }
-        catch (IllegalArgumentException e)
-        {
-            // ignore - this can occur due to lazy initialization
+            try
+            {
+                toolWindowManager.unregisterToolWindow(TOOL_WINDOW_ID);
+            }
+            catch (IllegalArgumentException e)
+            {
+                // ignore - this can occur due to lazy initialization
+            }
         }
     }
 }

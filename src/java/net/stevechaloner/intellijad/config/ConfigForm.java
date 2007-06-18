@@ -2,8 +2,10 @@ package net.stevechaloner.intellijad.config;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import net.stevechaloner.idea.util.fs.FileSelectionAction;
+import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
 import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
+import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -23,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -34,7 +38,6 @@ public class ConfigForm
     private JTextField outputDirectoryTextField;
     private JButton button1;
     private JCheckBox markDecompiledFilesAsCheckBox;
-    private JTextField outputFileExtensionTextField;
     private JTextField classesWithNumericalNamesTextField;
     private JTextField fieldsWithNumericalNamesTextField;
     private JTextField localsWithNumericalNamesTextField;
@@ -73,11 +76,65 @@ public class ConfigForm
     private JCheckBox decompileToMemoryCheckBox;
     private JCheckBox createIfDirectoryDoesnCheckBox;
     private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
+    private JCheckBox useProjectSpecificIntelliJadCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
-    public ConfigForm(final Project project)
+    private final List<JComponent> components = new ArrayList<JComponent>();
+
+    /**
+     *
+     */
+    public ConfigForm()
     {
+        this(null);
+    }
+
+    /**
+     * @param project
+     */
+    public ConfigForm(@Nullable final Project project)
+    {
+        components.add(outputDirectoryTextField);
+        components.add(button1);
+        components.add(markDecompiledFilesAsCheckBox);
+        components.add(classesWithNumericalNamesTextField);
+        components.add(fieldsWithNumericalNamesTextField);
+        components.add(localsWithNumericalNamesTextField);
+        components.add(methodsWithNumericalNamesTextField);
+        components.add(parametersWithNumericalNamesTextField);
+        components.add(allPackagesTextField);
+        components.add(unusedExceptionNamesTextField);
+        components.add(packFieldsWithTheSpinner);
+        components.add(splitStringsIntoPiecesSpinner);
+        components.add(spacesForIndentationSpinner);
+        components.add(displayLongsUsingRadixSpinner);
+        components.add(displayIntegersUsingRadixSpinner);
+        components.add(printDefaultInitializersForCheckBox);
+        components.add(generateRedundantBracesCheckBox);
+        components.add(generateFullyQualifiedNamesCheckBox);
+        components.add(suppressEmptyConstructorsCheckBox);
+        components.add(clearAllPrefixesIncludingCheckBox);
+        components.add(donTGenerateAuxiliaryCheckBox);
+        components.add(donTDisambiguateFieldsCheckBox);
+        components.add(originalLineNumbersAsCheckBox);
+        components.add(useTabsInsteadOfCheckBox);
+        components.add(sortLinesAccordingToCheckBox);
+        components.add(spaceBetweenKeywordAndCheckBox);
+        components.add(insertANewlineBeforeCheckBox);
+        components.add(outputFieldsBeforeMethodsCheckBox);
+        components.add(splitStringsOnNewlineCheckBox);
+        components.add(jadTextField);
+        components.add(actionRemoveExclusionButton);
+        components.add(pathTextField);
+        components.add(addButton);
+        components.add(exclusionTable);
+        components.add(navTriggeredDecomp);
+        components.add(browseButton1);
+        components.add(decompileToMemoryCheckBox);
+        components.add(createIfDirectoryDoesnCheckBox);
+        components.add(alwaysExcludePackagesRecursivelyCheckBox);
+
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ALWAYS);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ASK);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
@@ -88,20 +145,31 @@ public class ConfigForm
         displayLongsUsingRadixSpinner.setModel(new SpinnerRadixModel());
         displayIntegersUsingRadixSpinner.setModel(new SpinnerRadixModel());
 
-        button1.addActionListener(new FileSelectionAction(project,
-                                                          outputDirectoryTextField,
-                                                          FileSelectionDescriptor.DIRECTORIES_ONLY));
-        browseButton1.addActionListener(new FileSelectionAction(project,
-                                                                jadTextField,
-                                                                FileSelectionDescriptor.FILES_ONLY));
+        button1.addActionListener(project == null ?
+                                  new ApplicationFileSelectionAction(outputDirectoryTextField,
+                                                                     FileSelectionDescriptor.DIRECTORIES_ONLY) :
+                                                                                                               new ProjectFileSelectionAction(project,
+                                                                                                                                              outputDirectoryTextField,
+                                                                                                                                              FileSelectionDescriptor.DIRECTORIES_ONLY));
+        browseButton1.addActionListener(project == null ?
+                                        new ApplicationFileSelectionAction(jadTextField,
+                                                                           FileSelectionDescriptor.FILES_ONLY) :
+                                                                                                               new ProjectFileSelectionAction(project,
+                                                                                                                                              jadTextField,
+                                                                                                                                              FileSelectionDescriptor.FILES_ONLY));
+
         decompileToMemoryCheckBox.addChangeListener(new ChangeListener()
         {
             public void stateChanged(ChangeEvent e)
             {
-                boolean decompileToMemory = decompileToMemoryCheckBox.isSelected();
-                button1.setEnabled(!decompileToMemory);
-                createIfDirectoryDoesnCheckBox.setEnabled(!decompileToMemory);
-                outputDirectoryTextField.setEnabled(!decompileToMemory);
+                if (useProjectSpecificIntelliJadCheckBox.isSelected())
+                {
+                    // prevents an annoying model-driven state switch
+                    boolean decompileToMemory = decompileToMemoryCheckBox.isSelected();
+                    button1.setEnabled(!decompileToMemory);
+                    createIfDirectoryDoesnCheckBox.setEnabled(!decompileToMemory);
+                    outputDirectoryTextField.setEnabled(!decompileToMemory);
+                }
             }
         });
 
@@ -156,6 +224,35 @@ public class ConfigForm
                 }
             }
         });
+        if (project == null)
+        {
+            useProjectSpecificIntelliJadCheckBox.setVisible(false);
+        }
+        else
+        {
+            useProjectSpecificIntelliJadCheckBox.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    if (useProjectSpecificIntelliJadCheckBox.isSelected())
+                    {
+                        setControlsEnabled(true);
+                    }
+                    else
+                    {
+                        setControlsEnabled(false);
+                    }
+                }
+            });
+        }
+    }
+
+    private void setControlsEnabled(boolean enabled)
+    {
+        for (JComponent component : components)
+        {
+            component.setEnabled(enabled);
+        }
     }
 
     /**
@@ -185,13 +282,6 @@ public class ConfigForm
         return root;
     }
 
-    private static SpinnerModel createSpinnerModel()
-    {
-        SpinnerNumberModel model = new SpinnerNumberModel();
-        model.setMinimum(0);
-        return model;
-    }
-
     private void setUnboundData(Config data)
     {
         exclusionTableModel = data.getExclusionTableModel();
@@ -208,7 +298,6 @@ public class ConfigForm
     {
         setUnboundData(data);
 
-        outputFileExtensionTextField.setText(data.getFileExtension());
         jadTextField.setText(data.getJadPath());
         markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
         outputDirectoryTextField.setText(data.getOutputDirectory());
@@ -252,7 +341,6 @@ public class ConfigForm
     {
         getUnboundData(data);
 
-        data.setFileExtension(outputFileExtensionTextField.getText());
         data.setJadPath(jadTextField.getText());
         data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
         data.setOutputDirectory(outputDirectoryTextField.getText());
@@ -290,10 +378,6 @@ public class ConfigForm
     public boolean isModified(Config data)
     {
         if (isUnboundDataModified(data))
-        {
-            return true;
-        }
-        if (outputFileExtensionTextField.getText() != null ? !outputFileExtensionTextField.getText().equals(data.getFileExtension()) : data.getFileExtension() != null)
         {
             return true;
         }
@@ -412,6 +496,19 @@ public class ConfigForm
         return false;
     }
 
+    /**
+     * @return
+     */
+    private static SpinnerModel createSpinnerModel()
+    {
+        SpinnerNumberModel model = new SpinnerNumberModel();
+        model.setMinimum(0);
+        return model;
+    }
+
+    /**
+     * Restricted, non-contiguous spinner model.
+     */
     private class SpinnerRadixModel extends SpinnerNumberModel
     {
         SpinnerRadixModel()
@@ -426,7 +523,6 @@ public class ConfigForm
                   16,
                   2);
         }
-
 
         public void setValue(Object object)
         {

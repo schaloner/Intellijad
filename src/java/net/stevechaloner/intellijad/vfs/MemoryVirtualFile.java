@@ -100,7 +100,7 @@ public class MemoryVirtualFile extends VirtualFile
     public String getPath()
     {
         VirtualFile parent = getParent();
-        return (parent == null) ? name : parent.getPath() + name;
+        return (parent == null) ? name : parent.getPath() + '/' + name;
     }
 
     // javadoc inherited

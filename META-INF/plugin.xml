@@ -2,10 +2,16 @@
     <name>IntellIJad</name>
     <description>Jad Java Decompiler plugin</description>
     <version>0.1</version>
-    <vendor>Steve Chaloner</vendor>
+    <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="6180"/>
 
     <application-components>
+        <component>
+            <implementation-class>net.stevechaloner.intellijad.IntelliJad</implementation-class>
+        </component>
+        <component>
+            <implementation-class>net.stevechaloner.intellijad.config.ConfigComponent</implementation-class>
+        </component>
         <component>
             <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>
             <interface-class>com.intellij.openapi.vfs.VirtualFileSystem</interface-class>
@@ -14,10 +20,7 @@
 
     <project-components>
         <component>
-            <implementation-class>net.stevechaloner.intellijad.IntelliJad</implementation-class>
-        </component>
-        <component>
-            <implementation-class>net.stevechaloner.intellijad.config.ConfigComponent</implementation-class>
+            <implementation-class>net.stevechaloner.intellijad.config.ProjectConfigComponent</implementation-class>
         </component>
     </project-components>
 

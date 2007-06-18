@@ -52,7 +52,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     {
         if (file != null && "class".equals(file.getExtension()))
         {
-            Config config = PluginHelper.getConfig(project);
+            Config config = PluginHelper.getConfig();
             DecompilationDescriptor dd = DecompilationDescriptorFactory.create(file);
             boolean excluded = isExcluded(config,
                                           dd);

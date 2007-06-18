@@ -1,9 +1,8 @@
 package net.stevechaloner.intellijad.config;
 
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
@@ -25,7 +24,7 @@ import java.util.Map;
 /**
  * @author Steve Chaloner
  */
-public class ConfigComponent implements ProjectComponent,
+public class ConfigComponent implements ApplicationComponent,
                                         Configurable,
                                         JDOMExternalizable
 {
@@ -45,11 +44,6 @@ public class ConfigComponent implements ProjectComponent,
      * The display logo.
      */
     private static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-32.png"));
-
-    /**
-     * The project.
-     */
-    private final Project project;
 
     /**
      * The rule execution context.
@@ -76,26 +70,6 @@ public class ConfigComponent implements ProjectComponent,
                 config);
         }
     };
-
-    /**
-     * Initialises a new instance of this class.
-     *
-     * @param project the project
-     */
-    public ConfigComponent(Project project)
-    {
-        this.project = project;
-    }
-
-    // javadoc inherited
-    public void projectOpened()
-    {
-    }
-
-    // javadoc inherited
-    public void projectClosed()
-    {
-    }
 
     @NonNls
     @NotNull
@@ -134,7 +108,7 @@ public class ConfigComponent implements ProjectComponent,
     {
         if (form == null)
         {
-            form = new ConfigForm(project);
+            form = new ConfigForm();
         }
         return form.getRoot();
     }
