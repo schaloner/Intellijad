@@ -6,7 +6,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -90,12 +90,12 @@ public class IntelliJadConsole
         if (!initialised)
         {
             toolbar.setFloatable(false);
-            clearAndCloseOnSuccess.setSelected(PluginHelper.getConfig().isClearAndCloseConsoleOnSuccess());
+            clearAndCloseOnSuccess.setSelected(PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess());
             clearAndCloseOnSuccess.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent actionEvent)
                 {
-                    PluginHelper.getConfig().setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
+                    PluginUtil.getConfig().setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
                 }
             });
             closeButton.addActionListener(new ActionListener()
@@ -157,7 +157,7 @@ public class IntelliJadConsole
     public void openConsole()
     {
         jitInit();
-        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
+        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
         ToolWindow window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
         if (window == null)
         {
@@ -174,7 +174,7 @@ public class IntelliJadConsole
      */
     public void closeConsole()
     {
-        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
+        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
         ToolWindow window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
         if (window != null)
         {
@@ -242,7 +242,7 @@ public class IntelliJadConsole
 
     public void disposeConsole()
     {
-        ToolWindowManager toolWindowManager = PluginHelper.getToolWindowManager();
+        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
         if (toolWindowManager != null)
         {
             try

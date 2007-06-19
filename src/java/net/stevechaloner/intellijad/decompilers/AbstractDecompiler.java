@@ -4,7 +4,7 @@ import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -87,7 +87,7 @@ abstract class AbstractDecompiler implements Decompiler
                                                        context,
                                                        output);
                         // todo this doesn't belong here
-                        if (PluginHelper.getConfig().isClearAndCloseConsoleOnSuccess())
+                        if (PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess())
                         {
                             context.getConsole().clearConsoleContent();
                             context.getConsole().closeConsole();

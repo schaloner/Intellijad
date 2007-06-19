@@ -7,7 +7,7 @@ import net.stevechaloner.idea.util.events.DataContextHelper;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 
 /***
  *
@@ -29,8 +29,8 @@ public class DecompileAction extends AnAction
         DataContext dataContext = e.getDataContext();
         if ("class".equals(DataContextHelper.getFileExtension(dataContext)))
         {
-            IntelliJad intelliJad = PluginHelper.getComponent(DataContextHelper.getProject(dataContext),
-                                                              IntelliJad.class);
+            IntelliJad intelliJad = PluginUtil.getComponent(DataContextHelper.getProject(dataContext),
+                                                            IntelliJad.class);
             DecompilationDescriptor descriptor = DecompilationDescriptorFactory.create(DataContextHelper.getFile(e.getDataContext()));
             intelliJad.decompile(descriptor);
         }

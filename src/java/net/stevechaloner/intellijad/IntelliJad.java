@@ -19,7 +19,7 @@ import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.Decompiler;
 import net.stevechaloner.intellijad.decompilers.DiskDecompiler;
 import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -122,8 +122,8 @@ public class IntelliJad implements ApplicationComponent,
     // javadoc inherited
     public void decompile(DecompilationDescriptor descriptor)
     {
-        Config config = PluginHelper.getConfig();
-        Project project = PluginHelper.getProject();
+        Config config = PluginUtil.getConfig();
+        Project project = PluginUtil.getProject();
 
         String jadPath = config.getJadPath();
         console.openConsole();

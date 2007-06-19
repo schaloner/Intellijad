@@ -1,5 +1,6 @@
 package net.stevechaloner.intellijad.config;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
@@ -25,65 +26,101 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
 /**
- *
+ * IntelliJad configuration form.  This class deals with both application- and
+ * project-level configurations.
  */
 public class ConfigForm
 {
-
     private JTabbedPane tabbedPane1;
+    @Control
     private JTextField outputDirectoryTextField;
+    @Control
     private JButton button1;
+    @Control
     private JCheckBox markDecompiledFilesAsCheckBox;
+    @Control
     private JTextField classesWithNumericalNamesTextField;
+    @Control
     private JTextField fieldsWithNumericalNamesTextField;
+    @Control
     private JTextField localsWithNumericalNamesTextField;
+    @Control
     private JTextField methodsWithNumericalNamesTextField;
+    @Control
     private JTextField parametersWithNumericalNamesTextField;
+    @Control
     private JTextField allPackagesTextField;
+    @Control
     private JTextField unusedExceptionNamesTextField;
+    @Control
     private JSpinner packFieldsWithTheSpinner;
+    @Control
     private JSpinner splitStringsIntoPiecesSpinner;
+    @Control
     private JSpinner spacesForIndentationSpinner;
+    @Control
     private JSpinner displayLongsUsingRadixSpinner;
+    @Control
     private JSpinner displayIntegersUsingRadixSpinner;
+    @Control
     private JCheckBox printDefaultInitializersForCheckBox;
+    @Control
     private JCheckBox generateRedundantBracesCheckBox;
+    @Control
     private JCheckBox generateFullyQualifiedNamesCheckBox;
+    @Control
     private JCheckBox suppressEmptyConstructorsCheckBox;
+    @Control
     private JCheckBox clearAllPrefixesIncludingCheckBox;
+    @Control
     private JCheckBox donTGenerateAuxiliaryCheckBox;
+    @Control
     private JCheckBox donTDisambiguateFieldsCheckBox;
+    @Control
     private JCheckBox originalLineNumbersAsCheckBox;
+    @Control
     private JCheckBox useTabsInsteadOfCheckBox;
-    private JCheckBox sortLinesAccordingToCheckBox;
+    @Control
     private JCheckBox spaceBetweenKeywordAndCheckBox;
+    @Control
     private JCheckBox insertANewlineBeforeCheckBox;
+    @Control
     private JCheckBox outputFieldsBeforeMethodsCheckBox;
+    @Control
     private JCheckBox splitStringsOnNewlineCheckBox;
     private JPanel root;
+    @Control
     private JTextField jadTextField;
+    @Control
     private JButton actionRemoveExclusionButton;
+    @Control
     private JTextField pathTextField;
+    @Control
     private JButton addButton;
+    @Control
     private JScrollPane excludesScrollPane;
+    @Control
     private JTable exclusionTable;
+    @Control
     private JComboBox navTriggeredDecomp;
+    @Control
     private JButton browseButton1;
+    @Control
     private JCheckBox decompileToMemoryCheckBox;
+    @Control
     private JCheckBox createIfDirectoryDoesnCheckBox;
+    @Control
     private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     private JCheckBox useProjectSpecificIntelliJadCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
-    private final List<JComponent> components = new ArrayList<JComponent>();
-
     /**
-     *
+     * Initialises a new instance of this class with no project,
+     * forcing it into generic (application-level) behaviour.
      */
     public ConfigForm()
     {
@@ -91,50 +128,12 @@ public class ConfigForm
     }
 
     /**
-     * @param project
+     * Initialises a new instance of this class.
+     *
+     * @param project the bound project
      */
     public ConfigForm(@Nullable final Project project)
     {
-        components.add(outputDirectoryTextField);
-        components.add(button1);
-        components.add(markDecompiledFilesAsCheckBox);
-        components.add(classesWithNumericalNamesTextField);
-        components.add(fieldsWithNumericalNamesTextField);
-        components.add(localsWithNumericalNamesTextField);
-        components.add(methodsWithNumericalNamesTextField);
-        components.add(parametersWithNumericalNamesTextField);
-        components.add(allPackagesTextField);
-        components.add(unusedExceptionNamesTextField);
-        components.add(packFieldsWithTheSpinner);
-        components.add(splitStringsIntoPiecesSpinner);
-        components.add(spacesForIndentationSpinner);
-        components.add(displayLongsUsingRadixSpinner);
-        components.add(displayIntegersUsingRadixSpinner);
-        components.add(printDefaultInitializersForCheckBox);
-        components.add(generateRedundantBracesCheckBox);
-        components.add(generateFullyQualifiedNamesCheckBox);
-        components.add(suppressEmptyConstructorsCheckBox);
-        components.add(clearAllPrefixesIncludingCheckBox);
-        components.add(donTGenerateAuxiliaryCheckBox);
-        components.add(donTDisambiguateFieldsCheckBox);
-        components.add(originalLineNumbersAsCheckBox);
-        components.add(useTabsInsteadOfCheckBox);
-        components.add(sortLinesAccordingToCheckBox);
-        components.add(spaceBetweenKeywordAndCheckBox);
-        components.add(insertANewlineBeforeCheckBox);
-        components.add(outputFieldsBeforeMethodsCheckBox);
-        components.add(splitStringsOnNewlineCheckBox);
-        components.add(jadTextField);
-        components.add(actionRemoveExclusionButton);
-        components.add(pathTextField);
-        components.add(addButton);
-        components.add(exclusionTable);
-        components.add(navTriggeredDecomp);
-        components.add(browseButton1);
-        components.add(decompileToMemoryCheckBox);
-        components.add(createIfDirectoryDoesnCheckBox);
-        components.add(alwaysExcludePackagesRecursivelyCheckBox);
-
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ALWAYS);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ASK);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
@@ -169,6 +168,7 @@ public class ConfigForm
                     button1.setEnabled(!decompileToMemory);
                     createIfDirectoryDoesnCheckBox.setEnabled(!decompileToMemory);
                     outputDirectoryTextField.setEnabled(!decompileToMemory);
+                    markDecompiledFilesAsCheckBox.setEnabled(!decompileToMemory);
                 }
             }
         });
@@ -247,11 +247,31 @@ public class ConfigForm
         }
     }
 
+    /**
+     * Toggle the controls based on global inheritance.
+     *
+     * @param enabled true iff the project has specific settings
+     */
     private void setControlsEnabled(boolean enabled)
     {
-        for (JComponent component : components)
+        Field[] fields = this.getClass().getDeclaredFields();
+        try
         {
-            component.setEnabled(enabled);
+            for (Field field : fields)
+            {
+                if (field.isAnnotationPresent(Control.class))
+                {
+                    Object o = field.get(this);
+                    if (o != null)
+                    {
+                        ((JComponent) o).setEnabled(enabled);
+                    }
+                }
+            }
+        }
+        catch (IllegalAccessException e)
+        {
+            Logger.getInstance(getClass().getName()).error(e);
         }
     }
 
@@ -282,6 +302,11 @@ public class ConfigForm
         return root;
     }
 
+    /**
+     * Some components aren't bound via the data-binding wizard.  This takes care of them.
+     *
+     * @param data the config object to read state from
+     */
     private void setUnboundData(Config data)
     {
         exclusionTableModel = data.getExclusionTableModel();
@@ -294,6 +319,7 @@ public class ConfigForm
         navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
     }
 
+    // javadoc inherited
     public void setData(Config data)
     {
         setUnboundData(data);
@@ -312,7 +338,6 @@ public class ConfigForm
         donTDisambiguateFieldsCheckBox.setSelected(data.isNofd());
         useTabsInsteadOfCheckBox.setSelected(data.isUseTabs());
         spaceBetweenKeywordAndCheckBox.setSelected(data.isSpaceAfterKeyword());
-        sortLinesAccordingToCheckBox.setSelected(data.isSort());
         originalLineNumbersAsCheckBox.setSelected(data.isLineNumbersAsComments());
         outputFieldsBeforeMethodsCheckBox.setSelected(data.isFieldsFirst());
         insertANewlineBeforeCheckBox.setSelected(data.isNonlb());
@@ -327,6 +352,11 @@ public class ConfigForm
         alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
     }
 
+    /**
+     * Some components aren't bound via the data-binding wizard.  This takes care of them.
+     *
+     * @param data the config object to write state to
+     */
     private void getUnboundData(Config data)
     {
         data.setPackFields((Integer) packFieldsWithTheSpinner.getValue());
@@ -337,6 +367,7 @@ public class ConfigForm
         data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
     }
 
+    // javadoc inherited
     public void getData(Config data)
     {
         getUnboundData(data);
@@ -355,7 +386,6 @@ public class ConfigForm
         data.setNofd(donTDisambiguateFieldsCheckBox.isSelected());
         data.setUseTabs(useTabsInsteadOfCheckBox.isSelected());
         data.setSpaceAfterKeyword(spaceBetweenKeywordAndCheckBox.isSelected());
-        data.setSort(sortLinesAccordingToCheckBox.isSelected());
         data.setLineNumbersAsComments(originalLineNumbersAsCheckBox.isSelected());
         data.setFieldsFirst(outputFieldsBeforeMethodsCheckBox.isSelected());
         data.setNonlb(insertANewlineBeforeCheckBox.isSelected());
@@ -370,11 +400,20 @@ public class ConfigForm
         data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
     }
 
+    /**
+     * Some components aren't bound via the data-binding wizard.  This takes care of detecting
+     * changes in them.
+     *
+     * @param data the config object to compare to the current state
+     * @return true iff the data is modified
+     */
     private boolean isUnboundDataModified(Config data)
     {
+        // todo implement this
         return false;
     }
 
+    // javadoc inherited
     public boolean isModified(Config data)
     {
         if (isUnboundDataModified(data))
@@ -437,10 +476,6 @@ public class ConfigForm
         {
             return true;
         }
-        if (sortLinesAccordingToCheckBox.isSelected() != data.isSort())
-        {
-            return true;
-        }
         if (originalLineNumbersAsCheckBox.isSelected() != data.isLineNumbersAsComments())
         {
             return true;
@@ -497,7 +532,9 @@ public class ConfigForm
     }
 
     /**
-     * @return
+     * Convenience method to create a numeric {@link SpinnerModel}.
+     *
+     * @return a new spinner model
      */
     private static SpinnerModel createSpinnerModel()
     {
@@ -511,19 +548,30 @@ public class ConfigForm
      */
     private class SpinnerRadixModel extends SpinnerNumberModel
     {
+        /**
+         * Initialises a new instance of this class with a default value of 10.
+         */
         SpinnerRadixModel()
         {
             this(10);
         }
 
+        /**
+         * Initialises a new instance of this class with the given value.
+         *
+         * @param value the initial value
+         */
         SpinnerRadixModel(int value)
         {
             super(value,
                   8,
                   16,
                   2);
+            // ensure it's legal
+            setValue(value);
         }
 
+        // javadoc inherited
         public void setValue(Object object)
         {
             int value = ((Number) object).intValue();
@@ -534,6 +582,7 @@ public class ConfigForm
             super.setValue(object);
         }
 
+        // javadoc inherited
         public Object getNextValue()
         {
             Number number = getNumber();
@@ -555,6 +604,7 @@ public class ConfigForm
             return next;
         }
 
+        // javadoc inherited
         public Object getPreviousValue()
         {
             Number number = getNumber();

@@ -12,7 +12,7 @@ import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.util.SwingUtil;
 
 import javax.swing.JLabel;
@@ -52,7 +52,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     {
         if (file != null && "class".equals(file.getExtension()))
         {
-            Config config = PluginHelper.getConfig();
+            Config config = PluginUtil.getConfig();
             DecompilationDescriptor dd = DecompilationDescriptorFactory.create(file);
             boolean excluded = isExcluded(config,
                                           dd);

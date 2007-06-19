@@ -5,8 +5,8 @@ import com.intellij.openapi.actionSystem.DataConstants;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
+import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.config.ConfigComponent;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,12 +14,12 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Steve Chaloner
  */
-public class PluginHelper
+public class PluginUtil
 {
     /**
      * Static access only.
      */
-    private PluginHelper()
+    private PluginUtil()
     {
     }
 
@@ -63,6 +63,6 @@ public class PluginHelper
     public static Config getConfig()
     {
         return getComponent(getProject(),
-                            ConfigComponent.class).getConfig();
+                            ApplicationConfigComponent.class).getConfig();
     }
 }

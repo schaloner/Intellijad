@@ -10,7 +10,7 @@
             <implementation-class>net.stevechaloner.intellijad.IntelliJad</implementation-class>
         </component>
         <component>
-            <implementation-class>net.stevechaloner.intellijad.config.ConfigComponent</implementation-class>
+            <implementation-class>net.stevechaloner.intellijad.config.ApplicationConfigComponent</implementation-class>
         </component>
         <component>
             <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>

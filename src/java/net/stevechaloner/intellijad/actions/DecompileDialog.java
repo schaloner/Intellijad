@@ -2,13 +2,13 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.config.ConfigComponent;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
-import net.stevechaloner.intellijad.util.PluginHelper;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;
@@ -72,7 +72,7 @@ public class DecompileDialog extends JDialog
             }
         });
 
-        Config config = PluginHelper.getConfig();
+        Config config = PluginUtil.getConfig();
         excludeRecursivelyCheckBox.setSelected(config.isAlwaysExcludeRecursively());
 
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);
@@ -127,7 +127,7 @@ public class DecompileDialog extends JDialog
 
     private void onApply()
     {
-        Config config = getComponent(ConfigComponent.class).getConfig();
+        Config config = getComponent(ApplicationConfigComponent.class).getConfig();
         if (config != null)
         {
             NavigationTriggeredDecompile option = (NavigationTriggeredDecompile) comboBox1.getSelectedItem();

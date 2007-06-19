@@ -7,14 +7,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
-import net.stevechaloner.intellijad.IntelliJad;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 /**
@@ -25,47 +24,61 @@ public class ProjectConfigComponent implements ProjectComponent,
                                                JDOMExternalizable
 {
     /**
-     * The display name of the component
+     * The name of the component.
      */
     @NonNls
-    private static final String DISPLAY_NAME = "IntelliJad Project";
+    private static final String COMPONENT_NAME = "ProjectConfigComponent";
 
     /**
-     * The display logo.
+     * The generic configuration component.
      */
-    private static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-32.png"));
+    private final ConfigComponent configComponent = new ConfigComponent()
+    {
+        @Nls
+        public String getDisplayName()
+        {
+            return "IntelliJad Project";
+        }
+
+        public JComponent createComponent()
+        {
+            if (form == null)
+            {
+                form = new ConfigForm(project);
+            }
+            return form.getRoot();
+        }
+    };
 
     /**
-     * The configuration GUI.
-     */
-    private ConfigForm form;
-
-    /**
-     *
+     * The project this configuration is associated with.
      */
     private final Project project;
 
     /**
-     * @param project
+     * Initialises a new instance of this class.
+     *
+     * @param project the project this configuration is associated with.
      */
     public ProjectConfigComponent(Project project)
     {
         this.project = project;
     }
 
+    // javadoc inherited
     public void initComponent()
     {
-        // TODO: insert component initialization logic here
     }
 
+    // javadoc inherited
     public void disposeComponent()
     {
-        // TODO: insert component disposal logic here
     }
 
+    @NotNull
     public String getComponentName()
     {
-        return "ProjectConfigComponent";
+        return COMPONENT_NAME;
     }
 
     public void projectOpened()
@@ -81,52 +94,64 @@ public class ProjectConfigComponent implements ProjectComponent,
     @Nls
     public String getDisplayName()
     {
-        return DISPLAY_NAME;
+        return configComponent.getDisplayName();
     }
 
     public Icon getIcon()
     {
-        return LOGO;
+        return configComponent.getIcon();
     }
 
     @Nullable
     @NonNls
     public String getHelpTopic()
     {
-        return null;
+        return configComponent.getHelpTopic();
     }
 
     public JComponent createComponent()
     {
-        if (form == null)
-        {
-            form = new ConfigForm(project);
-        }
-        return form.getRoot();
+        return configComponent.createComponent();
     }
 
     public boolean isModified()
     {
-        return false;
+        return configComponent.isModified();
     }
 
     public void apply() throws ConfigurationException
     {
+        configComponent.apply();
     }
 
     public void reset()
     {
+        configComponent.reset();
     }
 
     public void disposeUIResources()
     {
+        configComponent.disposeUIResources();
     }
 
     public void readExternal(Element element) throws InvalidDataException
     {
+        configComponent.readExternal(element);
     }
 
     public void writeExternal(Element element) throws WriteExternalException
     {
+        configComponent.writeExternal(element);
+    }
+
+    /**
+     * Get the configuration instance.  If the project-level config specifies the global
+     * settings should be used, the global-level instance is returned.
+     *
+     * @return the configuration
+     */
+    public Config getConfig()
+    {
+        return configComponent.getConfig();
     }
 }
