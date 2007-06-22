@@ -61,8 +61,7 @@ abstract class AbstractDecompiler implements Decompiler
         VirtualFile decompiledFile = null;
         if (goodToGo)
         {
-            File targetClass = new File(context.getTargetDirectory(),
-                                        descriptor.getClassName() + '.' + descriptor.getExtension());
+            File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
 
             StringBuilder command = new StringBuilder(context.getCommand());
             updateCommand(command);

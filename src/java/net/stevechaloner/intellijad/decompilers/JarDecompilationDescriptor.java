@@ -4,6 +4,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 /**
  * @author Steve Chaloner
  */
@@ -47,5 +49,13 @@ public class JarDecompilationDescriptor extends DecompilationDescriptor
     public ClassPathType getClassPathType()
     {
         return ClassPathType.JAR;
+    }
+
+    // javadoc inherited
+    @NotNull
+    public File getSourceFile(@NotNull File availableDirectory)
+    {
+        return new File(availableDirectory,
+                        getClassName() + '.' + getExtension());
     }
 }

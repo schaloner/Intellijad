@@ -4,6 +4,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 /**
  * Defines the target class and supporting data required to target a file for decompilation.
  *
@@ -71,6 +73,15 @@ public abstract class DecompilationDescriptor
 
     @Nullable
     public abstract ClassPathType getClassPathType();
+
+    /**
+     * Gets the path to the source file.
+     *
+     * @param availableDirectory a directory available for temporary extractions.
+     * @return the source file
+     */
+    @NotNull
+    public abstract File getSourceFile(@NotNull File availableDirectory);
 
     // javadoc unnecessary
     @NotNull

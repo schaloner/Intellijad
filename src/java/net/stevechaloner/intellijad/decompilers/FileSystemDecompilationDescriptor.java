@@ -4,6 +4,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 /**
  * @author Steve Chaloner
  */
@@ -33,9 +35,17 @@ public class FileSystemDecompilationDescriptor extends DecompilationDescriptor
         return pathToFile;
     }
 
+    // javadoc inherited
     @Nullable
     public ClassPathType getClassPathType()
     {
         return ClassPathType.FS;
+    }
+
+    // javadoc inherited
+    @NotNull
+    public File getSourceFile(@NotNull File availableDirectory)
+    {
+        return new File(getClassFile().getPath());
     }
 }
