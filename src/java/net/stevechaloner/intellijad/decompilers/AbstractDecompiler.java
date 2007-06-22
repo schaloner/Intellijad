@@ -28,7 +28,7 @@ abstract class AbstractDecompiler implements Decompiler
      */
     protected abstract VirtualFile processOutput(DecompilationDescriptor descriptor,
                                                  DecompilationContext context,
-                                                 ByteArrayOutputStream content) throws DecompilationException;
+                                                 String content) throws DecompilationException;
 
     /**
      * Updates the command to insert any specific arguments.
@@ -41,13 +41,26 @@ abstract class AbstractDecompiler implements Decompiler
     public VirtualFile decompile(DecompilationDescriptor descriptor,
                                  DecompilationContext context) throws DecompilationException
     {
-        VirtualFile jarFile = descriptor.getJarFile();
-        VirtualFile decompiledFile = null;
-        if (jarFile != null)
+        boolean goodToGo = false;
+        switch (descriptor.getClassPathType())
         {
-            extractClassFiles(jarFile,
-                              context,
-                              descriptor);
+            case JAR:
+                JarDecompilationDescriptor jarDD = (JarDecompilationDescriptor) descriptor;
+                VirtualFile jarFile = jarDD.getJarFile();
+                if (jarFile != null)
+                {
+                    extractClassFiles(jarFile,
+                                      context,
+                                      descriptor);
+                    goodToGo = true;
+                }
+                break;
+            default:
+                goodToGo = true;
+        }
+        VirtualFile decompiledFile = null;
+        if (goodToGo)
+        {
             File targetClass = new File(context.getTargetDirectory(),
                                         descriptor.getClassName() + '.' + descriptor.getExtension());
 
@@ -58,34 +71,26 @@ abstract class AbstractDecompiler implements Decompiler
 
             try
             {
-                Process process = Runtime.getRuntime().exec(command.toString());
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 ByteArrayOutputStream err = new ByteArrayOutputStream();
-                StreamMonitor outputMonitor = new StreamMonitor(context,
-                                                                process.getInputStream(),
-                                                                output);
-                Thread outputThread = new Thread(outputMonitor);
-                outputThread.start();
-                StreamMonitor errMonitor = new StreamMonitor(context,
-                                                             process.getErrorStream(),
-                                                             err);
-                Thread errThread = new Thread(errMonitor);
-                errThread.start();
-                int exitCode = process.waitFor();
-                outputMonitor.stop();
-                errMonitor.stop();
-
-                ResultType resultType = checkDecompilationStatus(exitCode,
-                                                                 err,
-                                                                 output);
+                ResultType resultType = runExternalDecompiler(command.toString(),
+                                                              context,
+                                                              output,
+                                                              err);
                 switch (resultType)
                 {
                     case NON_FATAL_ERROR:
                         context.getConsole().appendToConsole(new String(err.toByteArray()));
                     case SUCCESS:
+                        String content = new String(output.toByteArray());
+                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                        {
+                            DecompilationDescriptorFactory.update(descriptor,
+                                                                  content);
+                        }
                         decompiledFile = processOutput(descriptor,
                                                        context,
-                                                       output);
+                                                       content);
                         // todo this doesn't belong here
                         if (PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess())
                         {
@@ -110,6 +115,32 @@ abstract class AbstractDecompiler implements Decompiler
         }
 
         return decompiledFile;
+    }
+
+    private ResultType runExternalDecompiler(String command,
+                                             DecompilationContext context,
+                                             ByteArrayOutputStream output,
+                                             ByteArrayOutputStream err) throws IOException,
+                                                                               InterruptedException
+    {
+        Process process = Runtime.getRuntime().exec(command);
+        StreamMonitor outputMonitor = new StreamMonitor(context,
+                                                        process.getInputStream(),
+                                                        output);
+        Thread outputThread = new Thread(outputMonitor);
+        outputThread.start();
+        StreamMonitor errMonitor = new StreamMonitor(context,
+                                                     process.getErrorStream(),
+                                                     err);
+        Thread errThread = new Thread(errMonitor);
+        errThread.start();
+        int exitCode = process.waitFor();
+        outputMonitor.stop();
+        errMonitor.stop();
+
+        return checkDecompilationStatus(exitCode,
+                                        err,
+                                        output);
     }
 
     /**

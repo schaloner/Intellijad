@@ -26,6 +26,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 /**
@@ -625,5 +629,16 @@ public class ConfigForm
             }
             return previous;
         }
+    }
+
+    /**
+     * Marker annotation to indicate a {@link javax.swing.JComponent} is considered
+     * part of the general control set, as defined by whatever class is using this.
+     */
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(java.lang.annotation.ElementType.FIELD)
+    public @interface Control
+    {
     }
 }

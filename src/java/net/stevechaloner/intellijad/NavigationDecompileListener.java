@@ -96,13 +96,17 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     {
         ExclusionTableModel exclusionModel = config.getExclusionTableModel();
         String packageName = decompilationDescriptor.getPackageName();
-        boolean exclude = exclusionModel.containsPackage(packageName);
-        for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
+        boolean exclude = false;
+        if (packageName != null)
         {
-            String pn = (String) exclusionModel.getValueAt(i, 0);
-            if (pn != null)
+            exclude = exclusionModel.containsPackage(packageName);
+            for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
             {
-                exclude = packageName.startsWith(pn) && (Boolean) exclusionModel.getValueAt(i, 1);
+                String pn = (String) exclusionModel.getValueAt(i, 0);
+                if (pn != null)
+                {
+                    exclude = packageName.startsWith(pn) && (Boolean) exclusionModel.getValueAt(i, 1);
+                }
             }
         }
         return exclude;

@@ -2,7 +2,6 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
@@ -40,8 +39,6 @@ public class DecompileDialog extends JDialog
     private JCheckBox excludePackageCheckBox;
     private JCheckBox excludeRecursivelyCheckBox;
 
-    private final Project project;
-
     private final DecompilationChoiceListener listener;
 
     private final DecompilationDescriptor decompilationDescriptor;
@@ -52,7 +49,6 @@ public class DecompileDialog extends JDialog
     {
         this.decompilationDescriptor = decompilationDescriptor;
         this.listener = listener;
-        this.project = project;
 
         setContentPane(contentPane);
         setModal(true);
@@ -127,16 +123,17 @@ public class DecompileDialog extends JDialog
 
     private void onApply()
     {
-        Config config = getComponent(ApplicationConfigComponent.class).getConfig();
+        Config config = PluginUtil.getConfig();
         if (config != null)
         {
             NavigationTriggeredDecompile option = (NavigationTriggeredDecompile) comboBox1.getSelectedItem();
             config.setConfirmNavigationTriggeredDecompile(option.getName());
 
-            if (excludePackageCheckBox.isSelected())
+            String packageName = decompilationDescriptor.getPackageName();
+            if (packageName != null && excludePackageCheckBox.isSelected())
             {
                 ExclusionTableModel tableModel = config.getExclusionTableModel();
-                tableModel.addExclusion(decompilationDescriptor.getPackageName(),
+                tableModel.addExclusion(packageName,
                                         excludeRecursivelyCheckBox.isSelected());
             }
         }
@@ -157,16 +154,5 @@ public class DecompileDialog extends JDialog
     public boolean isModified(Config data)
     {
         return !((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName().equals(data.getConfirmNavigationTriggeredDecompile());
-    }
-
-    /**
-     * Get the required component.
-     *
-     * @param clazz the component class
-     * @return the required component
-     */
-    private <C> C getComponent(Class<C> clazz)
-    {
-        return project.getComponent(clazz);
     }
 }

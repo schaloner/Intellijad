@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -152,6 +153,11 @@ public class ProjectConfigComponent implements ProjectComponent,
      */
     public Config getConfig()
     {
-        return configComponent.getConfig();
+        Config config = configComponent.getConfig();
+        if (!config.isUseProjectSpecificSettings())
+        {
+            config = PluginUtil.getApplicationConfig();
+        }
+        return config;
     }
 }

@@ -2,7 +2,11 @@ package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiManager;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
@@ -18,6 +22,7 @@ public class DecompilationDescriptorFactory
     private static final Pattern JARRED_CLASS_PATTERN = Pattern.compile("[.[^!]]*!(.*)");
     private static final Pattern PACKAGE_AND_CLASS_PATTERN = Pattern.compile("!(.*)");
     private static final Pattern CLASS_PATTERN = Pattern.compile("/\\w*\\.class");
+    private static final Pattern PACKAGE_PATTERN = Pattern.compile("package [\\w|\\.]*;");
 
     /**
      * Creates a {@link DecompilationDescriptor} for the target.
@@ -32,19 +37,42 @@ public class DecompilationDescriptorFactory
         DecompilationDescriptor dd;
         if (isJarFile.matches())
         {
-            dd = new DecompilationDescriptor(target,
-                                             getFullyQualifiedName(path),
-                                             getPackageName(path),
-                                             getPackageNameAsPath(path),
-                                             path,
-                                             getJarFile(target));
+            dd = new JarDecompilationDescriptor(target,
+                                                getFullyQualifiedName(path),
+                                                getPackageName(path),
+                                                getPackageNameAsPath(path),
+                                                getJarFile(target));
         }
         else
         {
-            throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.not-in-jar-file",
-                                                                                target.getPath()));
+            dd = new FileSystemDecompilationDescriptor(target);
         }
         return dd;
+    }
+
+    /**
+     * @param dd
+     * @param classContent
+     */
+    public static void update(DecompilationDescriptor dd,
+                              String classContent)
+    {
+        Matcher packageNameMatcher = PACKAGE_PATTERN.matcher(classContent);
+        if (packageNameMatcher.find())
+        {
+            String packageName = classContent.substring("package ".length() + packageNameMatcher.start(),
+                                                        packageNameMatcher.end() - 1);
+            dd.setPackageName(packageName);
+            String asPath = packageName.replaceAll("\\.", "/");
+            if (!asPath.endsWith("/"))
+            {
+                asPath = asPath + "/";
+            }
+            dd.setPackageNameAsPath(asPath);
+
+            PsiElementFactory elementFactory = PsiManager.getInstance(PluginUtil.getProject()).getElementFactory();
+            PsiElement[] psiElements = elementFactory.createFileFromText("X.java", classContent).getChildren();
+        }
     }
 
     /**

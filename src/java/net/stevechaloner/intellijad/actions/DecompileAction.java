@@ -29,8 +29,7 @@ public class DecompileAction extends AnAction
         DataContext dataContext = e.getDataContext();
         if ("class".equals(DataContextHelper.getFileExtension(dataContext)))
         {
-            IntelliJad intelliJad = PluginUtil.getComponent(DataContextHelper.getProject(dataContext),
-                                                            IntelliJad.class);
+            IntelliJad intelliJad = PluginUtil.getComponent(IntelliJad.class);
             DecompilationDescriptor descriptor = DecompilationDescriptorFactory.create(DataContextHelper.getFile(e.getDataContext()));
             intelliJad.decompile(descriptor);
         }

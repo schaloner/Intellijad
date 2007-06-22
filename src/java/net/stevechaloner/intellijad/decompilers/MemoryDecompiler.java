@@ -13,8 +13,6 @@ import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
-import java.io.ByteArrayOutputStream;
-
 /**
  * @author Steve Chaloner
  */
@@ -23,11 +21,11 @@ public class MemoryDecompiler extends AbstractDecompiler
     // javadoc inherited
     protected VirtualFile processOutput(DecompilationDescriptor descriptor,
                                         DecompilationContext context,
-                                        ByteArrayOutputStream content) throws DecompilationException
+                                        String content) throws DecompilationException
     {
         final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(MemoryVirtualFileSystem.PROTOCOL);
         MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + ".java",
-                                                       new String(content.toByteArray()));
+                                                       content);
         vfs.addFile(file);
 
         Project project = context.getProject();

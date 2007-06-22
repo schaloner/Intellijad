@@ -2,23 +2,37 @@ package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Defines the target class and supporting data required to target a file for decompilation.
  *
  * @author Steve Chaloner
  */
-public class DecompilationDescriptor
+public abstract class DecompilationDescriptor
 {
+    /**
+     * The type of path the class exists on, jar file or file system.
+     */
+    public enum ClassPathType
+    {
+        JAR, FS
+    }
+
+    @NotNull
     private final VirtualFile classFile;
-    private final String fqName;
+    @Nullable
+    private String fqName;
+    @Nullable
     private final String className;
+    @Nullable
     private final String extension;
-    private final String packageName;
-    private final String packageNameAsPath;
-    private final String path;
-    private final String pathToFile;
-    private final VirtualFile jarFile;
+    @Nullable
+    private String packageName;
+    @Nullable
+    private String packageNameAsPath;
+    @NotNull
+    private String path;
 
     /**
      * Initialises a new instance of this class.
@@ -27,15 +41,11 @@ public class DecompilationDescriptor
      * @param fqName            the fully-qualified name of the class
      * @param packageName       the package (e.g. net.stevechaloner.intellijad)
      * @param packageNameAsPath the package as a path (e.g. net/stevechaloner/intellijad/)
-     * @param path              the full path to the target class
-     * @param jarFile           the jar file
      */
     DecompilationDescriptor(@NotNull VirtualFile classFile,
                             @NotNull String fqName,
                             @NotNull String packageName,
-                            @NotNull String packageNameAsPath,
-                            @NotNull String path,
-                            @NotNull VirtualFile jarFile)
+                            @NotNull String packageNameAsPath)
     {
         this.classFile = classFile;
         this.fqName = fqName;
@@ -43,10 +53,24 @@ public class DecompilationDescriptor
         this.extension = classFile.getExtension();
         this.packageName = packageName;
         this.packageNameAsPath = packageNameAsPath;
-        this.path = path;
-        this.pathToFile = jarFile.getPath();
-        this.jarFile = jarFile;
+        this.path = classFile.getPath();
     }
+
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param classFile the file pointing to the target class
+     */
+    DecompilationDescriptor(@NotNull VirtualFile classFile)
+    {
+        this.classFile = classFile;
+        this.path = classFile.getPath();
+        this.className = classFile.getNameWithoutExtension();
+        this.extension = classFile.getExtension();
+    }
+
+    @Nullable
+    public abstract ClassPathType getClassPathType();
 
     // javadoc unnecessary
     @NotNull
@@ -56,21 +80,21 @@ public class DecompilationDescriptor
     }
 
     // javadoc unnecessary
-    @NotNull
+    @Nullable
     public String getFullyQualifiedName()
     {
         return fqName;
     }
 
     // javadoc unnecessary
-    @NotNull
+    @Nullable
     public String getClassName()
     {
         return className;
     }
 
     // javadoc unnecessary
-    @NotNull
+    @Nullable
     public String getExtension()
     {
         return extension;
@@ -84,31 +108,34 @@ public class DecompilationDescriptor
     }
 
     // javadoc unnecessary
-    @NotNull
+    @Nullable
     public String getPackageName()
     {
         return packageName;
     }
 
     // javadoc unnecessary
-    @NotNull
+    @Nullable
     public String getPackageNameAsPath()
     {
         return packageNameAsPath;
     }
 
     // javadoc unnecessary
-    @NotNull
-    public VirtualFile getJarFile()
+    public void setFqName(String fqName)
     {
-        return jarFile;
+        this.fqName = fqName;
     }
 
     // javadoc unnecessary
-    @NotNull
-    public String getPathToFile()
+    public void setPackageName(String packageName)
     {
-        return pathToFile;
+        this.packageName = packageName;
     }
 
+    // javadoc unnecessary
+    public void setPackageNameAsPath(String packageNameAsPath)
+    {
+        this.packageNameAsPath = packageNameAsPath;
+    }
 }
