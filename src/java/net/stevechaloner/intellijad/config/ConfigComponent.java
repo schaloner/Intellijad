@@ -18,10 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Generic configuation component.
+ *
  * @author Steve Chaloner
  */
-abstract class ConfigComponent implements Configurable,
-                                          JDOMExternalizable
+abstract class  ConfigComponent implements Configurable,
+                                           JDOMExternalizable
 {
     /**
      * The display logo.
@@ -44,7 +46,7 @@ abstract class ConfigComponent implements Configurable,
     private final Map<String, DOMable> domables = new HashMap<String, DOMable>()
     {
         {
-            put(config.getName(),
+            put(config.getPropertyDescriptor().getName(),
                 config);
         }
     };

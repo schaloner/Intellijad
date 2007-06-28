@@ -53,6 +53,23 @@ public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutableProperty
     /**
      * Initialises a new instance of this class with the given arguments.
      *
+     * @param name       the name of the property
+     * @param defaultValue the default value of the property
+     * @param renderRule the rule to control rendering of this property
+     */
+    public ImmutableCommandLinePropertyDescriptor(String name,
+                                                  T defaultValue,
+                                                  RenderRule renderRule)
+    {
+        this(name,
+             defaultValue,
+             renderRule,
+             RenderType.NAME_ONLY);
+    }
+
+    /**
+     * Initialises a new instance of this class with the given arguments.
+     *
      * @param name         the name of the property
      * @param defaultValue the default value of the property
      * @param renderRule   the rule to control rendering of this property

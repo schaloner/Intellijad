@@ -10,6 +10,7 @@ import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.util.text.StringUtil;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
@@ -17,7 +18,7 @@ import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.Decompiler;
-import net.stevechaloner.intellijad.decompilers.DiskDecompiler;
+import net.stevechaloner.intellijad.decompilers.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
@@ -35,7 +36,7 @@ public class IntelliJad implements ApplicationComponent,
                                    ProjectManagerListener
 {
     /**
-     *
+     * The name of the component.
      */
     public static final String COMPONENT_NAME = "net.stevechaloner.intellijad.IntelliJad";
 
@@ -56,6 +57,7 @@ public class IntelliJad implements ApplicationComponent,
         return COMPONENT_NAME;
     }
 
+    // javadoc inherited
     public void projectOpened(Project project)
     {
         console = new IntelliJadConsole();
@@ -69,12 +71,14 @@ public class IntelliJad implements ApplicationComponent,
                             navigationListener);
     }
 
+    // javadoc inherited
     public boolean canCloseProject(Project project)
     {
         // no-op
         return true;
     }
 
+    // javadoc inherited
     public void projectClosed(Project project)
     {
         NavigationDecompileListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
@@ -82,6 +86,7 @@ public class IntelliJad implements ApplicationComponent,
         console.disposeConsole();
     }
 
+    // javadoc inherited
     public void projectClosing(final Project project)
     {
         ApplicationManager.getApplication().runWriteAction(new Runnable()
@@ -125,17 +130,16 @@ public class IntelliJad implements ApplicationComponent,
         Config config = PluginUtil.getConfig();
         Project project = PluginUtil.getProject();
 
-        String jadPath = config.getJadPath();
         console.openConsole();
-        if (validateJadPath(jadPath))
+        if (validateOptions())
         {
             StringBuilder sb = new StringBuilder();
-            sb.append(jadPath).append(' ');
+            sb.append(config.getJadPath()).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
             DecompilationContext context = new DecompilationContext(project,
                                                                     console,
                                                                     sb.toString());
-            Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new DiskDecompiler();
+            Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new FileSystemDecompiler();
             try
             {
                 VirtualFile decompiledFile = decompiler.decompile(descriptor,
@@ -157,30 +161,37 @@ public class IntelliJad implements ApplicationComponent,
     /**
      * Validate the path to Jad as valid.
      *
-     * @param path the path to Jad
      * @return true iff the path is ok
      */
-    private boolean validateJadPath(String path)
+    private boolean validateOptions()
     {
         String message = null;
-        if (path == null || path.trim().length() == 0)
+        Config config = PluginUtil.getConfig();
+        String jadPath = config.getJadPath();
+        if (StringUtil.isEmptyOrSpaces(jadPath))
         {
             message = IntelliJadResourceBundle.message("error.unspecified-jad-path");
         }
         else
         {
-            File f = new File(path);
+            File f = new File(jadPath);
             if (!f.exists())
             {
                 message = IntelliJadResourceBundle.message("error.non-existant-jad-path",
-                                                           path);
+                                                           jadPath);
             }
             else if (!f.isFile())
             {
                 message = IntelliJadResourceBundle.message("error.invalid-jad-path",
-                                                           path);
+                                                           jadPath);
             }
         }
+
+        if (!config.isDecompileToMemory() && StringUtil.isEmptyOrSpaces(config.getOutputDirectory()))
+        {
+            message = IntelliJadResourceBundle.message("error.unspecified-output-directory");
+        }
+
         if (message != null)
         {
             console.appendToConsole(message);

@@ -28,7 +28,7 @@ public class ProjectConfigComponent implements ProjectComponent,
      * The name of the component.
      */
     @NonNls
-    private static final String COMPONENT_NAME = "ProjectConfigComponent";
+    private static final String COMPONENT_NAME = "IntelliJadProjectConfigComponent";
 
     /**
      * The generic configuration component.

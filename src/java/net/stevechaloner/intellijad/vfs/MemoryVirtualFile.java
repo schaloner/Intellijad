@@ -16,38 +16,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A memory-based file.
+ *
  * @author Steve Chaloner
  */
 public class MemoryVirtualFile extends VirtualFile
 {
     /**
-     *
+     * The name of the file.
      */
     private final String name;
 
     /**
-     *
+     * The content of the file.
      */
     private final String content;
 
     /**
-     *
+     * A flag to indicate if this file represents a directory.
      */
     private final boolean isDirectory;
 
     /**
-     *
+     * The children of this file, if the file is a directory.
      */
     private Map<String, MemoryVirtualFile> children = new HashMap<String, MemoryVirtualFile>();
 
     /**
-     *
+     * The parent of this file.  If this file is at the root of the file
+     * system, it will not have a parent.
      */
     private VirtualFile parent;
 
     /**
-     * @param name
-     * @param content
+     * Initialises a new instance of this class.
+     *
+     * @param name the name of the file
+     * @param content the content of the file
      */
     public MemoryVirtualFile(String name,
                              String content)
@@ -58,7 +63,9 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     /**
-     * @param name
+     * Initialises a new instance of this class.
+     *
+     * @param name the name of the file
      */
     public MemoryVirtualFile(String name)
     {
@@ -68,9 +75,13 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     /**
-     * @param name
-     * @param content
-     * @param isDirectory
+     * Initialises a new instance of this class.
+     *
+     * @param name the name of the file
+     * @param content the content of the file.  This is mutually exclusive with
+     * <code>isDirectory</code>.
+     * @param isDirectory true iff this file is a directory.  This is mutually exclusive
+     * with <code>content<code>.
      */
     private MemoryVirtualFile(String name,
                               String content,
@@ -135,13 +146,23 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     /**
-     * @param file
+     * Add the given file to the child list of this directory.
+     *
+     * @param file the file to add to the list of children
+     * @throws IllegalStateException if this file is not a directory
      */
-    public void addChild(MemoryVirtualFile file)
+    public void addChild(MemoryVirtualFile file) throws IllegalStateException
     {
-        file.setParent(this);
-        children.put(file.getName(),
-                     file);
+        if (isDirectory)
+        {
+            file.setParent(this);
+            children.put(file.getName(),
+                         file);
+        }
+        else
+        {
+            throw new IllegalStateException("files can only be added to a directory");
+        }
     }
 
     // javadoc inherited
@@ -188,8 +209,10 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     /**
-     * @param name
-     * @return
+     * Gets the file from this directory's children.
+     *
+     * @param name the name of the child to retrieve
+     * @return the file, or null if it cannot be found
      */
     @Nullable
     public MemoryVirtualFile getChild(String name)

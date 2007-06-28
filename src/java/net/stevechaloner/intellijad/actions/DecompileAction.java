@@ -3,8 +3,10 @@ package net.stevechaloner.intellijad.actions;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
-import net.stevechaloner.idea.util.events.DataContextHelper;
+import com.intellij.openapi.vfs.VirtualFile;
+import net.stevechaloner.idea.util.events.DataContextUtil;
 import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
@@ -19,7 +21,7 @@ public class DecompileAction extends AnAction
     {
         super.update(e);
 
-        String extension = DataContextHelper.getFileExtension(e.getDataContext());
+        String extension = DataContextUtil.getFileExtension(e.getDataContext());
         this.getTemplatePresentation().setEnabled(extension != null && "class".equals(extension));
     }
 
@@ -27,11 +29,21 @@ public class DecompileAction extends AnAction
     public void actionPerformed(AnActionEvent e)
     {
         DataContext dataContext = e.getDataContext();
-        if ("class".equals(DataContextHelper.getFileExtension(dataContext)))
+        if ("class".equals(DataContextUtil.getFileExtension(dataContext)))
         {
             IntelliJad intelliJad = PluginUtil.getComponent(IntelliJad.class);
-            DecompilationDescriptor descriptor = DecompilationDescriptorFactory.create(DataContextHelper.getFile(e.getDataContext()));
-            intelliJad.decompile(descriptor);
+            VirtualFile file = DataContextUtil.getFile(e.getDataContext());
+            if (file != null)
+            {
+                DecompilationDescriptor descriptor = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
+                intelliJad.decompile(descriptor);
+            }
+            else
+            {
+                IntelliJadConsole console = PluginUtil.getComponent(IntelliJadConsole.class);
+                // todo i18n here
+                console.appendToConsole("file is null");
+            }
         }
     }
 }

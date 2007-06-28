@@ -19,6 +19,19 @@ import java.util.zip.ZipFile;
  */
 abstract class AbstractDecompiler implements Decompiler
 {
+    protected enum OperationStatus { CONTINUE, ABORT }
+
+    /**
+     * Perform pre-compilation operations.
+     * 
+     * @param descriptor the decompilation descriptor
+     * @param context    the decompilation context
+     * @return the last chance to abort the operation before decompilation
+     * @throws DecompilationException if the operation fails
+     */
+    protected abstract OperationStatus setup(DecompilationDescriptor descriptor,
+                                              DecompilationContext context) throws DecompilationException;
+
     /**
      * @param descriptor the decompilation descriptor
      * @param context    the decompilation context
@@ -26,9 +39,9 @@ abstract class AbstractDecompiler implements Decompiler
      * @return a file representing the decompiled file
      * @throws DecompilationException if the processing fails
      */
-    protected abstract VirtualFile processOutput(DecompilationDescriptor descriptor,
-                                                 DecompilationContext context,
-                                                 String content) throws DecompilationException;
+    protected abstract VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
+                                                 @NotNull final DecompilationContext context,
+                                                 @NotNull final String content) throws DecompilationException;
 
     /**
      * Updates the command to insert any specific arguments.
@@ -41,76 +54,87 @@ abstract class AbstractDecompiler implements Decompiler
     public VirtualFile decompile(DecompilationDescriptor descriptor,
                                  DecompilationContext context) throws DecompilationException
     {
-        boolean goodToGo = false;
-        switch (descriptor.getClassPathType())
-        {
-            case JAR:
-                JarDecompilationDescriptor jarDD = (JarDecompilationDescriptor) descriptor;
-                VirtualFile jarFile = jarDD.getJarFile();
-                if (jarFile != null)
-                {
-                    extractClassFiles(jarFile,
-                                      context,
-                                      descriptor);
-                    goodToGo = true;
-                }
-                break;
-            default:
-                goodToGo = true;
-        }
         VirtualFile decompiledFile = null;
-        if (goodToGo)
+        try
         {
-            File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
-
-            StringBuilder command = new StringBuilder(context.getCommand());
-            updateCommand(command);
-            command.append(targetClass.getAbsolutePath());
-            context.getConsole().appendToConsole(command.toString());
-
-            try
+            boolean goodToGo = false;
+            switch (descriptor.getClassPathType())
             {
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
-                ByteArrayOutputStream err = new ByteArrayOutputStream();
-                ResultType resultType = runExternalDecompiler(command.toString(),
-                                                              context,
-                                                              output,
-                                                              err);
-                switch (resultType)
+                case JAR:
+                    JarDecompilationDescriptor jarDD = (JarDecompilationDescriptor) descriptor;
+                    VirtualFile jarFile = jarDD.getJarFile();
+                    if (jarFile != null)
+                    {
+                        extractClassFiles(jarFile,
+                                          context,
+                                          descriptor);
+                        goodToGo = true;
+                    }
+                    break;
+                default:
+                    goodToGo = true;
+            }
+            if (goodToGo)
+            {
+                File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
+
+                StringBuilder command = new StringBuilder(context.getCommand());
+                updateCommand(command);
+                command.append(targetClass.getAbsolutePath());
+                context.getConsole().appendToConsole(command.toString());
+
+                try
                 {
-                    case NON_FATAL_ERROR:
-                        context.getConsole().appendToConsole(new String(err.toByteArray()));
-                    case SUCCESS:
-                        String content = new String(output.toByteArray());
-                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                    OperationStatus status = setup(descriptor,
+                                                   context);
+                    if (status == OperationStatus.CONTINUE)
+                    {
+                        ByteArrayOutputStream output = new ByteArrayOutputStream();
+                        ByteArrayOutputStream err = new ByteArrayOutputStream();
+                        ResultType resultType = runExternalDecompiler(command.toString(),
+                                                                      context,
+                                                                      output,
+                                                                      err);
+                        switch (resultType)
                         {
-                            DecompilationDescriptorFactory.update(descriptor,
-                                                                  content);
+                            case NON_FATAL_ERROR:
+                                context.getConsole().appendToConsole(new String(err.toByteArray()));
+                            case SUCCESS:
+                                String content = new String(output.toByteArray());
+                                if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                                {
+                                    DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
+                                                                                                         content);
+                                }
+                                decompiledFile = processOutput(descriptor,
+                                                               context,
+                                                               content);
+                                // todo this doesn't belong here
+                                if (PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess())
+                                {
+                                    context.getConsole().clearConsoleContent();
+                                    context.getConsole().closeConsole();
+                                }
+                                break;
+                            case FATAL_ERROR:
+                            default:
+                                context.getConsole().appendToConsole(new String(err.toByteArray()));
                         }
-                        decompiledFile = processOutput(descriptor,
-                                                       context,
-                                                       content);
-                        // todo this doesn't belong here
-                        if (PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess())
-                        {
-                            context.getConsole().clearConsoleContent();
-                            context.getConsole().closeConsole();
-                        }
-                        break;
-                    case FATAL_ERROR:
-                    default:
-                        context.getConsole().appendToConsole(new String(err.toByteArray()));
+                    }
                 }
-                context.getTargetDirectory().delete();
+                catch (IOException e)
+                {
+                    throw new DecompilationException(e);
+                }
+                catch (InterruptedException e)
+                {
+                    throw new DecompilationException(e);
+                }
             }
-            catch (IOException e)
-            {
-                throw new DecompilationException(e);
-            }
-            catch (InterruptedException e)
-            {
-                throw new DecompilationException(e);
-            }
+        }
+        finally
+        {
+            context.getTargetDirectory().delete();
         }
 
         return decompiledFile;
@@ -137,6 +161,9 @@ abstract class AbstractDecompiler implements Decompiler
         outputMonitor.stop();
         errMonitor.stop();
 
+        output.flush();
+        err.flush();
+
         return checkDecompilationStatus(exitCode,
                                         err,
                                         output);
@@ -150,29 +177,9 @@ abstract class AbstractDecompiler implements Decompiler
      * @param output   the output of the process
      * @return a result based on the execution of the process
      */
-    private ResultType checkDecompilationStatus(int exitCode,
-                                                ByteArrayOutputStream err,
-                                                ByteArrayOutputStream output)
-    {
-        ResultType resultType = ResultType.SUCCESS;
-        switch (exitCode)
-        {
-            case 0:
-                if (err.size() > 0 && output.size() > 0)
-                {
-                    resultType = ResultType.NON_FATAL_ERROR;
-                }
-                else if (err.size() > 0)
-                {
-                    resultType = ResultType.FATAL_ERROR;
-                }
-                break;
-            default:
-                resultType = ResultType.FATAL_ERROR;
-
-        }
-        return resultType;
-    }
+    protected abstract ResultType checkDecompilationStatus(int exitCode,
+                                                           ByteArrayOutputStream err,
+                                                           ByteArrayOutputStream output);
 
     /**
      * Extract the class files from the library to the target directory.

@@ -6,9 +6,11 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.ToolWindow;
 import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ProjectConfigComponent;
+import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,20 +42,19 @@ public class PluginUtil
     /**
      * Gets the component from the project context.
      *
-     * @param project the project
      * @param clazz   the class of the component
      * @return the component
      */
-    public static <C> C getComponent(@NotNull Project project,
-                                     @NotNull Class<C> clazz)
+    public static <C> C getProjectComponent(@NotNull Class<C> clazz)
     {
-        return project.getComponent(clazz);
+        Project project = getProject();
+        return project == null ? null : project.getComponent(clazz);
     }
 
     /**
-     * Gets the tool window manager for teh
+     * Gets the tool window manager for the current project
      *
-     * @return
+     * @return the tool window manager
      */
     @Nullable
     public static ToolWindowManager getToolWindowManager()
@@ -90,8 +91,7 @@ public class PluginUtil
      */
     public static Config getConfig()
     {
-        Config config = getComponent(getProject(),
-                                     ProjectConfigComponent.class).getConfig();
+        Config config = getProjectComponent(ProjectConfigComponent.class).getConfig();
         if (!config.isUseProjectSpecificSettings())
         {
             config = getApplicationConfig();

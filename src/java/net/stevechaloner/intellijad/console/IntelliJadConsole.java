@@ -158,15 +158,20 @@ public class IntelliJadConsole
     {
         jitInit();
         ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
-        ToolWindow window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
-        if (window == null)
+
+        ToolWindow window = null;
+        if (toolWindowManager != null)
         {
-            window = toolWindowManager.registerToolWindow(IntelliJadConsole.TOOL_WINDOW_ID,
-                                                          getRoot(),
-                                                          ToolWindowAnchor.BOTTOM);
+            window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
+            if (window == null)
+            {
+                window = toolWindowManager.registerToolWindow(IntelliJadConsole.TOOL_WINDOW_ID,
+                                                              getRoot(),
+                                                              ToolWindowAnchor.BOTTOM);
+            }
+            window.setIcon(LOGO);
+            window.show(EMPTY_RUNNABLE);
         }
-        window.setIcon(LOGO);
-        window.show(EMPTY_RUNNABLE);
     }
 
     /**
@@ -175,10 +180,14 @@ public class IntelliJadConsole
     public void closeConsole()
     {
         ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
-        ToolWindow window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
-        if (window != null)
+        ToolWindow window = null;
+        if (toolWindowManager != null)
         {
-            window.hide(EMPTY_RUNNABLE);
+            window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
+            if (window != null)
+            {
+                window.hide(EMPTY_RUNNABLE);
+            }
         }
     }
 

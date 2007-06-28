@@ -53,7 +53,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         if (file != null && "class".equals(file.getExtension()))
         {
             Config config = PluginUtil.getConfig();
-            DecompilationDescriptor dd = DecompilationDescriptorFactory.create(file);
+            DecompilationDescriptor dd = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
             boolean excluded = isExcluded(config,
                                           dd);
             switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
@@ -99,14 +99,22 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         boolean exclude = false;
         if (packageName != null)
         {
-            exclude = exclusionModel.containsPackage(packageName);
-            for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
+            switch (exclusionModel.containsPackage(packageName))
             {
-                String pn = (String) exclusionModel.getValueAt(i, 0);
-                if (pn != null)
-                {
-                    exclude = packageName.startsWith(pn) && (Boolean) exclusionModel.getValueAt(i, 1);
-                }
+                case NOT_EXCLUDED:
+                    for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
+                    {
+                        String pn = (String) exclusionModel.getValueAt(i, 0);
+                        if (pn != null)
+                        {
+                            exclude = packageName.startsWith(pn) &&
+                                      (Boolean)exclusionModel.getValueAt(i, 1) &&
+                                      (Boolean)exclusionModel.getValueAt(i, 2);
+                        }
+                    }
+                    break;
+                default:
+                    // exclusion is either package-exact or disabled
             }
         }
         return exclude;

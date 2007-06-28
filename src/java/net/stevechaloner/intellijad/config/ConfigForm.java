@@ -6,6 +6,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
 import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
 import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
@@ -39,85 +40,46 @@ import java.lang.reflect.Field;
 public class ConfigForm
 {
     private JTabbedPane tabbedPane1;
-    @Control
-    private JTextField outputDirectoryTextField;
-    @Control
-    private JButton button1;
-    @Control
-    private JCheckBox markDecompiledFilesAsCheckBox;
-    @Control
-    private JTextField classesWithNumericalNamesTextField;
-    @Control
-    private JTextField fieldsWithNumericalNamesTextField;
-    @Control
-    private JTextField localsWithNumericalNamesTextField;
-    @Control
-    private JTextField methodsWithNumericalNamesTextField;
-    @Control
-    private JTextField parametersWithNumericalNamesTextField;
-    @Control
-    private JTextField allPackagesTextField;
-    @Control
-    private JTextField unusedExceptionNamesTextField;
-    @Control
-    private JSpinner packFieldsWithTheSpinner;
-    @Control
-    private JSpinner splitStringsIntoPiecesSpinner;
-    @Control
-    private JSpinner spacesForIndentationSpinner;
-    @Control
-    private JSpinner displayLongsUsingRadixSpinner;
-    @Control
-    private JSpinner displayIntegersUsingRadixSpinner;
-    @Control
-    private JCheckBox printDefaultInitializersForCheckBox;
-    @Control
-    private JCheckBox generateRedundantBracesCheckBox;
-    @Control
-    private JCheckBox generateFullyQualifiedNamesCheckBox;
-    @Control
-    private JCheckBox suppressEmptyConstructorsCheckBox;
-    @Control
-    private JCheckBox clearAllPrefixesIncludingCheckBox;
-    @Control
-    private JCheckBox donTGenerateAuxiliaryCheckBox;
-    @Control
-    private JCheckBox donTDisambiguateFieldsCheckBox;
-    @Control
-    private JCheckBox originalLineNumbersAsCheckBox;
-    @Control
-    private JCheckBox useTabsInsteadOfCheckBox;
-    @Control
-    private JCheckBox spaceBetweenKeywordAndCheckBox;
-    @Control
-    private JCheckBox insertANewlineBeforeCheckBox;
-    @Control
-    private JCheckBox outputFieldsBeforeMethodsCheckBox;
-    @Control
-    private JCheckBox splitStringsOnNewlineCheckBox;
+    @Control private JTextField outputDirectoryTextField;
+    @Control private JButton outputDirBrowseButton;
+    @Control private JCheckBox markDecompiledFilesAsCheckBox;
+    @Control private JTextField classesWithNumericalNamesTextField;
+    @Control private JTextField fieldsWithNumericalNamesTextField;
+    @Control private JTextField localsWithNumericalNamesTextField;
+    @Control private JTextField methodsWithNumericalNamesTextField;
+    @Control private JTextField parametersWithNumericalNamesTextField;
+    @Control private JTextField allPackagesTextField;
+    @Control private JTextField unusedExceptionNamesTextField;
+    @Control private JSpinner packFieldsWithTheSpinner;
+    @Control private JSpinner splitStringsIntoPiecesSpinner;
+    @Control private JSpinner spacesForIndentationSpinner;
+    @Control private JSpinner displayLongsUsingRadixSpinner;
+    @Control private JSpinner displayIntegersUsingRadixSpinner;
+    @Control private JCheckBox printDefaultInitializersForCheckBox;
+    @Control private JCheckBox generateRedundantBracesCheckBox;
+    @Control private JCheckBox generateFullyQualifiedNamesCheckBox;
+    @Control private JCheckBox suppressEmptyConstructorsCheckBox;
+    @Control private JCheckBox clearAllPrefixesIncludingCheckBox;
+    @Control private JCheckBox donTGenerateAuxiliaryCheckBox;
+    @Control private JCheckBox donTDisambiguateFieldsCheckBox;
+    @Control private JCheckBox originalLineNumbersAsCheckBox;
+    @Control private JCheckBox useTabsInsteadOfCheckBox;
+    @Control private JCheckBox spaceBetweenKeywordAndCheckBox;
+    @Control private JCheckBox insertANewlineBeforeCheckBox;
+    @Control private JCheckBox outputFieldsBeforeMethodsCheckBox;
+    @Control private JCheckBox splitStringsOnNewlineCheckBox;
     private JPanel root;
-    @Control
-    private JTextField jadTextField;
-    @Control
-    private JButton actionRemoveExclusionButton;
-    @Control
-    private JTextField pathTextField;
-    @Control
-    private JButton addButton;
-    @Control
-    private JScrollPane excludesScrollPane;
-    @Control
-    private JTable exclusionTable;
-    @Control
-    private JComboBox navTriggeredDecomp;
-    @Control
-    private JButton browseButton1;
-    @Control
-    private JCheckBox decompileToMemoryCheckBox;
-    @Control
-    private JCheckBox createIfDirectoryDoesnCheckBox;
-    @Control
-    private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
+    @Control private JTextField jadTextField;
+    @Control private JButton actionRemoveExclusionButton;
+    @Control private JButton addButton;
+    @Control private JScrollPane excludesScrollPane;
+    @Control private JTable exclusionTable;
+    @Control private JComboBox navTriggeredDecomp;
+    @Control private JCheckBox decompileToMemoryCheckBox;
+    @Control private JTextField pathTextField;
+    @Control private JButton browseButton1;
+    @Control private JCheckBox createIfDirectoryDoesnCheckBox;
+    @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     private JCheckBox useProjectSpecificIntelliJadCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
@@ -148,7 +110,7 @@ public class ConfigForm
         displayLongsUsingRadixSpinner.setModel(new SpinnerRadixModel());
         displayIntegersUsingRadixSpinner.setModel(new SpinnerRadixModel());
 
-        button1.addActionListener(project == null ?
+        outputDirBrowseButton.addActionListener(project == null ?
                                   new ApplicationFileSelectionAction(outputDirectoryTextField,
                                                                      FileSelectionDescriptor.DIRECTORIES_ONLY) :
                                                                                                                new ProjectFileSelectionAction(project,
@@ -165,15 +127,7 @@ public class ConfigForm
         {
             public void stateChanged(ChangeEvent e)
             {
-                if (useProjectSpecificIntelliJadCheckBox.isSelected())
-                {
-                    // prevents an annoying model-driven state switch
-                    boolean decompileToMemory = decompileToMemoryCheckBox.isSelected();
-                    button1.setEnabled(!decompileToMemory);
-                    createIfDirectoryDoesnCheckBox.setEnabled(!decompileToMemory);
-                    outputDirectoryTextField.setEnabled(!decompileToMemory);
-                    markDecompiledFilesAsCheckBox.setEnabled(!decompileToMemory);
-                }
+                toggleToDiskControls(project);
             }
         });
 
@@ -234,20 +188,33 @@ public class ConfigForm
         }
         else
         {
-            useProjectSpecificIntelliJadCheckBox.addActionListener(new ActionListener()
+            useProjectSpecificIntelliJadCheckBox.addChangeListener(new ChangeListener()
             {
-                public void actionPerformed(ActionEvent actionEvent)
+                public void stateChanged(ChangeEvent e)
                 {
-                    if (useProjectSpecificIntelliJadCheckBox.isSelected())
-                    {
-                        setControlsEnabled(true);
-                    }
-                    else
-                    {
-                        setControlsEnabled(false);
-                    }
+                    setControlsEnabled(useProjectSpecificIntelliJadCheckBox.isSelected());
                 }
             });
+        }
+    }
+
+    /**
+     * Toggles the use of the to-disk controls.
+     *
+     * @param project the current project
+     */
+    private void toggleToDiskControls(final Project project)
+    {
+        // todo just get the project from the PluginUtil?
+        if (project == null ||
+            useProjectSpecificIntelliJadCheckBox.isSelected())
+        {
+            // prevents an annoying model-driven state switch
+            boolean decompileToMemory = decompileToMemoryCheckBox.isSelected();
+            outputDirBrowseButton.setEnabled(!decompileToMemory);
+            createIfDirectoryDoesnCheckBox.setEnabled(!decompileToMemory);
+            outputDirectoryTextField.setEnabled(!decompileToMemory);
+            markDecompiledFilesAsCheckBox.setEnabled(!decompileToMemory);
         }
     }
 
@@ -258,7 +225,8 @@ public class ConfigForm
      */
     private void setControlsEnabled(boolean enabled)
     {
-        Field[] fields = this.getClass().getDeclaredFields();
+        Class<? extends ConfigForm> thisClass = this.getClass();
+        Field[] fields = thisClass.getDeclaredFields();
         try
         {
             for (Field field : fields)
@@ -277,6 +245,14 @@ public class ConfigForm
         {
             Logger.getInstance(getClass().getName()).error(e);
         }
+
+        // special case
+        if (enabled && decompileToMemoryCheckBox.isSelected())
+        {
+            toggleToDiskControls(PluginUtil.getProject());
+        }
+
+        root.validate();
     }
 
     /**
@@ -289,8 +265,9 @@ public class ConfigForm
             String path = pathTextField.getText();
             if (!StringUtil.isEmptyOrSpaces(path))
             {
-                exclusionTableModel.addRow(new Object[]{path,
-                                                        alwaysExcludePackagesRecursivelyCheckBox.isSelected()});
+                exclusionTableModel.addExclusion(path,
+                                                 alwaysExcludePackagesRecursivelyCheckBox.isSelected(),
+                                                 true);
             }
             pathTextField.setText("");
         }
@@ -321,6 +298,8 @@ public class ConfigForm
         displayLongsUsingRadixSpinner.setValue(data.getLongRadix());
         displayIntegersUsingRadixSpinner.setValue(data.getIntRadix());
         navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
+        useProjectSpecificIntelliJadCheckBox.setSelected(data.isUseProjectSpecificSettings());
+
     }
 
     // javadoc inherited
@@ -369,6 +348,7 @@ public class ConfigForm
         data.setLongRadix((Integer) displayLongsUsingRadixSpinner.getValue());
         data.setIntRadix((Integer) displayIntegersUsingRadixSpinner.getValue());
         data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
+        data.setUseProjectSpecificSettings(useProjectSpecificIntelliJadCheckBox.isSelected());
     }
 
     // javadoc inherited
@@ -413,8 +393,7 @@ public class ConfigForm
      */
     private boolean isUnboundDataModified(Config data)
     {
-        // todo implement this
-        return false;
+        return useProjectSpecificIntelliJadCheckBox.isSelected() != data.isUseProjectSpecificSettings();
     }
 
     // javadoc inherited

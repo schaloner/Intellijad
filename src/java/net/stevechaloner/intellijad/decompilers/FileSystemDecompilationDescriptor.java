@@ -11,28 +11,9 @@ import java.io.File;
  */
 public class FileSystemDecompilationDescriptor extends DecompilationDescriptor
 {
-    @NotNull
-    private String pathToFile;
-    @NotNull
-    private VirtualFile jarFile;
-
     FileSystemDecompilationDescriptor(@NotNull VirtualFile classFile)
     {
         super(classFile);
-    }
-
-    // javadoc unnecessary
-    @Nullable
-    public VirtualFile getJarFile()
-    {
-        return jarFile;
-    }
-
-    // javadoc unnecessary
-    @Nullable
-    public String getPathToFile()
-    {
-        return pathToFile;
     }
 
     // javadoc inherited

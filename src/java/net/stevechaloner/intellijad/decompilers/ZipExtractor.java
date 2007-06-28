@@ -14,6 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
+ * ZipExtractor will pull a file from a given path and extract it into
+ * a directory on the file system.
  * @author Steve Chaloner
  */
 class ZipExtractor
@@ -21,11 +23,13 @@ class ZipExtractor
     private static final String CLASS_PATTERN = "((\\$\\w*)?)*";
 
     /**
-     * @param context
-     * @param zipFile
-     * @param packageName
-     * @param className
-     * @throws IOException
+     * Extract the given file to the target directory specified in the context.
+     *
+     * @param context the context of the decompilation operation
+     * @param zipFile the name of the zip file to open
+     * @param packageName the package of the class
+     * @param className the name of the class
+     * @throws IOException if an error occurs during the operation
      */
     void extract(DecompilationContext context,
                  ZipFile zipFile,

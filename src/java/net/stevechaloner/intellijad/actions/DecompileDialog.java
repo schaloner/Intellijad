@@ -134,7 +134,8 @@ public class DecompileDialog extends JDialog
             {
                 ExclusionTableModel tableModel = config.getExclusionTableModel();
                 tableModel.addExclusion(packageName,
-                                        excludeRecursivelyCheckBox.isSelected());
+                                        excludeRecursivelyCheckBox.isSelected(),
+                                        true);
             }
         }
     }
