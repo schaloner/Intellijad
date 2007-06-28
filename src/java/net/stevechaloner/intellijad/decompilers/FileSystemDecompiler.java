@@ -28,9 +28,9 @@ public class FileSystemDecompiler extends AbstractDecompiler
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
-        Config config = PluginUtil.getConfig();
-        File outputDirectory = new File(config.getOutputDirectory());
-        boolean outputDirExists = outputDirectory.exists();
+        final Config config = PluginUtil.getConfig();
+        final File outputDirectory = new File(config.getOutputDirectory());
+        final boolean outputDirExists = outputDirectory.exists();
         OperationStatus status = OperationStatus.CONTINUE;
         if (!outputDirExists && config.isCreateOutputDirectory())
         {

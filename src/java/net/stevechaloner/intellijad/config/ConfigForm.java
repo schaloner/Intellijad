@@ -23,6 +23,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -236,7 +237,7 @@ public class ConfigForm
                     Object o = field.get(this);
                     if (o != null)
                     {
-                        ((JComponent) o).setEnabled(enabled);
+                        ((Component) o).setEnabled(enabled);
                     }
                 }
             }
