@@ -63,10 +63,15 @@ public class FileSystemDecompiler extends AbstractDecompiler
         {
             public void run()
             {
-                fileContainer[0] = vfs.refreshAndFindFileByIoFile(new File(td,
-                                                                           descriptor.getPackageNameAsPath() +
-                                                                           descriptor.getClassName() +
-                                                                           IntelliJadConstants.DOT_JAVA_EXTENSION));
+                File f = new File(td,
+                                  descriptor.getPackageNameAsPath() +
+                                  descriptor.getClassName() +
+                                  IntelliJadConstants.DOT_JAVA_EXTENSION);
+                if (config.isReadOnly())
+                {
+                    f.setReadOnly();
+                }
+                fileContainer[0] = vfs.refreshAndFindFileByIoFile(f);
 
                 final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
                                                                    project);

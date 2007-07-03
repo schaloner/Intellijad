@@ -54,7 +54,7 @@ public class MemoryDecompiler extends AbstractDecompiler
                     boolean found = false;
                     for (int i = 0; !found && i < urls.length; i++)
                     {
-                        found = "intellijad://root".equals(urls[i]);
+                        found = IntelliJadConstants.INTELLIJAD_ROOT.equals(urls[i]);
                     }
                     if (!found)
                     {

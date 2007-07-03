@@ -22,7 +22,6 @@ import net.stevechaloner.intellijad.decompilers.Decompiler;
 import net.stevechaloner.intellijad.decompilers.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
 import net.stevechaloner.intellijad.util.PluginUtil;
-import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -101,7 +100,7 @@ public class IntelliJad implements ApplicationComponent,
                     VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
                     for (VirtualFile file : files)
                     {
-                        if (file instanceof MemoryVirtualFile && file.getParent() == null)
+                        if (file.getParent() == null && IntelliJadConstants.INTELLIJAD_ROOT.equals(file.getUrl()))
                         {
                             model.removeRoot(file.getUrl(),
                                              OrderRootType.SOURCES);

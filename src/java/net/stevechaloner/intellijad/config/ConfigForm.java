@@ -304,16 +304,84 @@ public class ConfigForm
 
     }
 
-    // javadoc inherited
+    /**
+     * Some components aren't bound via the data-binding wizard.  This takes care of them.
+     *
+     * @param data the config object to write state to
+     */
+    private void getUnboundData(Config data)
+    {
+        data.setPackFields((Integer) packFieldsWithTheSpinner.getValue());
+        data.setMaxStringLength((Integer) splitStringsIntoPiecesSpinner.getValue());
+        data.setIndentation((Integer) spacesForIndentationSpinner.getValue());
+        data.setLongRadix((Integer) displayLongsUsingRadixSpinner.getValue());
+        data.setIntRadix((Integer) displayIntegersUsingRadixSpinner.getValue());
+        data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
+        data.setUseProjectSpecificSettings(useProjectSpecificIntelliJadCheckBox.isSelected());
+    }
+
+    /**
+     * Some components aren't bound via the data-binding wizard.  This takes care of detecting
+     * changes in them.
+     *
+     * @param data the config object to compare to the current state
+     * @return true iff the data is modified
+     */
+    private boolean isUnboundDataModified(Config data)
+    {
+        if (data.getPackFields() != packFieldsWithTheSpinner.getValue())
+        {
+            return true;
+        }
+        if (data.getMaxStringLength() != splitStringsIntoPiecesSpinner.getValue())
+        {
+            return true;
+        }
+        if (data.getIndentation() != spacesForIndentationSpinner.getValue())
+        {
+            return true;
+        }
+        if (data.getLongRadix() != displayLongsUsingRadixSpinner.getValue())
+        {
+            return true;
+        }
+        if (data.getIntRadix() != displayIntegersUsingRadixSpinner.getValue())
+        {
+            return true;
+        }
+        if (!data.getConfirmNavigationTriggeredDecompile().equals(navTriggeredDecomp.getSelectedItem()))
+        {
+            return true;
+        }
+        if (useProjectSpecificIntelliJadCheckBox.isSelected() != data.isUseProjectSpecificSettings())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Convenience method to create a numeric {@link SpinnerModel}.
+     *
+     * @return a new spinner model
+     */
+    private static SpinnerModel createSpinnerModel()
+    {
+        SpinnerNumberModel model = new SpinnerNumberModel();
+        model.setMinimum(0);
+        return model;
+    }
+
+    // javadoc unnecessary
     public void setData(Config data)
     {
         setUnboundData(data);
 
         jadTextField.setText(data.getJadPath());
-        markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
         outputDirectoryTextField.setText(data.getOutputDirectory());
         createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
         decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
+        markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
         printDefaultInitializersForCheckBox.setSelected(data.isDefaultInitializers());
         generateFullyQualifiedNamesCheckBox.setSelected(data.isFullyQualifiedNames());
         clearAllPrefixesIncludingCheckBox.setSelected(data.isClearPrefixes());
@@ -337,32 +405,16 @@ public class ConfigForm
         alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
     }
 
-    /**
-     * Some components aren't bound via the data-binding wizard.  This takes care of them.
-     *
-     * @param data the config object to write state to
-     */
-    private void getUnboundData(Config data)
-    {
-        data.setPackFields((Integer) packFieldsWithTheSpinner.getValue());
-        data.setMaxStringLength((Integer) splitStringsIntoPiecesSpinner.getValue());
-        data.setIndentation((Integer) spacesForIndentationSpinner.getValue());
-        data.setLongRadix((Integer) displayLongsUsingRadixSpinner.getValue());
-        data.setIntRadix((Integer) displayIntegersUsingRadixSpinner.getValue());
-        data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
-        data.setUseProjectSpecificSettings(useProjectSpecificIntelliJadCheckBox.isSelected());
-    }
-
-    // javadoc inherited
+    // javadoc unnecessary
     public void getData(Config data)
     {
         getUnboundData(data);
 
         data.setJadPath(jadTextField.getText());
-        data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
         data.setOutputDirectory(outputDirectoryTextField.getText());
         data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
         data.setDecompileToMemory(decompileToMemoryCheckBox.isSelected());
+        data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
         data.setDefaultInitializers(printDefaultInitializersForCheckBox.isSelected());
         data.setFullyQualifiedNames(generateFullyQualifiedNamesCheckBox.isSelected());
         data.setClearPrefixes(clearAllPrefixesIncludingCheckBox.isSelected());
@@ -386,19 +438,6 @@ public class ConfigForm
         data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
     }
 
-    /**
-     * Some components aren't bound via the data-binding wizard.  This takes care of detecting
-     * changes in them.
-     *
-     * @param data the config object to compare to the current state
-     * @return true iff the data is modified
-     */
-    private boolean isUnboundDataModified(Config data)
-    {
-        return useProjectSpecificIntelliJadCheckBox.isSelected() != data.isUseProjectSpecificSettings();
-    }
-
-    // javadoc inherited
     public boolean isModified(Config data)
     {
         if (isUnboundDataModified(data))
@@ -406,10 +445,6 @@ public class ConfigForm
             return true;
         }
         if (jadTextField.getText() != null ? !jadTextField.getText().equals(data.getJadPath()) : data.getJadPath() != null)
-        {
-            return true;
-        }
-        if (markDecompiledFilesAsCheckBox.isSelected() != data.isReadOnly())
         {
             return true;
         }
@@ -422,6 +457,10 @@ public class ConfigForm
             return true;
         }
         if (decompileToMemoryCheckBox.isSelected() != data.isDecompileToMemory())
+        {
+            return true;
+        }
+        if (markDecompiledFilesAsCheckBox.isSelected() != data.isReadOnly())
         {
             return true;
         }
@@ -509,29 +548,13 @@ public class ConfigForm
         {
             return true;
         }
-        if (exclusionTableModel != null && !exclusionTableModel.equals(data.getExclusionTableModel()))
-        {
-            return true;
-        }
         return false;
-    }
-
-    /**
-     * Convenience method to create a numeric {@link SpinnerModel}.
-     *
-     * @return a new spinner model
-     */
-    private static SpinnerModel createSpinnerModel()
-    {
-        SpinnerNumberModel model = new SpinnerNumberModel();
-        model.setMinimum(0);
-        return model;
     }
 
     /**
      * Restricted, non-contiguous spinner model.
      */
-    private class SpinnerRadixModel extends SpinnerNumberModel
+    private final class SpinnerRadixModel extends SpinnerNumberModel
     {
         /**
          * Initialises a new instance of this class with a default value of 10.

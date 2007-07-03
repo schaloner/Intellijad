@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="IntelliJad" default="build" basedir=".">
+
+    <!-- A build.properties file must exist -->
+    <property file="build.properties"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="compiled.dir" value="compiled/"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="build"/>
+    <property name="build.intellijad.dir" value="${build.dir}/intellijad"/>
+    <property name="build.lib.dir" value="${build.intellijad.dir}/lib"/>
+    <property name="plugin.jar" value="intellijad.jar"/>
+    <property name="plugin.zip" value="intellijad.zip"/>
+    <property name="sources.zip" value="intellijad_src.zip"/>
+    <property name="idea.sdk.dir" value="${idea.home.dir}"/>
+    <property name="java.src.dir" value="${src.dir}/java"/>
+    <property name="icons.src.dir" value="${src.dir}/icons"/>
+    <property name="plugin.xml.file" value="META-INF/plugin.xml"/>
+
+    <path id="project.classpath">
+        <fileset dir="${idea.sdk.dir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- The task requires the following libraries from IntelliJ IDEA distribution: -->
+    <!--   javac2.jar; jdom.jar; asm.jar; asm-commons.jar -->
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2"/>
+
+    <target name="build" depends="clean, -jar, -package.src">
+        <antcall target="-cleanup"/>
+    </target>
+
+    <!-- Packages plugin sources -->
+    <target name="-package.src">
+        <echo message="Packaging plugin sources"/>
+        <zip zipfile="${dist.dir}/${sources.zip}">
+            <fileset dir=".">
+                <include name="**/*.*"/>
+                <exclude name="**/.*"/>
+                <exclude name="${dist.dir}"/>
+                <exclude name="${build.dir}"/>
+                <exclude name="classes/"/>
+                <exclude name="*.iml"/>
+                <exclude name="*.ipr"/>
+                <exclude name="*.iws"/>
+                <exclude name="*.jar"/>
+                <exclude name="*.zip"/>
+            </fileset>
+        </zip>
+    </target>
+
+    <!-- Creates plugin zip -->
+    <target name="-jar" depends="-compile, -compile.forms">
+        <echo message="Creating plugin zip"/>
+        <jar basedir="${compiled.dir}"
+             destfile="${build.lib.dir}/${plugin.jar}"/>
+        <copy todir="${build.lib.dir}">
+            <fileset dir="${lib.dir}"
+                     includes="*.jar"/>
+        </copy>
+        <zip zipfile="${dist.dir}/${plugin.zip}">
+            <fileset dir="${build.dir}">
+                <include name="**/*"/>
+            </fileset>
+        </zip>
+    </target>
+
+    <!-- Compiles plugin sources -->
+    <target name="-compile" depends="-init">
+        <echo message="Compiling plugin sources"/>
+
+        <javac destdir="${compiled.dir}"
+               debug="true"
+               source="1.5"
+               target="1.5"
+               fork="yes">
+            <src path="${java.src.dir}"/>
+            <classpath refid="project.classpath"/>
+        </javac>
+
+        <!-- Copy plugin.xml -->
+        <copy file="${plugin.xml.file}" todir="${compiled.dir}/META-INF"/>
+
+        <!-- Copy resources -->
+        <copy todir="${compiled.dir}">
+            <fileset dir="${icons.src.dir}"/>
+        </copy>
+        <copy todir="${compiled.dir}">
+            <fileset dir="${java.src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- Compile plugin forms -->
+    <target name="-compile.forms" depends="-compile">
+        <echo message="Compiling UI forms"/>
+
+        <javac2 destdir="${compiled.dir}"
+                debug="true"
+                source="1.5"
+                target="1.5"
+                fork="yes">
+            <src path="${java.src.dir}"/>
+            <include name="**/*.form"/>
+            <classpath refid="project.classpath"/>
+        </javac2>
+    </target>
+
+    <!-- Deletes produced files -->
+    <target name="clean">
+        <echo message="Cleaning target directories"/>
+        <delete dir="${dist.dir}"/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- Cleans up after build -->
+    <target name="-cleanup">
+        <echo message="Cleaning up"/>
+        <delete dir="${build.dir}"/>
+        <delete dir="${compiled.dir}"/>
+    </target>
+
+    <!-- Creates directories -->
+    <target name="-init">
+        <echo message="Creating target directories"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${compiled.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.intellijad.dir}"/>
+        <mkdir dir="${build.lib.dir}"/>
+        <mkdir dir="${compiled.dir}/META-INF"/>
+    </target>
+</project>

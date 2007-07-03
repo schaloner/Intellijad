@@ -95,8 +95,8 @@ public class NavigationDecompileListener implements FileEditorManagerListener
      * @param decompilationDescriptor the descriptor of the target class
      * @return true if the class should not be decompiled
      */
-    private boolean isExcluded(Config config,
-                               DecompilationDescriptor decompilationDescriptor)
+    private boolean isExcluded(@NotNull Config config,
+                               @NotNull DecompilationDescriptor decompilationDescriptor)
     {
         ExclusionTableModel exclusionModel = config.getExclusionTableModel();
         String packageName = decompilationDescriptor.getPackageName();

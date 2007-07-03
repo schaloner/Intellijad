@@ -23,7 +23,28 @@ public class IntelliJadConstants
      */
     public static final String DOT_JAVA_EXTENSION = ".java";
 
+    /**
+     * The protocol name used by in-memory decompiled classes.
+     */
+    public static final String INTELLIJAD_PROTOCOL = "intellijad";
+
+    /**
+     * The schema used by in-memory decompiled classes.
+     */
+    public static final String INTELLIJAD_SCHEMA = "intellijad://";
+
+    /**
+     * The root URL of all in-memory decompiled classes.
+     */
+    public static final String INTELLIJAD_ROOT = "intellijad://root";
+
+    /**
+     *
+     */
     public static final Key<List<Library>> GENERATED_SOURCE_LIBRARIES = new Key<List<Library>>("generated-source-libraries");
 
+    /**
+     *
+     */
     public static final Key<NavigationDecompileListener> DECOMPILE_LISTENER = new Key<NavigationDecompileListener>("decompile-listener");
 }
