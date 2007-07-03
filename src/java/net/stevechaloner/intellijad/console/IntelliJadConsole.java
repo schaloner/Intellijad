@@ -1,12 +1,14 @@
 package net.stevechaloner.intellijad.console;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.util.PluginUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -83,19 +85,37 @@ public class IntelliJadConsole
     private JButton closeButton;
     private JToolBar toolbar;
 
+    /**
+     * Initialisation flag for JIT setup.
+     */
     private boolean initialised = false;
+
+    /**
+     * The project this console reports for.
+     */
+    private final Project project;
+
+    /**
+     * Initialise a new instance of this class.
+     *
+     * @param project the project this console reports for
+     */
+    public IntelliJadConsole(@NotNull Project project)
+    {
+        this.project = project;
+    }
 
     private void jitInit()
     {
         if (!initialised)
         {
             toolbar.setFloatable(false);
-            clearAndCloseOnSuccess.setSelected(PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess());
+            clearAndCloseOnSuccess.setSelected(PluginUtil.getConfig(project).isClearAndCloseConsoleOnSuccess());
             clearAndCloseOnSuccess.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent actionEvent)
                 {
-                    PluginUtil.getConfig().setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
+                    PluginUtil.getConfig(project).setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
                 }
             });
             closeButton.addActionListener(new ActionListener()
@@ -157,7 +177,7 @@ public class IntelliJadConsole
     public void openConsole()
     {
         jitInit();
-        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
         ToolWindow window = null;
         if (toolWindowManager != null)
@@ -179,7 +199,7 @@ public class IntelliJadConsole
      */
     public void closeConsole()
     {
-        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         ToolWindow window = null;
         if (toolWindowManager != null)
         {
@@ -251,7 +271,7 @@ public class IntelliJadConsole
 
     public void disposeConsole()
     {
-        ToolWindowManager toolWindowManager = PluginUtil.getToolWindowManager();
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         if (toolWindowManager != null)
         {
             try

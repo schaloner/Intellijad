@@ -1,7 +1,9 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.project.Project;
+import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
+import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -63,8 +65,16 @@ public class DecompilationContext
         return targetDirectory;
     }
 
+    // javadoc unnecessary
     public Project getProject()
     {
         return project;
+    }
+
+    // javadoc unnecessary
+    public Config getConfig()
+    {
+        return PluginUtil.getConfig(project);
+
     }
 }

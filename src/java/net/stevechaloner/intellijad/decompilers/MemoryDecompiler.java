@@ -67,7 +67,6 @@ public class MemoryDecompiler extends AbstractDecompiler
             FileEditorManager.getInstance(project).openFile(file,
                                                             true);
 
-
             project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(lib);
             context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
                                                                                   descriptor.getClassName(),
@@ -97,8 +96,8 @@ public class MemoryDecompiler extends AbstractDecompiler
      * @return a result based on the execution of the process
      */
     protected ResultType checkDecompilationStatus(int exitCode,
-                                                ByteArrayOutputStream err,
-                                                ByteArrayOutputStream output)
+                                                  ByteArrayOutputStream err,
+                                                  ByteArrayOutputStream output)
     {
         ResultType resultType = ResultType.SUCCESS;
         switch (exitCode)

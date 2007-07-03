@@ -198,14 +198,16 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     // javadoc inherited
-    public void refresh(boolean b, boolean b1, Runnable runnable)
+    public void refresh(boolean b,
+                        boolean b1,
+                        Runnable runnable)
     {
     }
 
     // javadoc inherited
     public InputStream getInputStream() throws IOException
     {
-        return new ByteArrayInputStream(new byte[0]);
+        return new ByteArrayInputStream(content.getBytes());
     }
 
     /**

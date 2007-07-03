@@ -12,12 +12,10 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.util.PluginUtil;
-
-import java.io.File;
-import java.io.ByteArrayOutputStream;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * @author Steve Chaloner
@@ -28,7 +26,7 @@ public class FileSystemDecompiler extends AbstractDecompiler
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
-        final Config config = PluginUtil.getConfig();
+        final Config config = context.getConfig();
         final File outputDirectory = new File(config.getOutputDirectory());
         final boolean outputDirExists = outputDirectory.exists();
         OperationStatus status = OperationStatus.CONTINUE;
@@ -57,7 +55,7 @@ public class FileSystemDecompiler extends AbstractDecompiler
     {
         final Project project = context.getProject();
         final LocalFileSystem vfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
-        final Config config = PluginUtil.getConfig();
+        final Config config = context.getConfig();
         final File td = new File(config.getOutputDirectory());
         final VirtualFile targetDirectory = vfs.findFileByIoFile(td);
         final VirtualFile[] fileContainer = new VirtualFile[1];
@@ -130,8 +128,8 @@ public class FileSystemDecompiler extends AbstractDecompiler
      * @return a result based on the execution of the process
      */
     protected ResultType checkDecompilationStatus(int exitCode,
-                                                  ByteArrayOutputStream err,
-                                                  ByteArrayOutputStream output)
+                                                  @NotNull ByteArrayOutputStream err,
+                                                  @NotNull ByteArrayOutputStream output)
     {
         ResultType resultType = ResultType.SUCCESS;
         switch (exitCode)

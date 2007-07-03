@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.idea.util.events.DataContextUtil;
+import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
@@ -36,7 +37,8 @@ public class DecompileAction extends AnAction
             if (file != null)
             {
                 DecompilationDescriptor descriptor = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
-                intelliJad.decompile(descriptor);
+                intelliJad.decompile(new EnvironmentContext(PluginUtil.getProject(e.getDataContext())),
+                                     descriptor);
             }
             else
             {

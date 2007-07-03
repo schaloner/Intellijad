@@ -6,7 +6,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
 import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
 import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
-import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
@@ -193,7 +192,8 @@ public class ConfigForm
             {
                 public void stateChanged(ChangeEvent e)
                 {
-                    setControlsEnabled(useProjectSpecificIntelliJadCheckBox.isSelected());
+                    setControlsEnabled(project,
+                                       useProjectSpecificIntelliJadCheckBox.isSelected());
                 }
             });
         }
@@ -206,7 +206,6 @@ public class ConfigForm
      */
     private void toggleToDiskControls(final Project project)
     {
-        // todo just get the project from the PluginUtil?
         if (project == null ||
             useProjectSpecificIntelliJadCheckBox.isSelected())
         {
@@ -222,9 +221,11 @@ public class ConfigForm
     /**
      * Toggle the controls based on global inheritance.
      *
+     * @param project the current project
      * @param enabled true iff the project has specific settings
      */
-    private void setControlsEnabled(boolean enabled)
+    private void setControlsEnabled(@Nullable final Project project,
+                                    boolean enabled)
     {
         Class<? extends ConfigForm> thisClass = this.getClass();
         Field[] fields = thisClass.getDeclaredFields();
@@ -250,7 +251,7 @@ public class ConfigForm
         // special case
         if (enabled && decompileToMemoryCheckBox.isSelected())
         {
-            toggleToDiskControls(PluginUtil.getProject());
+            toggleToDiskControls(project);
         }
 
         root.validate();

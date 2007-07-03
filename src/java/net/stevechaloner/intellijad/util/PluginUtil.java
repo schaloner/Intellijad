@@ -1,18 +1,13 @@
 package net.stevechaloner.intellijad.util;
 
-import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataConstants;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.ToolWindow;
 import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ProjectConfigComponent;
-import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Helper class for plugin interactions.
@@ -40,37 +35,13 @@ public class PluginUtil
     }
 
     /**
-     * Gets the component from the project context.
-     *
-     * @param clazz   the class of the component
-     * @return the component
-     */
-    public static <C> C getProjectComponent(@NotNull Class<C> clazz)
-    {
-        Project project = getProject();
-        return project == null ? null : project.getComponent(clazz);
-    }
-
-    /**
-     * Gets the tool window manager for the current project
-     *
-     * @return the tool window manager
-     */
-    @Nullable
-    public static ToolWindowManager getToolWindowManager()
-    {
-        Project project = getProject();
-        return project == null ? null : ToolWindowManager.getInstance(project);
-    }
-
-    /**
      * Gets the current project.
      *
+     * @param dataContext the context to get the project from
      * @return the current project
      */
-    public static Project getProject()
+    public static Project getProject(@NotNull DataContext dataContext)
     {
-        DataContext dataContext = DataManager.getInstance().getDataContext();
         return (Project) dataContext.getData(DataConstants.PROJECT);
     }
 
@@ -87,12 +58,18 @@ public class PluginUtil
     /**
      * Gets the plugin configuration.
      *
+     * @param project the project to get the config from
      * @return the project configuration
      */
-    public static Config getConfig()
+    public static Config getConfig(@NotNull Project project)
     {
-        Config config = getProjectComponent(ProjectConfigComponent.class).getConfig();
-        if (!config.isUseProjectSpecificSettings())
+        ProjectConfigComponent projectComponent = project.getComponent(ProjectConfigComponent.class);
+        Config config = null;
+        if (projectComponent != null)
+        {
+            config = projectComponent.getConfig();
+        }
+        if (config == null || !config.isUseProjectSpecificSettings())
         {
             config = getApplicationConfig();
         }

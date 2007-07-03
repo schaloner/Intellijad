@@ -2,6 +2,7 @@ package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
+import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
 
 import java.util.List;
 

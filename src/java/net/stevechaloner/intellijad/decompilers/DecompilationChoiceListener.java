@@ -1,9 +1,17 @@
 package net.stevechaloner.intellijad.decompilers;
 
+import net.stevechaloner.intellijad.EnvironmentContext;
+
 /**
  * @author Steve Chaloner
  */
 public interface DecompilationChoiceListener
 {
-    void decompile(DecompilationDescriptor decompilationDescriptor);
+    /**
+     * 
+     * @param environmentContext
+     * @param decompilationDescriptor
+     */
+    void decompile(EnvironmentContext environmentContext,
+                   DecompilationDescriptor decompilationDescriptor);
 }

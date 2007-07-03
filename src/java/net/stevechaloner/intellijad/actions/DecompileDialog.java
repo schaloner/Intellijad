@@ -1,6 +1,7 @@
 package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
+import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
@@ -39,15 +40,30 @@ public class DecompileDialog extends JDialog
     private JCheckBox excludePackageCheckBox;
     private JCheckBox excludeRecursivelyCheckBox;
 
+    /**
+     * The one and only listener for the dialog.
+     */
+    @NotNull
     private final DecompilationChoiceListener listener;
 
+    /**
+     * The descriptor giving details of the class to decompile.
+     */
+    @NotNull
     private final DecompilationDescriptor decompilationDescriptor;
 
-    public DecompileDialog(@NotNull DecompilationDescriptor decompilationDescriptor,
-                           @NotNull Project project,
+    /**
+     *
+     */
+    @NotNull
+    private final EnvironmentContext environmentContext;
+
+    public DecompileDialog(@NotNull final DecompilationDescriptor decompilationDescriptor,
+                           @NotNull final Project project,
                            @NotNull final DecompilationChoiceListener listener)
     {
         this.decompilationDescriptor = decompilationDescriptor;
+        this.environmentContext = new EnvironmentContext(project);
         this.listener = listener;
 
         setContentPane(contentPane);
@@ -68,7 +84,7 @@ public class DecompileDialog extends JDialog
             }
         });
 
-        Config config = PluginUtil.getConfig();
+        Config config = PluginUtil.getConfig(project);
         excludeRecursivelyCheckBox.setSelected(config.isAlwaysExcludeRecursively());
 
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);
@@ -123,7 +139,7 @@ public class DecompileDialog extends JDialog
 
     private void onApply()
     {
-        Config config = PluginUtil.getConfig();
+        Config config = PluginUtil.getConfig(environmentContext.getProject());
         if (config != null)
         {
             NavigationTriggeredDecompile option = (NavigationTriggeredDecompile) comboBox1.getSelectedItem();
@@ -143,7 +159,8 @@ public class DecompileDialog extends JDialog
     private void onOK()
     {
         onApply();
-        listener.decompile(decompilationDescriptor);
+        listener.decompile(environmentContext,
+                           decompilationDescriptor);
         dispose();
     }
 

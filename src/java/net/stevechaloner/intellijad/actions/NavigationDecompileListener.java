@@ -1,11 +1,11 @@
-package net.stevechaloner.intellijad;
+package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.stevechaloner.intellijad.actions.DecompileDialog;
+import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
@@ -14,6 +14,7 @@ import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.util.SwingUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,23 +25,25 @@ import javax.swing.JOptionPane;
 public class NavigationDecompileListener implements FileEditorManagerListener
 {
     /**
-     * The current project.
-     */
-    private final Project project;
-
-    /**
      * The decompilation listener.
      */
+    @NotNull
     private final DecompilationChoiceListener decompilationListener;
+
+    /**
+     *
+     */
+    @NotNull
+    private final Project project;
 
     /**
      * Initialises a new instance of this class.
      *
-     * @param project               the current project
+     * @param project the project this object is listening for
      * @param decompilationListener the decompilation listener
      */
-    NavigationDecompileListener(Project project,
-                                DecompilationChoiceListener decompilationListener)
+    public NavigationDecompileListener(@NotNull Project project,
+                                       @NotNull DecompilationChoiceListener decompilationListener)
     {
         this.project = project;
         this.decompilationListener = decompilationListener;
@@ -52,7 +55,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     {
         if (file != null && "class".equals(file.getExtension()))
         {
-            Config config = PluginUtil.getConfig();
+            Config config = PluginUtil.getConfig(project);
             DecompilationDescriptor dd = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
             boolean excluded = isExcluded(config,
                                           dd);
@@ -61,7 +64,8 @@ public class NavigationDecompileListener implements FileEditorManagerListener
                 case ALWAYS:
                     if (!excluded)
                     {
-                        decompilationListener.decompile(dd);
+                        decompilationListener.decompile(new EnvironmentContext(project),
+                                                        dd);
                     }
                     break;
                 case ASK:

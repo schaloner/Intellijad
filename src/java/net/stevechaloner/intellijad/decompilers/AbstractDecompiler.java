@@ -1,17 +1,14 @@
 package net.stevechaloner.intellijad.decompilers;
 
-import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginUtil;
+import net.stevechaloner.intellijad.util.StreamPumper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.zip.ZipFile;
 
 /**
@@ -98,9 +95,9 @@ abstract class AbstractDecompiler implements Decompiler
                         switch (resultType)
                         {
                             case NON_FATAL_ERROR:
-                                context.getConsole().appendToConsole(new String(err.toByteArray()));
+                                context.getConsole().appendToConsole(err.toString());
                             case SUCCESS:
-                                String content = new String(output.toByteArray());
+                                String content = output.toString();
                                 if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
                                 {
                                     DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
@@ -110,7 +107,7 @@ abstract class AbstractDecompiler implements Decompiler
                                                                context,
                                                                content);
                                 // todo this doesn't belong here
-                                if (PluginUtil.getConfig().isClearAndCloseConsoleOnSuccess())
+                                if (context.getConfig().isClearAndCloseConsoleOnSuccess())
                                 {
                                     context.getConsole().clearConsoleContent();
                                     context.getConsole().closeConsole();
@@ -118,7 +115,7 @@ abstract class AbstractDecompiler implements Decompiler
                                 break;
                             case FATAL_ERROR:
                             default:
-                                context.getConsole().appendToConsole(new String(err.toByteArray()));
+                                context.getConsole().appendToConsole(err.toString());
                         }
                     }
                 }
@@ -140,6 +137,16 @@ abstract class AbstractDecompiler implements Decompiler
         return decompiledFile;
     }
 
+    /**
+     * 
+     * @param command
+     * @param context
+     * @param output
+     * @param err
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private ResultType runExternalDecompiler(String command,
                                              DecompilationContext context,
                                              ByteArrayOutputStream output,
@@ -147,22 +154,19 @@ abstract class AbstractDecompiler implements Decompiler
                                                                                InterruptedException
     {
         Process process = Runtime.getRuntime().exec(command);
-        StreamMonitor outputMonitor = new StreamMonitor(context,
-                                                        process.getInputStream(),
-                                                        output);
-        Thread outputThread = new Thread(outputMonitor);
+        StreamPumper outputPumper = new StreamPumper(context,
+                                                     process.getInputStream(),
+                                                     output);
+        Thread outputThread = new Thread(outputPumper);
         outputThread.start();
-        StreamMonitor errMonitor = new StreamMonitor(context,
-                                                     process.getErrorStream(),
-                                                     err);
-        Thread errThread = new Thread(errMonitor);
+        StreamPumper errPumper = new StreamPumper(context,
+                                                  process.getErrorStream(),
+                                                  err);
+        Thread errThread = new Thread(errPumper);
         errThread.start();
         int exitCode = process.waitFor();
-        outputMonitor.stop();
-        errMonitor.stop();
-
-        output.flush();
-        err.flush();
+        outputPumper.stopPumping();
+        errPumper.stopPumping();
 
         return checkDecompilationStatus(exitCode,
                                         err,
@@ -207,73 +211,6 @@ abstract class AbstractDecompiler implements Decompiler
         catch (IOException e)
         {
             throw new DecompilationException(e);
-        }
-    }
-
-    /**
-     * Monitors an input stream to prevent it blocking.
-     */
-    protected class StreamMonitor implements Runnable
-    {
-        /**
-         * The input stream to monitor
-         */
-        private final InputStream inputStream;
-
-        /**
-         * The output stream to move content to
-         */
-        private final OutputStream outputStream;
-
-        /**
-         * The decompilation context.
-         */
-        private final DecompilationContext context;
-
-        /**
-         * Monitor flag.
-         */
-        private boolean monitor = true;
-
-        /**
-         * Initialises a new instance of this class.
-         *
-         * @param context      the decompilation context
-         * @param inputStream  the input stream to monitor
-         * @param outputStream the output stream to move content to
-         */
-        public StreamMonitor(@NotNull DecompilationContext context,
-                             @NotNull InputStream inputStream,
-                             @NotNull OutputStream outputStream)
-        {
-            this.inputStream = inputStream;
-            this.outputStream = outputStream;
-            this.context = context;
-        }
-
-        // javadoc inherited
-        public void run()
-        {
-            try
-            {
-                while (monitor)
-                {
-                    while (inputStream.available() > 0)
-                    {
-                        StreamUtil.copyStreamContent(inputStream,
-                                                     outputStream);
-                    }
-                }
-            }
-            catch (IOException e)
-            {
-                context.getConsole().appendToConsole(e.getMessage());
-            }
-        }
-
-        public void stop()
-        {
-            monitor = false;
         }
     }
 }

@@ -9,8 +9,9 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
@@ -60,7 +61,7 @@ public class IntelliJad implements ApplicationComponent,
     // javadoc inherited
     public void projectOpened(Project project)
     {
-        console = new IntelliJadConsole();
+        console = new IntelliJadConsole(project);
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
                             new ArrayList<Library>());
 
@@ -125,17 +126,17 @@ public class IntelliJad implements ApplicationComponent,
     }
 
     // javadoc inherited
-    public void decompile(DecompilationDescriptor descriptor)
+    public void decompile(EnvironmentContext envContext,
+                          DecompilationDescriptor descriptor)
     {
-        Config config = PluginUtil.getConfig();
-        Project project = PluginUtil.getProject();
-
         console.openConsole();
-        if (validateOptions())
+        Config config = PluginUtil.getConfig(envContext.getProject());
+        if (validateOptions(config))
         {
             StringBuilder sb = new StringBuilder();
             sb.append(config.getJadPath()).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
+            Project project = envContext.getProject();
             DecompilationContext context = new DecompilationContext(project,
                                                                     console,
                                                                     sb.toString());
@@ -161,12 +162,12 @@ public class IntelliJad implements ApplicationComponent,
     /**
      * Validate the path to Jad as valid.
      *
+     * @param config the config to check
      * @return true iff the path is ok
      */
-    private boolean validateOptions()
+    private boolean validateOptions(@NotNull Config config)
     {
         String message = null;
-        Config config = PluginUtil.getConfig();
         String jadPath = config.getJadPath();
         if (StringUtil.isEmptyOrSpaces(jadPath))
         {
