@@ -14,13 +14,12 @@
     <property name="plugin.jar" value="intellijad.jar"/>
     <property name="plugin.zip" value="intellijad.zip"/>
     <property name="sources.zip" value="intellijad_src.zip"/>
-    <property name="idea.sdk.dir" value="${idea.home.dir}"/>
     <property name="java.src.dir" value="${src.dir}/java"/>
     <property name="icons.src.dir" value="${src.dir}/icons"/>
     <property name="plugin.xml.file" value="META-INF/plugin.xml"/>
 
     <path id="project.classpath">
-        <fileset dir="${idea.sdk.dir}/lib">
+        <fileset dir="${idea.home.dir}/lib">
             <include name="*.jar"/>
         </fileset>
         <fileset dir="${lib.dir}">
@@ -30,7 +29,13 @@
 
     <!-- The task requires the following libraries from IntelliJ IDEA distribution: -->
     <!--   javac2.jar; jdom.jar; asm.jar; asm-commons.jar -->
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2"/>
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2">
+        <classpath>
+            <fileset dir="${idea.home.dir}/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
 
     <target name="build" depends="clean, -jar, -package.src">
         <antcall target="-cleanup"/>
