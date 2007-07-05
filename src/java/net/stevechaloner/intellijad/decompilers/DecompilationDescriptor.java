@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Steve Chaloner
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.VirtualFile;
@@ -21,18 +36,45 @@ public abstract class DecompilationDescriptor
         JAR, FS
     }
 
+    /**
+     * The class file to decompile.
+     */
     @NotNull
     private final VirtualFile classFile;
+
+    /**
+     * The fully-qualified name of the class.
+     */
     @Nullable
     private String fqName;
+
+    /**
+     * The name of the class.
+     */
     @Nullable
     private final String className;
+
+    /**
+     * The extension of the class (typically "class").
+     */
     @Nullable
     private final String extension;
+
+    /**
+     * The name of the class's package.
+     */
     @Nullable
     private String packageName;
+
+    /**
+     * The class's package as a path, i.e. with / instead of .
+     */
     @Nullable
     private String packageNameAsPath;
+
+    /**
+     * The path to the class file.
+     */
     @NotNull
     private String path;
 

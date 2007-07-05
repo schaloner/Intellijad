@@ -1,5 +1,5 @@
 <idea-plugin>
-    <name>IntellIJad</name>
+    <name>IntelliJad</name>
     <description>Jad Java Decompiler plugin</description>
     <version>0.1</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
@@ -33,5 +33,8 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
         </action>
     </actions>
+
+    <helpset file="intellijad-help.jar" path="/helpset.hs"/>
+
 </idea-plugin>
 

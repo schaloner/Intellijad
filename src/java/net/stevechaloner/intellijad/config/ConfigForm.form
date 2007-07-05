@@ -35,7 +35,7 @@
                 </constraints>
                 <properties>
                   <labelFor value="1fa43"/>
-                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="message.jad"/>
+                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.jad-executable"/>
                 </properties>
               </component>
               <component id="1fa43" class="javax.swing.JTextField" binding="jadTextField" default-binding="true">

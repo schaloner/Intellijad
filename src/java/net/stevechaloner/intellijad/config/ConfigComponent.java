@@ -1,15 +1,34 @@
+/*
+ * Copyright 2007 Steve Chaloner
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package net.stevechaloner.intellijad.config;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import net.stevechaloner.idea.util.properties.DOMable;
 import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.rules.RuleContext;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
@@ -22,8 +41,8 @@ import java.util.Map;
  *
  * @author Steve Chaloner
  */
-abstract class  ConfigComponent implements Configurable,
-                                           JDOMExternalizable
+abstract class ConfigComponent implements Configurable,
+                                          JDOMExternalizable
 {
     /**
      * The display logo.
@@ -54,7 +73,7 @@ abstract class  ConfigComponent implements Configurable,
     /**
      * The configuration GUI.
      */
-    protected ConfigForm form;
+    private ConfigForm form;
 
     // javadoc inherited
     public Icon getIcon()
@@ -62,11 +81,12 @@ abstract class  ConfigComponent implements Configurable,
         return LOGO;
     }
 
+    // javadoc inherited
     @Nullable
     @NonNls
     public String getHelpTopic()
     {
-        return null;
+        return IntelliJadConstants.CONFIGURATION_HELP_TOPIC;
     }
 
     // javadoc inherited
@@ -97,6 +117,40 @@ abstract class  ConfigComponent implements Configurable,
     public void disposeUIResources()
     {
         form = null;
+    }
+
+    /**
+     * Creates a form with no bound project.
+     *
+     * @return the form
+     */
+    @NotNull
+    protected ConfigForm createForm()
+    {
+        return createForm(null);
+    }
+
+    /**
+     * Creates a form with no bound project.
+     *
+     * @param project the project to bind the form to
+     * @return the form
+     */
+    @NotNull
+    protected ConfigForm createForm(@Nullable Project project)
+    {
+        if (form != null)
+        {
+            throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.config-form-already-exists"));
+        }
+        return new ConfigForm(project);
+    }
+
+    // javadoc unnecessary
+    @Nullable
+    protected ConfigForm getForm()
+    {
+        return form;
     }
 
     // javadoc inherited

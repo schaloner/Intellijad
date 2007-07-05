@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Steve Chaloner
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.JarFileSystem;
@@ -12,10 +27,15 @@ import java.io.IOException;
 import java.util.zip.ZipFile;
 
 /**
+ * The generic decompilation operations required to decompile and display a class.
+ *
  * @author Steve Chaloner
  */
 abstract class AbstractDecompiler implements Decompiler
 {
+    /**
+     * Operational continue/cancel flags.
+     */
     protected enum OperationStatus { CONTINUE, ABORT }
 
     /**
@@ -27,7 +47,7 @@ abstract class AbstractDecompiler implements Decompiler
      * @throws DecompilationException if the operation fails
      */
     protected abstract OperationStatus setup(DecompilationDescriptor descriptor,
-                                              DecompilationContext context) throws DecompilationException;
+                                             DecompilationContext context) throws DecompilationException;
 
     /**
      * @param descriptor the decompilation descriptor
@@ -138,14 +158,15 @@ abstract class AbstractDecompiler implements Decompiler
     }
 
     /**
-     * 
-     * @param command
-     * @param context
-     * @param output
-     * @param err
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
+     * Run the external decompiler (i.e. Jad) to obtain the decompiled content.
+     *
+     * @param command the command to execute in the process
+     * @param context the context of the decompilation
+     * @param output stream containing the process's output
+     * @param err stream containing the process's error output
+     * @return the result of the operation
+     * @throws IOException if an IO exception occurs at any point
+     * @throws InterruptedException if the stream pumping operations fail
      */
     private ResultType runExternalDecompiler(String command,
                                              DecompilationContext context,
