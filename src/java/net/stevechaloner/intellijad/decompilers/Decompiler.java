@@ -26,12 +26,22 @@ public interface Decompiler
     /**
      * Decompiles the class detailed in the decompilation descriptor.
      *
-     * @param decompilationDescriptor a description of the class to decompile
+     * @param descriptor a description of the class to decompile
      * @param context the context of the decompilation
      * @return a file representing the decompiled class
      * @throws DecompilationException if something prevents the operation
      */
     @Nullable
-    VirtualFile decompile(DecompilationDescriptor decompilationDescriptor,
+    VirtualFile decompile(DecompilationDescriptor descriptor,
                           DecompilationContext context) throws DecompilationException;
+
+    /**
+     * Gets the virtual file that would be createdif the decompilation occurs.
+     *
+     * @param descriptor a description of the class to decompile
+     * @param context the context of the decompilation
+     * @return the virtual file
+     */
+    VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
+                               DecompilationContext context);
 }

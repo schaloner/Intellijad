@@ -26,10 +26,18 @@ import java.awt.Toolkit;
  */
 public class SwingUtil
 {
+    /**
+     * Static access only.
+     */
     private SwingUtil()
     {
     }
 
+    /**
+     * Centers the dialog in the screen.
+     *
+     * @param dialog the dialog to center
+     */
     public static void center(JDialog dialog)
     {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -34,8 +34,8 @@ import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.Decompiler;
-import net.stevechaloner.intellijad.decompilers.FileSystemDecompiler;
-import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
+import net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler;
+import net.stevechaloner.intellijad.decompilers.memory.MemoryDecompiler;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +56,7 @@ public class IntelliJad implements ApplicationComponent,
     public static final String COMPONENT_NAME = "net.stevechaloner.intellijad.IntelliJad";
 
     /**
-     *
+     * The name of the plugin.
      */
     public static final String INTELLIJAD = "IntelliJad";
 
@@ -157,13 +157,27 @@ public class IntelliJad implements ApplicationComponent,
             Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new FileSystemDecompiler();
             try
             {
-                VirtualFile decompiledFile = decompiler.decompile(descriptor,
-                                                                  context);
-                if (decompiledFile != null)
+                // todo check if file is already open
+                VirtualFile file = decompiler.getVirtualFile(descriptor,
+                                                             context);
+                FileEditorManager editorManager = FileEditorManager.getInstance(project);
+                if (file != null && editorManager.isFileOpen(file))
                 {
+                    console.closeConsole();
                     FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
-                    FileEditorManager.getInstance(project).openFile(decompiledFile,
-                                                                    true);
+                    editorManager.openFile(file,
+                                           true);
+                }
+                else
+                {
+                    VirtualFile decompiledFile = decompiler.decompile(descriptor,
+                                                                      context);
+                    if (decompiledFile != null)
+                    {
+                        FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
+                        FileEditorManager.getInstance(project).openFile(decompiledFile,
+                                                                        true);
+                    }
                 }
             }
             catch (DecompilationException e)

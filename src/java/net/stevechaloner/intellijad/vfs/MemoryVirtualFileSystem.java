@@ -1,5 +1,6 @@
 package net.stevechaloner.intellijad.vfs;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -35,10 +36,11 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
      *
      * @param file the file to add
      */
-    public void addFile(MemoryVirtualFile file)
+    public void addFile(final MemoryVirtualFile file)
     {
         files.put(file.getName(),
                   file);
+        fireFileCreated(file);
     }
 
     // javadoc inherited
@@ -51,8 +53,38 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     @Nullable
     public VirtualFile findFileByPath(String string)
     {
-        String s = VirtualFileManager.extractPath(string);
-        return files.get(s);
+        // todo rewrite this so it doesn't look like crap
+        String path = VirtualFileManager.extractPath(string);
+        StringTokenizer st = new StringTokenizer(path, "/");
+        VirtualFile currentFile = files.get("root");
+        boolean keepLooking = true;
+        String targetName = null;
+        while (keepLooking && st.hasMoreTokens())
+        {
+            String element = st.nextToken();
+            if (!st.hasMoreTokens())
+            {
+                targetName = element;
+            }
+            VirtualFile child = currentFile.findChild(element);
+            if (child != null)
+            {
+                currentFile = child;
+            }
+            else
+            {
+                keepLooking = false;
+            }
+        }
+
+        VirtualFile file = null;
+        if (currentFile != null &&
+            targetName != null &&
+            targetName.equals(currentFile.getName()))
+        {
+            file = currentFile;
+        }
+        return file;
     }
 
     // javadoc inherited
@@ -71,6 +103,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
+        // no-op
     }
 
     // javadoc inherited
@@ -102,22 +135,42 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
 
     // javadoc inherited
     protected MemoryVirtualFile createChildFile(Object object,
-                                                VirtualFile virtualFile,
-                                                String string) throws IOException
+                                                VirtualFile parent,
+                                                String name) throws IOException
     {
-        MemoryVirtualFile file = new MemoryVirtualFile(string, null);
-        file.setParent(virtualFile);
+        final MemoryVirtualFile file = new MemoryVirtualFile(name,
+                                                       null);
+        file.setParent(parent);
+        addFile(file);
         return file;
     }
 
     // javadoc inherited
     protected MemoryVirtualFile createChildDirectory(Object object,
-                                                     VirtualFile virtualFile,
-                                                     String string) throws IOException
+                                                     VirtualFile parent,
+                                                     String name) throws IOException
     {
-        MemoryVirtualFile file = new MemoryVirtualFile(string);
-        file.setParent(virtualFile);
+        MemoryVirtualFile file = new MemoryVirtualFile(name);
+        ((MemoryVirtualFile)parent).addChild(file);
+        addFile(file);
         return file;
+    }
+
+    /**
+     * Fires an event to notify listeners of file creation.
+     *
+     * @param file the new file
+     */
+    private void fireFileCreated(final VirtualFile file)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                fireFileCreated(null,
+                                file);
+            }
+        });
     }
 
     // javadoc inherited
@@ -149,7 +202,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
      * @param packageName the name of the package
      * @return the file corresponding to the final location of the package
      */
-    public MemoryVirtualFile getFileByPackage(String packageName)
+    public MemoryVirtualFile getFileForPackage(@NotNull String packageName)
     {
         StringTokenizer st = new StringTokenizer(packageName, ".");
         List<String> names = new ArrayList<String>();
@@ -157,7 +210,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         {
             names.add(st.nextToken());
         }
-        return getFileByPackage(names,
+        return getFileForPackage(names,
                                 files.get("root"));
     }
 
@@ -169,8 +222,8 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
      * @param parent the parent file
      * @return a file corresponding to the last entry in the name list
      */
-    private MemoryVirtualFile getFileByPackage(List<String> names,
-                                               MemoryVirtualFile parent)
+    private MemoryVirtualFile getFileForPackage(@NotNull List<String> names,
+                                                @NotNull MemoryVirtualFile parent)
     {
         MemoryVirtualFile child = null;
         if (!names.isEmpty())
@@ -179,16 +232,35 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
             child = parent.getChild(name);
             if (child == null)
             {
-                child = new MemoryVirtualFile(name);
-                parent.addChild(child);
+                try
+                {
+                    child = createChildDirectory(null,
+                                                 parent,
+                                                 name);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
 
         if (child != null && !names.isEmpty())
         {
-            child = getFileByPackage(names,
+            child = getFileForPackage(names,
                                      child);
         }
         return child;
+    }
+
+    // javadoc inherited
+    public void projectOpened()
+    {
+    }
+
+    // javadoc inherited
+    public void projectClosed()
+    {
+        files.clear();
     }
 }

@@ -13,7 +13,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package net.stevechaloner.intellijad.decompilers;
+package net.stevechaloner.intellijad.decompilers.memory;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -25,6 +25,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationException;
+import net.stevechaloner.intellijad.decompilers.ResultType;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +61,7 @@ public class MemoryDecompiler extends AbstractDecompiler
         vfs.addFile(file);
 
         Project project = context.getProject();
-        MemoryVirtualFile showdom = vfs.getFileByPackage(descriptor.getPackageName());
+        MemoryVirtualFile showdom = vfs.getFileForPackage(descriptor.getPackageName());
         showdom.addChild(file);
 
         final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
@@ -135,5 +140,13 @@ public class MemoryDecompiler extends AbstractDecompiler
 
         }
         return resultType;
+    }
+
+    // javadoc inherited
+    public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
+                                      DecompilationContext context)
+    {
+        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(MemoryVirtualFileSystem.PROTOCOL);
+        return vfs.findFileByPath(descriptor.getFullyQualifiedNameAsPath());
     }
 }

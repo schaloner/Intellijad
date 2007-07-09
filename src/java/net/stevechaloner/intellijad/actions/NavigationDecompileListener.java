@@ -31,14 +31,67 @@ import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.util.SwingUtil;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Steve Chaloner
  */
 public class NavigationDecompileListener implements FileEditorManagerListener
 {
+    /**
+     * Handler classes for the result of navigation actions.
+     */
+    private final Map<NavigationTriggeredDecompile, NavigationOption> navigationOptions = new HashMap<NavigationTriggeredDecompile,NavigationOption>()
+    {
+        {
+            put(NavigationTriggeredDecompile.ALWAYS,
+                new NavigationOption()
+                {
+                    public void execute(@NotNull Config config,
+                                        @NotNull DecompilationDescriptor descriptor)
+                    {
+                        boolean excluded = isExcluded(config,
+                                                      descriptor);
+                        if (!excluded)
+                        {
+                            decompilationListener.decompile(new EnvironmentContext(project),
+                                                            descriptor);
+                        }
+                    }
+                });
+            put(NavigationTriggeredDecompile.ASK,
+                new NavigationOption()
+                {
+                    public void execute(@NotNull Config config,
+                                        @NotNull DecompilationDescriptor descriptor)
+                    {
+                        boolean excluded = isExcluded(config,
+                                                      descriptor);
+                        if (!excluded)
+                        {
+                            DecompileDialog dialog = new DecompileDialog(descriptor,
+                                                                         project,
+                                                                         decompilationListener);
+                            dialog.pack();
+                            SwingUtil.center(dialog);
+
+                            dialog.setVisible(true);
+                        }
+                    }
+                });
+            put(NavigationTriggeredDecompile.NEVER,
+                new NavigationOption()
+                {
+                    public void execute(@NotNull Config config,
+                                        @NotNull DecompilationDescriptor descriptor)
+                    {
+                        // no-op
+                    }
+                });
+        }
+    };
+
     /**
      * The decompilation listener.
      */
@@ -72,34 +125,9 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         {
             Config config = PluginUtil.getConfig(project);
             DecompilationDescriptor dd = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
-            boolean excluded = isExcluded(config,
-                                          dd);
-            switch (NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()))
-            {
-                case ALWAYS:
-                    if (!excluded)
-                    {
-                        decompilationListener.decompile(new EnvironmentContext(project),
-                                                        dd);
-                    }
-                    break;
-                case ASK:
-                    if (!excluded)
-                    {
-                        DecompileDialog dialog = new DecompileDialog(dd,
-                                                                     project,
-                                                                     decompilationListener);
-                        dialog.pack();
-                        SwingUtil.center(dialog);
-                        
-                        dialog.setVisible(true);
-                    }
-                    break;
-                case NEVER:
-                    JOptionPane.showMessageDialog(new JLabel(),
-                                                  "NEVER");
-                    break;
-            }
+            NavigationOption navigationOption = navigationOptions.get(NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()));
+            navigationOption.execute(config,
+                                     dd);
         }
     }
 
@@ -118,29 +146,26 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         boolean exclude = false;
         if (packageName != null)
         {
-            switch (exclusionModel.containsPackage(packageName))
+            if (ExclusionTableModel.ExclusionType.NOT_EXCLUDED == exclusionModel.containsPackage(packageName))
             {
-                case NOT_EXCLUDED:
-                    for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
+                for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
+                {
+                    String pn = (String) exclusionModel.getValueAt(i, 0);
+                    if (pn != null)
                     {
-                        String pn = (String) exclusionModel.getValueAt(i, 0);
-                        if (pn != null)
-                        {
-                            exclude = packageName.startsWith(pn) &&
-                                      (Boolean)exclusionModel.getValueAt(i, 1) &&
-                                      (Boolean)exclusionModel.getValueAt(i, 2);
-                        }
+                        exclude = packageName.startsWith(pn) &&
+                                  (Boolean)exclusionModel.getValueAt(i, 1) &&
+                                  (Boolean)exclusionModel.getValueAt(i, 2);
                     }
-                    break;
-                default:
-                    // exclusion is either package-exact or disabled
+                }
             }
         }
         return exclude;
     }
 
     // javadoc inherited
-    public void fileClosed(FileEditorManager fileEditorManager, VirtualFile virtualFile)
+    public void fileClosed(FileEditorManager fileEditorManager,
+                           VirtualFile virtualFile)
     {
         // no-op
     }
@@ -149,5 +174,20 @@ public class NavigationDecompileListener implements FileEditorManagerListener
     public void selectionChanged(FileEditorManagerEvent fileEditorManagerEvent)
     {
         // no-op
+    }
+
+    /**
+     * Handles the result of a navigation-based action decision.
+     */
+    private interface NavigationOption
+    {
+        /**
+         * Handle the choice.
+         *
+         * @param config the configutation
+         * @param descriptor the descriptor of the class to decompile
+         */
+        void execute(@NotNull Config config,
+                     @NotNull DecompilationDescriptor descriptor);
     }
 }

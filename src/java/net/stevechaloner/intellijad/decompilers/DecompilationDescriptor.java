@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.VirtualFile;
+import net.stevechaloner.intellijad.IntelliJadConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +48,12 @@ public abstract class DecompilationDescriptor
      */
     @Nullable
     private String fqName;
+
+    /**
+     * The fully-qualified name of the class represented as a path, including extension.
+     */
+    @Nullable
+    private String fqNameAsPath;
 
     /**
      * The name of the class.
@@ -83,16 +90,19 @@ public abstract class DecompilationDescriptor
      *
      * @param classFile         the file pointing to the target class
      * @param fqName            the fully-qualified name of the class
+     * @param fqNameAsPath      the fully-qualified name of the class as a path
      * @param packageName       the package (e.g. net.stevechaloner.intellijad)
      * @param packageNameAsPath the package as a path (e.g. net/stevechaloner/intellijad/)
      */
     DecompilationDescriptor(@NotNull VirtualFile classFile,
                             @NotNull String fqName,
+                            @NotNull String fqNameAsPath,
                             @NotNull String packageName,
                             @NotNull String packageNameAsPath)
     {
         this.classFile = classFile;
         this.fqName = fqName;
+        setFqNameAsPath(fqNameAsPath);
         this.className = classFile.getNameWithoutExtension();
         this.extension = classFile.getExtension();
         this.packageName = packageName;
@@ -139,6 +149,23 @@ public abstract class DecompilationDescriptor
         return fqName;
     }
 
+
+    @Nullable
+    public String getFullyQualifiedNameAsPath()
+    {
+        return fqNameAsPath;
+    }
+
+    public final void setFqNameAsPath(String fqNameAsPath)
+    {
+        if (!fqNameAsPath.endsWith(IntelliJadConstants.DOT_JAVA_EXTENSION))
+        {
+            fqNameAsPath += IntelliJadConstants.DOT_JAVA_EXTENSION;
+        }
+        this.fqNameAsPath = fqNameAsPath;
+
+    }
+
     // javadoc unnecessary
     @Nullable
     public String getClassName()
@@ -175,19 +202,19 @@ public abstract class DecompilationDescriptor
     }
 
     // javadoc unnecessary
-    public void setFqName(String fqName)
+    public final void setFqName(String fqName)
     {
         this.fqName = fqName;
     }
 
     // javadoc unnecessary
-    public void setPackageName(String packageName)
+    public final void setPackageName(String packageName)
     {
         this.packageName = packageName;
     }
 
     // javadoc unnecessary
-    public void setPackageNameAsPath(String packageNameAsPath)
+    public final void setPackageNameAsPath(String packageNameAsPath)
     {
         this.packageNameAsPath = packageNameAsPath;
     }

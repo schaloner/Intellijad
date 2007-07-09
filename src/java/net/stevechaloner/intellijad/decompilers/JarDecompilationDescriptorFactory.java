@@ -43,8 +43,10 @@ class JarDecompilationDescriptorFactory extends DecompilationDescriptorFactory
     public DecompilationDescriptor create(@NotNull VirtualFile target)
     {
         String path = target.getPath();
+        String fqName = getFullyQualifiedName(path);
         return new JarDecompilationDescriptor(target,
-                                              getFullyQualifiedName(path),
+                                              fqName,
+                                              fqName.replace('.', '/'),
                                               getPackageName(path),
                                               getPackageNameAsPath(path),
                                               getJarFile(target));
@@ -144,7 +146,7 @@ class JarDecompilationDescriptorFactory extends DecompilationDescriptorFactory
     private static String getPackageNameAsPath(@NotNull String path)
     {
         String packageName = getPackageName(path);
-        packageName = packageName.replaceAll("\\.", "/");
+        packageName = packageName.replace("\\.", "/");
         if (!packageName.endsWith("/"))
         {
             packageName = packageName + "/";

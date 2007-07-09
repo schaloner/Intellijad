@@ -27,7 +27,7 @@ import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
-/***
+/**
  *
  */
 public class DecompileAction extends AnAction

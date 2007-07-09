@@ -13,7 +13,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package net.stevechaloner.intellijad.decompilers;
+package net.stevechaloner.intellijad.decompilers.fs;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -27,6 +27,11 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
+import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationException;
+import net.stevechaloner.intellijad.decompilers.ResultType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -168,5 +173,12 @@ public class FileSystemDecompiler extends AbstractDecompiler
 
         }
         return resultType;
+    }
+
+    // javadoc inherited
+    public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
+                                      DecompilationContext context)
+    {
+        return null;
     }
 }
