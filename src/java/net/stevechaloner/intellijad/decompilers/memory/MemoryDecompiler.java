@@ -35,6 +35,8 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -60,40 +62,54 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                        content);
         vfs.addFile(file);
 
-        Project project = context.getProject();
+        final Project project = context.getProject();
         MemoryVirtualFile showdom = vfs.getFileForPackage(descriptor.getPackageName());
         showdom.addChild(file);
 
-        final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
-                                                           project);
+        Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
+                                                     project);
+        final List<Library> libraries = new ArrayList<Library>();
         if (lib != null)
+        {
+            libraries.add(lib);
+        }
+        else
+        {
+            libraries.addAll(net.stevechaloner.intellijad.util.LibraryUtil.findModuleLibrariesByClass(descriptor.getFullyQualifiedName(),
+                                                                                 project));
+        }
+
+        if (!libraries.isEmpty())
         {
             ApplicationManager.getApplication().runWriteAction(new Runnable()
             {
                 public void run()
                 {
-                    Library.ModifiableModel model = lib.getModifiableModel();
-                    String[] urls = model.getUrls(OrderRootType.SOURCES);
-                    boolean found = false;
-                    for (int i = 0; !found && i < urls.length; i++)
+                    for (Library library : libraries)
                     {
-                        found = IntelliJadConstants.INTELLIJAD_ROOT.equals(urls[i]);
-                    }
-                    if (!found)
-                    {
-                        model.addRoot(vfs.findFileByPath("root"),
-                                      OrderRootType.SOURCES);
-                        model.commit();
+                        Library.ModifiableModel model = library.getModifiableModel();
+                        String[] urls = model.getUrls(OrderRootType.SOURCES);
+                        boolean found = false;
+                        for (int i = 0; !found && i < urls.length; i++)
+                        {
+                            found = IntelliJadConstants.INTELLIJAD_ROOT.equals(urls[i]);
+                        }
+                        if (!found)
+                        {
+                            model.addRoot(vfs.findFileByPath("root"),
+                                          OrderRootType.SOURCES);
+                            model.commit();
+                        }
+                        context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
+                                                                                              descriptor.getClassName(),
+                                                                                              library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName()));
+                        project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
                     }
                 }
             });
             FileEditorManager.getInstance(project).openFile(file,
                                                             true);
 
-            project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(lib);
-            context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
-                                                                                  descriptor.getClassName(),
-                                                                                  lib.getName()));
         }
         else
         {

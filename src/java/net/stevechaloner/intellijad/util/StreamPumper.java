@@ -1,5 +1,3 @@
-package net.stevechaloner.intellijad.util;
-
 /*
  * Copyright 2007 Steve Chaloner
  *
@@ -14,6 +12,8 @@ package net.stevechaloner.intellijad.util;
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
+package net.stevechaloner.intellijad.util;
 
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import org.jetbrains.annotations.NotNull;

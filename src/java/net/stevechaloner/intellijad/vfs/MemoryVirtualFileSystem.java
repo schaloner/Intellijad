@@ -2,6 +2,7 @@ package net.stevechaloner.intellijad.vfs;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
@@ -54,35 +55,38 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     public VirtualFile findFileByPath(String string)
     {
         // todo rewrite this so it doesn't look like crap
-        String path = VirtualFileManager.extractPath(string);
-        StringTokenizer st = new StringTokenizer(path, "/");
-        VirtualFile currentFile = files.get("root");
-        boolean keepLooking = true;
-        String targetName = null;
-        while (keepLooking && st.hasMoreTokens())
-        {
-            String element = st.nextToken();
-            if (!st.hasMoreTokens())
-            {
-                targetName = element;
-            }
-            VirtualFile child = currentFile.findChild(element);
-            if (child != null)
-            {
-                currentFile = child;
-            }
-            else
-            {
-                keepLooking = false;
-            }
-        }
-
         VirtualFile file = null;
-        if (currentFile != null &&
-            targetName != null &&
-            targetName.equals(currentFile.getName()))
+        if (!StringUtil.isEmptyOrSpaces(string))
         {
-            file = currentFile;
+            String path = VirtualFileManager.extractPath(string);
+            StringTokenizer st = new StringTokenizer(path, "/");
+            VirtualFile currentFile = files.get("root");
+            boolean keepLooking = true;
+            String targetName = null;
+            while (keepLooking && st.hasMoreTokens())
+            {
+                String element = st.nextToken();
+                if (!st.hasMoreTokens())
+                {
+                    targetName = element;
+                }
+                VirtualFile child = currentFile.findChild(element);
+                if (child != null)
+                {
+                    currentFile = child;
+                }
+                else
+                {
+                    keepLooking = false;
+                }
+            }
+
+            if (currentFile != null &&
+                targetName != null &&
+                targetName.equals(currentFile.getName()))
+            {
+                file = currentFile;
+            }
         }
         return file;
     }

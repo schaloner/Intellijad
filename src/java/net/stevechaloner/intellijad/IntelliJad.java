@@ -157,7 +157,6 @@ public class IntelliJad implements ApplicationComponent,
             Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new FileSystemDecompiler();
             try
             {
-                // todo check if file is already open
                 VirtualFile file = decompiler.getVirtualFile(descriptor,
                                                              context);
                 FileEditorManager editorManager = FileEditorManager.getInstance(project);
@@ -170,13 +169,14 @@ public class IntelliJad implements ApplicationComponent,
                 }
                 else
                 {
-                    VirtualFile decompiledFile = decompiler.decompile(descriptor,
-                                                                      context);
-                    if (decompiledFile != null)
+                    file = decompiler.decompile(descriptor,
+                                                context);
+                    // todo check if file is already open in case of FS decomp
+                    if (file != null)
                     {
-                        FileEditorManager.getInstance(project).closeFile(descriptor.getClassFile());
-                        FileEditorManager.getInstance(project).openFile(decompiledFile,
-                                                                        true);
+                        editorManager.closeFile(descriptor.getClassFile());
+                        editorManager.openFile(file,
+                                               true);
                     }
                 }
             }

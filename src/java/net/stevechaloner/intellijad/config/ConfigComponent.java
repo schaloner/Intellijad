@@ -137,13 +137,14 @@ abstract class ConfigComponent implements Configurable,
      * @return the form
      */
     @NotNull
-    protected ConfigForm createForm(@Nullable Project project)
+    protected synchronized ConfigForm createForm(@Nullable Project project)
     {
         if (form != null)
         {
             throw new IllegalArgumentException(IntelliJadResourceBundle.message("error.config-form-already-exists"));
         }
-        return new ConfigForm(project);
+        form = new ConfigForm(project);
+        return form;
     }
 
     // javadoc unnecessary
