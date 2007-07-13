@@ -6,6 +6,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
+import net.stevechaloner.intellijad.IntelliJadConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,15 +19,12 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
+ * A file system for content that resides only in memory.
+ *
  * @author Steve Chaloner
  */
 public class MemoryVirtualFileSystem extends VirtualFileSystem implements ApplicationComponent
 {
-    /**
-     * The protocol name.
-     */
-    public static final String PROTOCOL = "intellijad";
-
     /**
      * The files.
      */
@@ -47,7 +45,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     // javadoc inherited
     public String getProtocol()
     {
-        return PROTOCOL;
+        return IntelliJadConstants.INTELLIJAD_PROTOCOL;
     }
 
     // javadoc inherited
@@ -60,7 +58,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         {
             String path = VirtualFileManager.extractPath(string);
             StringTokenizer st = new StringTokenizer(path, "/");
-            VirtualFile currentFile = files.get("root");
+            VirtualFile currentFile = files.get(IntelliJadConstants.INTELLIJAD_ROOT);
             boolean keepLooking = true;
             String targetName = null;
             while (keepLooking && st.hasMoreTokens())
@@ -188,7 +186,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     // javadoc inherited
     public void initComponent()
     {
-        MemoryVirtualFile root = new MemoryVirtualFile("root");
+        MemoryVirtualFile root = new MemoryVirtualFile(IntelliJadConstants.INTELLIJAD_ROOT);
         addFile(root);
     }
 
@@ -215,7 +213,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
             names.add(st.nextToken());
         }
         return getFileForPackage(names,
-                                files.get("root"));
+                                files.get(IntelliJadConstants.INTELLIJAD_ROOT));
     }
 
     /**

@@ -115,7 +115,7 @@ public class IntelliJad implements ApplicationComponent,
                     VirtualFile[] files = model.getFiles(OrderRootType.SOURCES);
                     for (VirtualFile file : files)
                     {
-                        if (file.getParent() == null && IntelliJadConstants.INTELLIJAD_ROOT.equals(file.getUrl()))
+                        if (file.getParent() == null && IntelliJadConstants.ROOT_URI.equals(file.getUrl()))
                         {
                             model.removeRoot(file.getUrl(),
                                              OrderRootType.SOURCES);

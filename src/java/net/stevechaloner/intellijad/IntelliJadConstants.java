@@ -46,12 +46,17 @@ public class IntelliJadConstants
     /**
      * The schema used by in-memory decompiled classes.
      */
-    public static final String INTELLIJAD_SCHEMA = "intellijad://";
+    public static final String INTELLIJAD_SCHEMA = INTELLIJAD_PROTOCOL + "://";
 
     /**
-     * The root URL of all in-memory decompiled classes.
+     * The name of the root.
      */
-    public static final String INTELLIJAD_ROOT = "intellijad://root";
+    public static final String INTELLIJAD_ROOT = "intellijad";
+
+    /**
+     * The root URI of all in-memory decompiled classes.
+     */
+    public static final String ROOT_URI = INTELLIJAD_SCHEMA + INTELLIJAD_ROOT;
 
     /**
      * The help key for configuration support.

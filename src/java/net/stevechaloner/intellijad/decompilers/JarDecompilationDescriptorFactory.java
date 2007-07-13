@@ -146,7 +146,7 @@ class JarDecompilationDescriptorFactory extends DecompilationDescriptorFactory
     private static String getPackageNameAsPath(@NotNull String path)
     {
         String packageName = getPackageName(path);
-        packageName = packageName.replace("\\.", "/");
+        packageName = packageName.replaceAll("\\.", "/");
         if (!packageName.endsWith("/"))
         {
             packageName = packageName + "/";

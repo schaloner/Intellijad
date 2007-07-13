@@ -3,6 +3,7 @@ package net.stevechaloner.intellijad.vfs;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
+import net.stevechaloner.intellijad.IntelliJadConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -104,7 +105,7 @@ public class MemoryVirtualFile extends VirtualFile
     @NotNull
     public VirtualFileSystem getFileSystem()
     {
-        return VirtualFileManager.getInstance().getFileSystem(MemoryVirtualFileSystem.PROTOCOL);
+        return VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
     }
 
     // javadoc inherited

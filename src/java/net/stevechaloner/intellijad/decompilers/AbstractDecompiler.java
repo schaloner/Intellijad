@@ -32,6 +32,7 @@ import java.util.zip.ZipFile;
 /**
  * The generic decompilation operations required to decompile and display a class.
  *
+ * @todo this class and its children need some serious refactoring to reduce duplication
  * @author Steve Chaloner
  */
 public abstract class AbstractDecompiler implements Decompiler
@@ -79,73 +80,7 @@ public abstract class AbstractDecompiler implements Decompiler
         }
     };
 
-    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
-    {
-        {
-            put(ResultType.NON_FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
-                                                                           descriptor,
-                                                                           targetClass,
-                                                                           output,
-                                                                           err);
-                        context.getConsole().appendToConsole(err.toString());
-                        return file;
-                    }
-                });
-            put(ResultType.FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        context.getConsole().appendToConsole(err.toString());
-                        return null;
-                    }
-                });
-            put(ResultType.SUCCESS,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        String content = output.toString();
-                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
-                        {
-                            DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
-                                                                                                 content);
-                        }
-                        VirtualFile file = processOutput(descriptor,
-                                                         context,
-                                                         content);
-                        // todo this doesn't belong here
-                        if (context.getConfig().isClearAndCloseConsoleOnSuccess())
-                        {
-                            context.getConsole().clearConsoleContent();
-                            context.getConsole().closeConsole();
-                        }
 
-                        return file;
-                    }
-                });
-        }
-    };
 
     /**
      * Perform pre-compilation operations.
@@ -157,17 +92,6 @@ public abstract class AbstractDecompiler implements Decompiler
      */
     protected abstract OperationStatus setup(DecompilationDescriptor descriptor,
                                              DecompilationContext context) throws DecompilationException;
-
-    /**
-     * @param descriptor the decompilation descriptor
-     * @param context    the decompilation context
-     * @param content    the content of the decompiled file
-     * @return a file representing the decompiled file
-     * @throws DecompilationException if the processing fails
-     */
-    protected abstract VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
-                                                 @NotNull final DecompilationContext context,
-                                                 @NotNull final String content) throws DecompilationException;
 
     /**
      * Updates the command to insert any specific arguments.
@@ -206,11 +130,11 @@ public abstract class AbstractDecompiler implements Decompiler
                                                                       context,
                                                                       output,
                                                                       err);
-                        decompiledFile = decompilationAftermathHandlers.get(resultType).execute(context,
-                                                                                                descriptor,
-                                                                                                targetClass,
-                                                                                                output,
-                                                                                                err);
+                        decompiledFile = getDecompilationAftermathHandler(resultType).execute(context,
+                                                                                              descriptor,
+                                                                                              targetClass,
+                                                                                              output,
+                                                                                              err);
                     }
                 }
                 catch (IOException e)
@@ -281,6 +205,15 @@ public abstract class AbstractDecompiler implements Decompiler
                                                            ByteArrayOutputStream output);
 
     /**
+     * Gets a handler for the result of the decompilation.
+     *
+     * @param resultType the result of the decompilation operation.
+     * @return a handler
+     */
+    @NotNull
+    protected abstract DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType);
+
+    /**
      * Extract the class files from the library to the target directory.
      *
      * @param jarFile                 the library containing the class files
@@ -312,7 +245,7 @@ public abstract class AbstractDecompiler implements Decompiler
     /**
      * Handles the output/state result of the decompilation process.
      */
-    private interface DecompilationAftermathHandler
+    protected interface DecompilationAftermathHandler
     {
         /**
          * Handle the aftermath of the decompilation process.

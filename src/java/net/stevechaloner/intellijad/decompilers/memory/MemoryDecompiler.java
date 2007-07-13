@@ -20,7 +20,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
@@ -28,15 +27,20 @@ import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.ResultType;
+import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -46,19 +50,98 @@ import java.util.List;
  */
 public class MemoryDecompiler extends AbstractDecompiler
 {
+    /**
+     *
+     */
+    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
+    {
+        {
+            put(ResultType.NON_FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
+                                                                           descriptor,
+                                                                           targetClass,
+                                                                           output,
+                                                                           err);
+                        context.getConsole().appendToConsole(err.toString());
+                        return file;
+                    }
+                });
+            put(ResultType.FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        context.getConsole().appendToConsole(err.toString());
+                        return null;
+                    }
+                });
+            put(ResultType.SUCCESS,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        String content = output.toString();
+                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                        {
+                            DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
+                                                                                                 content);
+                        }
+                        VirtualFile file = processOutput(descriptor,
+                                                         context,
+                                                         content);
+                        // todo this doesn't belong here
+                        if (context.getConfig().isClearAndCloseConsoleOnSuccess())
+                        {
+                            context.getConsole().clearConsoleContent();
+                            context.getConsole().closeConsole();
+                        }
+
+                        return file;
+                    }
+                });
+        }
+    };
+    
+    // javadoc inherited
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
         return OperationStatus.CONTINUE;
     }
 
-    // javadoc inherited
-    protected VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
-                                        @NotNull final DecompilationContext context,
-                                        @NotNull final String content) throws DecompilationException
+    /**
+     * 
+     * @param descriptor the decompilation descriptor
+     * @param context    the decompilation context
+     * @param content    the content of the decompiled file
+     * @return a file representing the decompiled file
+     * @throws DecompilationException if the processing fails
+     */
+    private VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
+                                      @NotNull final DecompilationContext context,
+                                      @NotNull final String content) throws DecompilationException
     {
-        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(MemoryVirtualFileSystem.PROTOCOL);
-        MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + ".java",
+        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+        MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION,
                                                        content);
         vfs.addFile(file);
 
@@ -66,18 +149,8 @@ public class MemoryDecompiler extends AbstractDecompiler
         MemoryVirtualFile showdom = vfs.getFileForPackage(descriptor.getPackageName());
         showdom.addChild(file);
 
-        Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
-                                                     project);
-        final List<Library> libraries = new ArrayList<Library>();
-        if (lib != null)
-        {
-            libraries.add(lib);
-        }
-        else
-        {
-            libraries.addAll(net.stevechaloner.intellijad.util.LibraryUtil.findModuleLibrariesByClass(descriptor.getFullyQualifiedName(),
-                                                                                 project));
-        }
+        final List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
+                                                                         project);
 
         if (!libraries.isEmpty())
         {
@@ -92,11 +165,11 @@ public class MemoryDecompiler extends AbstractDecompiler
                         boolean found = false;
                         for (int i = 0; !found && i < urls.length; i++)
                         {
-                            found = IntelliJadConstants.INTELLIJAD_ROOT.equals(urls[i]);
+                            found = IntelliJadConstants.ROOT_URI.equals(urls[i]);
                         }
                         if (!found)
                         {
-                            model.addRoot(vfs.findFileByPath("root"),
+                            model.addRoot(vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT),
                                           OrderRootType.SOURCES);
                             model.commit();
                         }
@@ -159,10 +232,17 @@ public class MemoryDecompiler extends AbstractDecompiler
     }
 
     // javadoc inherited
+    @NotNull
+    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
+    {
+        return decompilationAftermathHandlers.get(resultType);
+    }
+
+    // javadoc inherited
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
-        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(MemoryVirtualFileSystem.PROTOCOL);
+        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
         return vfs.findFileByPath(descriptor.getFullyQualifiedNameAsPath());
     }
 }

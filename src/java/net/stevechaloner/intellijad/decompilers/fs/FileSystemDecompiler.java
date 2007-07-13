@@ -20,7 +20,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryUtil;
+import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -30,12 +30,19 @@ import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.ResultType;
+import net.stevechaloner.intellijad.util.LibraryUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A decompiler that outputs the result to the file system and builds
@@ -45,6 +52,107 @@ import java.io.File;
  */
 public class FileSystemDecompiler extends AbstractDecompiler
 {
+    /**
+     *
+     */
+    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
+    {
+        {
+            put(ResultType.NON_FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
+                                                                           descriptor,
+                                                                           targetClass,
+                                                                           output,
+                                                                           err);
+                        context.getConsole().appendToConsole(err.toString());
+                        return file;
+                    }
+                });
+            put(ResultType.FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        context.getConsole().appendToConsole(err.toString());
+                        return null;
+                    }
+                });
+            put(ResultType.SUCCESS,
+                new DecompilationAftermathHandler()
+                {
+                    private VirtualFile getFile(DecompilationContext context,
+                                                DecompilationDescriptor descriptor)
+                    {
+                        final LocalFileSystem vfs = getLocalFileSystem();
+                        final Config config = context.getConfig();
+                        final File td = new File(config.getOutputDirectory() + '/' + descriptor.getPackageNameAsPath() + descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
+                        final VirtualFile[] files = new VirtualFile[1];
+                        ApplicationManager.getApplication().runWriteAction(new Runnable()
+                        {
+                            public void run()
+                            {
+                                files[0] = vfs.refreshAndFindFileByIoFile(td);
+                            }
+                        });
+                        return files[0];
+                    }
+
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        // todo this sucks - rewrite
+                        VirtualFile file = getFile(context,
+                                                   descriptor);
+                        String content = null;
+                        try
+                        {
+                            content = StreamUtil.readText(file.getInputStream());
+                        }
+                        catch (IOException e)
+                        {
+                            throw new DecompilationException(e);
+                        }
+
+                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                        {
+                            DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
+                                                                                                 content);
+                        }
+
+                        processOutput(descriptor,
+                                      context,
+                                      file);
+                        // todo this doesn't belong here
+                        if (context.getConfig().isClearAndCloseConsoleOnSuccess())
+                        {
+                            context.getConsole().clearConsoleContent();
+                            context.getConsole().closeConsole();
+                        }
+
+                        return file;
+                    }
+                });
+        }
+    };
+
     // javadoc inherited
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
@@ -71,62 +179,61 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return status;
     }
 
-    // javadoc inherited
-    protected VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
-                                        @NotNull final DecompilationContext context,
-                                        @NotNull final String content) throws DecompilationException
+    /**
+     *
+     * @param descriptor the decompilation descriptor
+     * @param context    the decompilation context
+     * @param content    the content of the decompiled file
+     * @return a file representing the decompiled file
+     * @throws DecompilationException if the processing fails
+     */
+    private VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
+                                      @NotNull final DecompilationContext context,
+                                      @NotNull final VirtualFile file) throws DecompilationException
     {
         final Project project = context.getProject();
-        final LocalFileSystem vfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
+        final LocalFileSystem vfs = getLocalFileSystem();
         final Config config = context.getConfig();
         final File td = new File(config.getOutputDirectory());
         final VirtualFile targetDirectory = vfs.findFileByIoFile(td);
-        final VirtualFile[] fileContainer = new VirtualFile[1];
+
         ApplicationManager.getApplication().runWriteAction(new Runnable()
         {
             public void run()
             {
-                File f = new File(td,
-                                  descriptor.getPackageNameAsPath() +
-                                  descriptor.getClassName() +
-                                  IntelliJadConstants.DOT_JAVA_EXTENSION);
-                if (config.isReadOnly())
-                {
-                    f.setReadOnly();
-                }
-                fileContainer[0] = vfs.refreshAndFindFileByIoFile(f);
-
-                final Library lib = LibraryUtil.findLibraryByClass(descriptor.getFullyQualifiedName(),
-                                                                   project);
-                if (lib != null)
+                final List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
+                                                                                 project);
+                if (!libraries.isEmpty())
                 {
                     ApplicationManager.getApplication().runWriteAction(new Runnable()
                     {
                         public void run()
                         {
-                            Library.ModifiableModel model = lib.getModifiableModel();
-                            String[] urls = model.getUrls(OrderRootType.SOURCES);
-                            boolean found = false;
-                            for (int i = 0; !found && i < urls.length; i++)
+                            for (Library library : libraries)
                             {
-                                found = targetDirectory.getUrl().equals(urls[i]);
-                            }
-                            if (!found)
-                            {
-                                model.addRoot(targetDirectory,
-                                              OrderRootType.SOURCES);
-                                model.commit();
+                                Library.ModifiableModel model = library.getModifiableModel();
+                                String[] urls = model.getUrls(OrderRootType.SOURCES);
+                                boolean found = false;
+                                for (int i = 0; !found && i < urls.length; i++)
+                                {
+                                    found = targetDirectory.getUrl().equals(urls[i]);
+                                }
+                                if (!found)
+                                {
+                                    model.addRoot(targetDirectory,
+                                                  OrderRootType.SOURCES);
+                                    model.commit();
+                                }
+
+                                project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
+                                context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
+                                                                                                      descriptor.getClassName(),
+                                                                                                      library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName()));
                             }
                         }
                     });
-                    FileEditorManager.getInstance(project).openFile(fileContainer[0],
+                    FileEditorManager.getInstance(project).openFile(file,
                                                                     true);
-
-
-                    project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(lib);
-                    context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
-                                                                                          descriptor.getClassName(),
-                                                                                          lib.getName()));
                 }
                 else
                 {
@@ -137,7 +244,7 @@ public class FileSystemDecompiler extends AbstractDecompiler
         });
 
 
-        return fileContainer[0];
+        return file;
     }
 
     // javadoc inherited
@@ -175,10 +282,24 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return resultType;
     }
 
+    private LocalFileSystem getLocalFileSystem()
+    {
+        return (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
+    }
+
+    @NotNull
+    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
+    {
+        return decompilationAftermathHandlers.get(resultType);
+    }
+
     // javadoc inherited
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
+        final LocalFileSystem vfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
+        VirtualFile file = vfs.findFileByPath(descriptor.getPath());
+//        return file;
         return null;
     }
 }

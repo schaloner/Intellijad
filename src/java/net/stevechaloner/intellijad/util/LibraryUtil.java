@@ -19,105 +19,92 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
-import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.util.text.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
+ * Extension to the openapi LibraryUtil to allow easy searching in module libraries.
  * @author Steve Chaloner
  */
 public class LibraryUtil
 {
-    private LibraryUtil() {
+    /**
+     * Static use only.
+     */
+    private LibraryUtil()
+    {
     }
 
-    public static List<Library> findModuleLibrariesByClass(String fqn,
-                                                           Project project)
+    /**
+     * Searches the project and application scopes for libraries containing
+     * the class.  If none are found, the module libraries are searched.
+     *
+     * @param fqn the fully-qualified name of the class.
+     * @param project the current project
+     * @return a list containing any matching libraries
+     */
+    @NotNull
+    public static List<Library> findLibrariesByClass(@Nullable String fqn,
+                                                     @NotNull Project project)
     {
-
-        ModuleManager moduleManager = ModuleManager.getInstance(project);
-        List<Module> modules = new ArrayList<Module>(Arrays.asList(moduleManager.getSortedModules()));
         List<Library> libraries = new ArrayList<Library>();
-        for (Module module : modules) {
-            ModuleRootManager mrm = ModuleRootManager.getInstance(module);
-            LibraryTable table = mrm.getModifiableModel().getModuleLibraryTable();
-            Library library = findInTable(table,
-                                          fqn);
-            if (library != null)
+        if (!StringUtil.isEmptyOrSpaces(fqn))
+        {
+            Library lib = com.intellij.openapi.roots.libraries.LibraryUtil.findLibraryByClass(fqn,
+                                                                                              project);
+            if (lib != null)
             {
-                libraries.add(library);
+                libraries.add(lib);
+            }
+            else
+            {
+                ModuleManager moduleManager = ModuleManager.getInstance(project);
+                List<Module> modules = new ArrayList<Module>(Arrays.asList(moduleManager.getSortedModules()));
+                for (Module module : modules)
+                {
+                    ModuleRootManager mrm = ModuleRootManager.getInstance(module);
+                    LibraryTable table = mrm.getModifiableModel().getModuleLibraryTable();
+                    Library library = findInTable(table,
+                                                  fqn);
+                    if (library != null)
+                    {
+                        libraries.add(library);
+                    }
+                }
             }
         }
         return libraries;
     }
 
-    public static boolean isClassAvailableInLibrary(Library library, String fqn) {
-        return isClassAvailableInLibrary(library.getFiles(OrderRootType.CLASSES), fqn);
-    }
-
-    public static boolean isClassAvailableInLibrary(VirtualFile files[], String fqn) {
-        int len = files.length;
-        boolean found = false;
-        for (int i = 0; !found && i < len; i++) {
-            if (findInFile(files[i],
-                    new StringTokenizer(fqn, "."))) {
-                found = true;
-            }
-        }
-
-        return found;
-    }
-
-    public static Library findLibraryByClass(String fqn, Project project) {
-        if (project != null) {
-            LibraryTable projectTable = LibraryTablesRegistrar.getInstance().getLibraryTable(project);
-            Library library = findInTable(projectTable, fqn);
-            if (library != null) {
-                return library;
-            }
-        }
-        LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable();
-        return findInTable(table, fqn);
-    }
-
-    private static boolean findInFile(VirtualFile file, StringTokenizer tokenizer) {
-        if (!tokenizer.hasMoreTokens()) {
-            return true;
-        }
-        StringBuffer name = new StringBuffer(tokenizer.nextToken());
-        if (!tokenizer.hasMoreTokens()) {
-            name.append(".class");
-        }
-        VirtualFile child = file.findChild(name.toString());
-        return child != null && findInFile(child, tokenizer);
-    }
-
-    private static Library findInTable(LibraryTable table, String fqn) {
-        Library[] arr = table.getLibraries();
-        int len = arr.length;
-        for (int i = 0; i < len; i++) {
-            Library library = arr[i];
-            if (isClassAvailableInLibrary(library, fqn)) {
-                return library;
-            }
-        }
-
-        return null;
-    }
-
-    public static Library createLibrary(LibraryTable libraryTable, String baseName) {
-        String name = baseName;
-        int count = 2;
-        for (; libraryTable.getLibraryByName(name) != null; name = (new StringBuilder()).append(baseName).append(" (").append(count++).append(")").toString())
+    /**
+     * This method has been borrowed from {@link com.intellij.openapi.roots.libraries.LibraryUtil} -
+     * it would be nice if the method in that class was public :)
+     *
+     * @param table the library table to search
+     * @param fqn the fully-qualified name of the class
+     * @return the matching library, if any
+     */
+    @Nullable
+    private static Library findInTable(LibraryTable table,
+                                       String fqn)
+    {
+        Library[] libraries = table.getLibraries();
+        Library library = null;
+        for (int i = 0; library == null && i < libraries.length; i++)
         {
+            if (com.intellij.openapi.roots.libraries.LibraryUtil.isClassAvailableInLibrary(libraries[i],
+                                                                                           fqn))
+            {
+                library = libraries[i];
+            }
         }
-        return libraryTable.createLibrary(name);
+        return library;
     }
 }
