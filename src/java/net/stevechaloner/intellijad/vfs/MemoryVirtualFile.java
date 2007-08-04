@@ -93,7 +93,7 @@ public class MemoryVirtualFile extends VirtualFile
         this.isDirectory = isDirectory;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @NotNull
     @NonNls
     public String getName()
@@ -101,45 +101,45 @@ public class MemoryVirtualFile extends VirtualFile
         return name;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @NotNull
     public VirtualFileSystem getFileSystem()
     {
         return VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String getPath()
     {
         VirtualFile parent = getParent();
         return (parent == null) ? name : parent.getPath() + '/' + name;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public boolean isWritable()
     {
-        return false;
+        return true;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public boolean isDirectory()
     {
         return isDirectory;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public boolean isValid()
     {
         return true;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void setParent(VirtualFile parent)
     {
         this.parent = parent;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @Nullable
     public VirtualFile getParent()
     {
@@ -166,13 +166,13 @@ public class MemoryVirtualFile extends VirtualFile
         }
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public VirtualFile[] getChildren()
     {
         return children.values().toArray(new VirtualFile[children.size()]);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public OutputStream getOutputStream(Object object,
                                         long l,
                                         long l1) throws IOException
@@ -180,32 +180,32 @@ public class MemoryVirtualFile extends VirtualFile
         return new ByteArrayOutputStream();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public byte[] contentsToByteArray() throws IOException
     {
         return content.getBytes();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public long getTimeStamp()
     {
         return 0L;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public long getLength()
     {
         return content.getBytes().length;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void refresh(boolean b,
                         boolean b1,
                         Runnable runnable)
     {
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public InputStream getInputStream() throws IOException
     {
         return new ByteArrayInputStream(content.getBytes());
@@ -223,7 +223,7 @@ public class MemoryVirtualFile extends VirtualFile
         return children.get(name);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public long getModificationStamp()
     {
         return 0L;

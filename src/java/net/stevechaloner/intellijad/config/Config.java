@@ -49,6 +49,7 @@ public class Config implements DOMable
     private static final PropertyDescriptor<Boolean> READ_ONLY = new ImmutablePropertyDescriptor<Boolean>("read-only");
     private static final PropertyDescriptor<Boolean> SORT = new ImmutablePropertyDescriptor<Boolean>("sort");
     private static final PropertyDescriptor<Boolean> USE_PROJECT_SPECIFIC_SETTINGS = new ImmutablePropertyDescriptor<Boolean>("use-project-specific-settings");
+    private static final PropertyDescriptor<Boolean> REFORMAT_ACCORDING_TO_STYLE = new ImmutablePropertyDescriptor<Boolean>("reformat-according-to-style");
 
     /**
      * The persistence model.
@@ -121,6 +122,7 @@ public class Config implements DOMable
         registerBooleanProperty(JadOptions.VERBOSE, dpc);
         registerStringProperty(JAD_PATH, dpc);
         registerBooleanProperty(USE_PROJECT_SPECIFIC_SETTINGS, dpc);
+        registerBooleanProperty(REFORMAT_ACCORDING_TO_STYLE, dpc);
 
         dpc.put(EXCLUSION_TABLE_MODEL,
                 new DOMableTableModel(EXCLUSION_TABLE_MODEL,
@@ -786,6 +788,17 @@ public class Config implements DOMable
         value.setValue(useProjectSpecificSettings);
     }
 
+    public boolean isReformatAccordingToStyle()
+    {
+        return REFORMAT_ACCORDING_TO_STYLE.getValue(propertyContainer.get(REFORMAT_ACCORDING_TO_STYLE));
+    }
+
+    public void setReformatAccordingToStyle(boolean reformatAccordingToStyle)
+    {
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(REFORMAT_ACCORDING_TO_STYLE);
+        value.setValue(reformatAccordingToStyle);
+    }
+
     @NotNull
     public PropertyDescriptor getPropertyDescriptor()
     {
@@ -798,13 +811,13 @@ public class Config implements DOMable
         return domable.write();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void read(@NotNull Element element)
     {
         domable.read(element);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public Object getValue()
     {
         return null;

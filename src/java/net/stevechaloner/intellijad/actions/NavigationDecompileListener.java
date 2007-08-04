@@ -117,7 +117,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         this.decompilationListener = decompilationListener;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void fileOpened(FileEditorManager fileEditorManager,
                            VirtualFile file)
     {
@@ -163,14 +163,14 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         return exclude;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void fileClosed(FileEditorManager fileEditorManager,
                            VirtualFile virtualFile)
     {
         // no-op
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void selectionChanged(FileEditorManagerEvent fileEditorManagerEvent)
     {
         // no-op

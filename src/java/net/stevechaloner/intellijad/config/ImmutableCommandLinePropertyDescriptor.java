@@ -103,13 +103,13 @@ public class ImmutableCommandLinePropertyDescriptor<T> extends ImmutableProperty
         this.renderRule = renderRule;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public RenderRule getRenderRule()
     {
         return renderRule;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String getOption(@NotNull RuleContext ruleContext,
                             DOMable<T> domable)
     {

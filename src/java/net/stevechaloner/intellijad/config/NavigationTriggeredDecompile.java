@@ -90,12 +90,12 @@ public enum NavigationTriggeredDecompile {
         this.displayName = displayName;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String getName() {
         return name;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String getDisplayName() {
         return displayName;
     }
@@ -111,7 +111,7 @@ public enum NavigationTriggeredDecompile {
         return MAP.get(name);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String toString() {
         return displayName;
     }

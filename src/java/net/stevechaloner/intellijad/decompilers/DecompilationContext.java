@@ -17,7 +17,7 @@ package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.project.Project;
 import net.stevechaloner.intellijad.config.Config;
-import net.stevechaloner.intellijad.console.IntelliJadConsole;
+import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,9 +31,9 @@ import java.io.File;
 public class DecompilationContext
 {
     /**
-     * The console to use for reporting.
+     * The console context to use for reporting.
      */
-    private final IntelliJadConsole console;
+    private final ConsoleContext consoleContext;
 
     /**
      * The command to execute.
@@ -54,15 +54,15 @@ public class DecompilationContext
      * Initialises a new instance of this class.
      *
      * @param project the project
-     * @param console the reporting console
+     * @param consoleContext the reporting console context
      * @param command the command to execute
      */
     public DecompilationContext(@NotNull Project project,
-                                @NotNull IntelliJadConsole console,
+                                @NotNull ConsoleContext consoleContext,
                                 @NotNull String command)
     {
         this.project = project;
-        this.console = console;
+        this.consoleContext = consoleContext;
         this.command = command;
         this.targetDirectory = new File(new File(System.getProperty("java.io.tmpdir")),
                                         "ij" + System.currentTimeMillis());
@@ -71,9 +71,9 @@ public class DecompilationContext
     }
 
     // javadoc unnecessary
-    public IntelliJadConsole getConsole()
+    public ConsoleContext getConsoleContext()
     {
-        return console;
+        return consoleContext;
     }
 
     // javadoc unnecessary

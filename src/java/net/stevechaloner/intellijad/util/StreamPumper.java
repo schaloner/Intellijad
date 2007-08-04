@@ -84,11 +84,13 @@ public class StreamPumper implements Runnable
         }
         catch (InterruptedException e)
         {
-            context.getConsole().appendToConsole(e.getMessage());
+            context.getConsoleContext().addMessage("error",
+                                                   e.getMessage());
         }
         catch (IOException e)
         {
-            context.getConsole().appendToConsole(e.getMessage());
+            context.getConsoleContext().addMessage("error",
+                                                   e.getMessage());
         }
     }
 

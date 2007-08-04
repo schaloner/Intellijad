@@ -24,6 +24,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
@@ -71,7 +73,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                                            targetClass,
                                                                            output,
                                                                            err);
-                        context.getConsole().appendToConsole(err.toString());
+                        context.getConsoleContext().addMessage("error",
+                                                               err.toString());
                         return file;
                     }
                 });
@@ -85,7 +88,10 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                @NotNull ByteArrayOutputStream output,
                                                @NotNull ByteArrayOutputStream err) throws DecompilationException
                     {
-                        context.getConsole().appendToConsole(err.toString());
+                        ConsoleContext consoleContext = context.getConsoleContext();
+                        consoleContext.addMessage("error",
+                                                  err.toString());
+                        consoleContext.setWorthDisplaying(true);
                         return null;
                     }
                 });
@@ -105,23 +111,15 @@ public class MemoryDecompiler extends AbstractDecompiler
                             DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
                                                                                                  content);
                         }
-                        VirtualFile file = processOutput(descriptor,
-                                                         context,
-                                                         content);
-                        // todo this doesn't belong here
-                        if (context.getConfig().isClearAndCloseConsoleOnSuccess())
-                        {
-                            context.getConsole().clearConsoleContent();
-                            context.getConsole().closeConsole();
-                        }
-
-                        return file;
+                        return processOutput(descriptor,
+                                             context,
+                                             content);
                     }
                 });
         }
     };
     
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
@@ -158,6 +156,8 @@ public class MemoryDecompiler extends AbstractDecompiler
             {
                 public void run()
                 {
+                    ConsoleContext consoleContext = context.getConsoleContext();
+                    consoleContext.addSubsection(ConsoleEntryType.LIBRARY_OPERATION);
                     for (Library library : libraries)
                     {
                         Library.ModifiableModel model = library.getModifiableModel();
@@ -173,9 +173,9 @@ public class MemoryDecompiler extends AbstractDecompiler
                                           OrderRootType.SOURCES);
                             model.commit();
                         }
-                        context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.associating-source-with-library",
-                                                                                              descriptor.getClassName(),
-                                                                                              library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName()));
+                        consoleContext.addMessage("message.associating-source-with-library",
+                                                  descriptor.getClassName(),
+                                                  library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
                         project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
                     }
                 }
@@ -186,14 +186,14 @@ public class MemoryDecompiler extends AbstractDecompiler
         }
         else
         {
-            context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.library-not-found-for-class",
-                                                                                  descriptor.getClassName()));
+            context.getConsoleContext().addMessage("message.library-not-found-for-class",
+                                                   descriptor.getClassName());
         }
 
         return file;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected void updateCommand(StringBuilder command)
     {
         command.append(" -p ");
@@ -231,14 +231,14 @@ public class MemoryDecompiler extends AbstractDecompiler
         return resultType;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @NotNull
     protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
     {
         return decompilationAftermathHandlers.get(resultType);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {

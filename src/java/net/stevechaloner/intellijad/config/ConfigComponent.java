@@ -75,13 +75,13 @@ abstract class ConfigComponent implements Configurable,
      */
     private ConfigForm form;
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public Icon getIcon()
     {
         return LOGO;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @Nullable
     @NonNls
     public String getHelpTopic()
@@ -89,13 +89,13 @@ abstract class ConfigComponent implements Configurable,
         return IntelliJadConstants.CONFIGURATION_HELP_TOPIC;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public boolean isModified()
     {
         return form != null && form.isModified(config);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void apply() throws ConfigurationException
     {
         if (form != null)
@@ -104,7 +104,7 @@ abstract class ConfigComponent implements Configurable,
         }
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void reset()
     {
         if (form != null)
@@ -113,7 +113,7 @@ abstract class ConfigComponent implements Configurable,
         }
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void disposeUIResources()
     {
         form = null;
@@ -154,7 +154,7 @@ abstract class ConfigComponent implements Configurable,
         return form;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void readExternal(Element element) throws InvalidDataException
     {
         for (String key : domables.keySet())
@@ -170,7 +170,7 @@ abstract class ConfigComponent implements Configurable,
         }
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void writeExternal(Element element) throws WriteExternalException
     {
         for (String key : domables.keySet())

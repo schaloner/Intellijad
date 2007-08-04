@@ -50,14 +50,14 @@ public class ApplicationConfigComponent implements ApplicationComponent,
      */
     private final ConfigComponent configComponent = new ConfigComponent()
     {
-        // javadoc inherited
+        /** {@javadocInherited} */
         @Nls
         public String getDisplayName()
         {
             return "IntelliJad";
         }
 
-        // javadoc inherited
+        /** {@javadocInherited} */
         @NotNull
         public JComponent createComponent()
         {
@@ -73,17 +73,17 @@ public class ApplicationConfigComponent implements ApplicationComponent,
         return COMPONENT_NAME;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void initComponent()
     {
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void disposeComponent()
     {
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public Icon getIcon()
     {
         return configComponent.getIcon();
@@ -95,7 +95,7 @@ public class ApplicationConfigComponent implements ApplicationComponent,
         return configComponent.getDisplayName();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @Nullable
     @NonNls
     public String getHelpTopic()
@@ -103,43 +103,43 @@ public class ApplicationConfigComponent implements ApplicationComponent,
         return configComponent.getHelpTopic();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public JComponent createComponent()
     {
         return configComponent.createComponent();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public boolean isModified()
     {
         return configComponent.isModified();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void apply() throws ConfigurationException
     {
         configComponent.apply();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void reset()
     {
         configComponent.reset();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void disposeUIResources()
     {
         configComponent.disposeUIResources();
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void readExternal(Element element) throws InvalidDataException
     {
         configComponent.readExternal(element);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void writeExternal(Element element) throws WriteExternalException
     {
         configComponent.writeExternal(element);

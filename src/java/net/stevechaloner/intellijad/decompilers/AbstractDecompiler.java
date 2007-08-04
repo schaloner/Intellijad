@@ -15,9 +15,11 @@
 
 package net.stevechaloner.intellijad.decompilers;
 
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.util.StreamPumper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,6 +71,8 @@ public abstract class AbstractDecompiler implements Decompiler
                         boolean successful = false;
                         if (jarFile != null)
                         {
+                            ConsoleContext consoleContext = context.getConsoleContext();
+                            consoleContext.addSubsection(ConsoleEntryType.JAR_OPERATION);
                             extractClassFiles(jarFile,
                                               context,
                                               descriptor);
@@ -100,7 +104,7 @@ public abstract class AbstractDecompiler implements Decompiler
      */
     protected abstract void updateCommand(StringBuilder command);
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public VirtualFile decompile(DecompilationDescriptor descriptor,
                                  DecompilationContext context) throws DecompilationException
     {
@@ -109,14 +113,18 @@ public abstract class AbstractDecompiler implements Decompiler
         {
             boolean prepared = classPreparers.get(descriptor.getClassPathType()).execute(context,
                                                                                          descriptor);
+
             if (prepared)
             {
+                ConsoleContext consoleContext = context.getConsoleContext();
+                consoleContext.addSubsection(ConsoleEntryType.DECOMPILATION_OPERATION);
                 File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
 
                 StringBuilder command = new StringBuilder(context.getCommand());
                 updateCommand(command);
                 command.append(targetClass.getAbsolutePath());
-                context.getConsole().appendToConsole(command.toString());
+                consoleContext.addMessage("message.executing-jad",
+                                          command.toString());
 
                 try
                 {
@@ -149,7 +157,7 @@ public abstract class AbstractDecompiler implements Decompiler
         }
         finally
         {
-            context.getTargetDirectory().delete();
+            FileUtil.delete(context.getTargetDirectory());
         }
 
         return decompiledFile;
@@ -228,8 +236,8 @@ public abstract class AbstractDecompiler implements Decompiler
         try
         {
             ZipFile lib = JarFileSystem.getInstance().getJarFile(jarFile);
-            context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.examining",
-                                                                                  jarFile.getPath()));
+            context.getConsoleContext().addMessage("message.examining",
+                                                   jarFile.getPath());
             ZipExtractor zipExtractor = new ZipExtractor();
             zipExtractor.extract(context,
                                  lib,

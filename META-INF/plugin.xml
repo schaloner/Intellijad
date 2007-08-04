@@ -32,6 +32,11 @@
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
         </action>
+
+        <action id="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction"
+                class="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction" text="decompile byte array">
+            <add-to-group group-id="Debugger.EvaluationDialogPopup" anchor="last"/>
+        </action>
     </actions>
 
     <helpset file="intellijad-help.jar" path="/helpset.hs"/>

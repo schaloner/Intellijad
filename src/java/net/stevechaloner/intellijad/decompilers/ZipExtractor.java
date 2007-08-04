@@ -16,7 +16,6 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.util.io.StreamUtil;
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,8 +64,8 @@ class ZipExtractor
             Matcher matcher = p.matcher(name);
             if (matcher.matches())
             {
-                context.getConsole().appendToConsole(IntelliJadResourceBundle.message("message.extracting",
-                                                                                      entry.getName()));
+                context.getConsoleContext().addMessage("message.extracting",
+                                                       entry.getName());
                 InputStream inputStream = zipFile.getInputStream(entry);
                 int lastIndex = name.lastIndexOf("/");
                 File outputFile = new File(context.getTargetDirectory(),

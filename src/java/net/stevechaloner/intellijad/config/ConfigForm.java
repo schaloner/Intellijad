@@ -96,6 +96,7 @@ public class ConfigForm
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     private JCheckBox useProjectSpecificIntelliJadCheckBox;
+    private JCheckBox reformatAccordingToStyleCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
@@ -387,7 +388,6 @@ public class ConfigForm
         return model;
     }
 
-    // javadoc unnecessary
     public void setData(Config data)
     {
         setUnboundData(data);
@@ -397,6 +397,7 @@ public class ConfigForm
         createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
         decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
         markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
+        reformatAccordingToStyleCheckBox.setSelected(data.isReformatAccordingToStyle());
         printDefaultInitializersForCheckBox.setSelected(data.isDefaultInitializers());
         generateFullyQualifiedNamesCheckBox.setSelected(data.isFullyQualifiedNames());
         clearAllPrefixesIncludingCheckBox.setSelected(data.isClearPrefixes());
@@ -420,7 +421,6 @@ public class ConfigForm
         alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
     }
 
-    // javadoc unnecessary
     public void getData(Config data)
     {
         getUnboundData(data);
@@ -430,6 +430,7 @@ public class ConfigForm
         data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
         data.setDecompileToMemory(decompileToMemoryCheckBox.isSelected());
         data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
+        data.setReformatAccordingToStyle(reformatAccordingToStyleCheckBox.isSelected());
         data.setDefaultInitializers(printDefaultInitializersForCheckBox.isSelected());
         data.setFullyQualifiedNames(generateFullyQualifiedNamesCheckBox.isSelected());
         data.setClearPrefixes(clearAllPrefixesIncludingCheckBox.isSelected());
@@ -476,6 +477,10 @@ public class ConfigForm
             return true;
         }
         if (markDecompiledFilesAsCheckBox.isSelected() != data.isReadOnly())
+        {
+            return true;
+        }
+        if (reformatAccordingToStyleCheckBox.isSelected() != data.isReformatAccordingToStyle())
         {
             return true;
         }
@@ -594,7 +599,7 @@ public class ConfigForm
             setValue(value);
         }
 
-        // javadoc inherited
+        /** {@javadocInherited} */
         public void setValue(Object object)
         {
             int value = ((Number) object).intValue();
@@ -605,7 +610,7 @@ public class ConfigForm
             super.setValue(object);
         }
 
-        // javadoc inherited
+        /** {@javadocInherited} */
         public Object getNextValue()
         {
             Number number = getNumber();
@@ -627,7 +632,7 @@ public class ConfigForm
             return next;
         }
 
-        // javadoc inherited
+        /** {@javadocInherited} */
         public Object getPreviousValue()
         {
             Number number = getNumber();

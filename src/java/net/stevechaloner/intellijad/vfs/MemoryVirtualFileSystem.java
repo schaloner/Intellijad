@@ -42,13 +42,13 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         fireFileCreated(file);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public String getProtocol()
     {
         return IntelliJadConstants.INTELLIJAD_PROTOCOL;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @Nullable
     public VirtualFile findFileByPath(String string)
     {
@@ -89,33 +89,33 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void refresh(boolean b)
     {
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @Nullable
     public VirtualFile refreshAndFindFileByPath(String string)
     {
         return files.get(string);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
         // no-op
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected void deleteFile(Object object,
                               VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected void moveFile(Object object,
                             VirtualFile virtualFile,
                             VirtualFile virtualFile1) throws IOException
@@ -125,7 +125,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile1);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected void renameFile(Object object,
                               VirtualFile virtualFile,
                               String string) throws IOException
@@ -135,7 +135,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected MemoryVirtualFile createChildFile(Object object,
                                                 VirtualFile parent,
                                                 String name) throws IOException
@@ -147,7 +147,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     protected MemoryVirtualFile createChildDirectory(Object object,
                                                      VirtualFile parent,
                                                      String name) throws IOException
@@ -175,7 +175,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         });
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @NonNls
     @NotNull
     public String getComponentName()
@@ -183,14 +183,14 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return "MemoryFileSystem";
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void initComponent()
     {
         MemoryVirtualFile root = new MemoryVirtualFile(IntelliJadConstants.INTELLIJAD_ROOT);
         addFile(root);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void disposeComponent()
     {
         files.clear();
@@ -255,12 +255,12 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return child;
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void projectOpened()
     {
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void projectClosed()
     {
         files.clear();

@@ -15,62 +15,45 @@
 
 package net.stevechaloner.intellijad.console;
 
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * The console for IntelliJad messages to the user.
  *
  * @author Steve Chaloner
  */
-public class IntelliJadConsole
+public class IntelliJadConsole implements NodeHandler
 {
     /**
      * The display logo.
      */
-    private static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-12.png"));
+    static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-12.png"));
 
     /**
      * The tool window ID.
      */
     private static final String TOOL_WINDOW_ID = "IntelliJad Console";
-
-    /**
-     * The system-dependent newline character.
-     */
-    private static final String NEWLINE = System.getProperty("line.separator");
 
     /**
      * An empty implementation of {@link Runnable} for use with tool windows.
@@ -83,24 +66,15 @@ public class IntelliJadConsole
         }
     };
 
-    /**
-     * An empty implementation of {@link ClipboardOwner} for use with the system clipboard.
-     */
-    private static final ClipboardOwner EMPTY_CLIPBOARD_OWNER = new ClipboardOwner()
-    {
-        public void lostOwnership(Clipboard clipboard,
-                                  Transferable transferable)
-        {
-            // no-op
-        }
-    };
-
-    private JTabbedPane tabbedPane1;
+    private final ConsoleTreeModel treeModel;
     private JPanel root;
-    private JTextArea consoleTextArea;
     private JToggleButton clearAndCloseOnSuccess;
-    private JButton closeButton;
+    private JButton clearButton;
     private JToolBar toolbar;
+    private JButton helpButton;
+    private JTree consoleTree;
+    private JButton expandAll;
+    private JButton collapseAll;
 
     /**
      * Initialisation flag for JIT setup.
@@ -119,6 +93,7 @@ public class IntelliJadConsole
      */
     public IntelliJadConsole(@NotNull Project project)
     {
+        this.treeModel = new ConsoleTreeModel(this);
         this.project = project;
     }
 
@@ -126,6 +101,9 @@ public class IntelliJadConsole
     {
         if (!initialised)
         {
+            consoleTree.setModel(treeModel);
+            consoleTree.setCellRenderer(new ConsoleTreeCellRenderer());
+
             toolbar.setFloatable(false);
             clearAndCloseOnSuccess.setSelected(PluginUtil.getConfig(project).isClearAndCloseConsoleOnSuccess());
             clearAndCloseOnSuccess.addActionListener(new ActionListener()
@@ -135,56 +113,34 @@ public class IntelliJadConsole
                     PluginUtil.getConfig(project).setClearAndCloseConsoleOnSuccess(clearAndCloseOnSuccess.isSelected());
                 }
             });
-            closeButton.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent actionEvent)
-                {
-                    closeConsole();
-                }
-            });
-
-            final JPopupMenu menu = new JPopupMenu();
-            JMenuItem item = menu.add(new AbstractAction()
+            clearButton.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent actionEvent)
                 {
                     clearConsoleContent();
                 }
             });
-            item.setText(IntelliJadResourceBundle.message("action.clear"));
-            item = menu.add(new AbstractAction()
+            helpButton.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent actionEvent)
                 {
-                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                    clipboard.setContents(new StringSelection(consoleTextArea.getText()),
-                                          EMPTY_CLIPBOARD_OWNER);
+                    HelpManager.getInstance().invokeHelp(IntelliJadConstants.CONFIGURATION_HELP_TOPIC);
                 }
             });
-            item.setText(IntelliJadResourceBundle.message("action.copy-content"));
-            consoleTextArea.addMouseListener(new MouseAdapter()
+            expandAll.addActionListener(new ActionListener()
             {
-                public void mouseReleased(MouseEvent e)
+                public void actionPerformed(ActionEvent actionEvent)
                 {
-                    maybeShowPopup(e);
-                }
-
-                public void mousePressed(MouseEvent e)
-                {
-                    maybeShowPopup(e);
-                }
-
-                private void maybeShowPopup(MouseEvent e)
-                {
-                    if (e.isPopupTrigger())
-                    {
-                        menu.show(e.getComponent(),
-                                  e.getX(),
-                                  e.getY());
-                    }
+                    expand(treeModel.getRootNode());
                 }
             });
-            consoleTextArea.setBackground(Color.white);
+            collapseAll.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent actionEvent)
+                {
+                    collapse(treeModel.getRootNode());
+                }
+            });
         }
     }
 
@@ -196,7 +152,7 @@ public class IntelliJadConsole
         jitInit();
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
-        ToolWindow window = null;
+        ToolWindow window;
         if (toolWindowManager != null)
         {
             window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
@@ -217,7 +173,7 @@ public class IntelliJadConsole
     public void closeConsole()
     {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        ToolWindow window = null;
+        ToolWindow window;
         if (toolWindowManager != null)
         {
             window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
@@ -229,51 +185,25 @@ public class IntelliJadConsole
     }
 
     /**
-     * Sets the content of the console.
-     *
-     * @param content the content
-     */
-    public void setConsoleContent(String content)
-    {
-        consoleTextArea.setText(content);
-    }
-
-    /**
-     * Gets the content of the console.
-     *
-     * @return the content
-     */
-    public String getConsoleContent()
-    {
-        return consoleTextArea.getText();
-    }
-
-    /**
      * Clears the console.
      */
     public void clearConsoleContent()
     {
-        setConsoleContent("");
+        treeModel.clear();
     }
 
     /**
-     * Appends the given content to the console.
+     * Creates a console context for an atomic decompilation.
      *
-     * @param content the content
+     * @param message the associated message
+     * @param parameters any parameters used in the message
+     * @return a new console context
      */
-    public void appendToConsole(String content)
+    public ConsoleContext createConsoleContext(String message,
+                                               Object... parameters)
     {
-        Document document = consoleTextArea.getDocument();
-        try
-        {
-            document.insertString(document.getLength(),
-                                  content + NEWLINE,
-                                  null);
-        }
-        catch (BadLocationException e)
-        {
-            Logger.getInstance("IntelliJad").error(e);
-        }
+        return treeModel.createConsoleContext(IntelliJadResourceBundle.message(message,
+                                                                               parameters));
     }
 
     /**
@@ -300,5 +230,44 @@ public class IntelliJadConsole
                 // ignore - this can occur due to lazy initialization
             }
         }
+    }
+
+
+    public void expand(ConsoleTreeNode node)
+    {
+        if (node.isLeaf() && node.getParent() != null)
+        {
+            consoleTree.expandPath(new TreePath(((ConsoleTreeNode)node.getParent()).getPath()));
+        }
+        else
+        {
+            for (ConsoleTreeNode child : node.getChildren())
+            {
+                expand(child);
+            }
+        }
+    }
+
+    public void collapse(ConsoleTreeNode node)
+    {
+        if (node.isLeaf() && node.getParent() != null)
+        {
+            consoleTree.collapsePath(new TreePath(((ConsoleTreeNode)node.getParent()).getPath()));
+        }
+        else
+        {
+            for (ConsoleTreeNode child : node.getChildren())
+            {
+                collapse(child);
+            }
+        }
+    }
+
+    public void select(ConsoleTreeNode node)
+    {
+        TreePath treePath = new TreePath((node.getPath()));
+        consoleTree.expandPath(treePath);
+        consoleTree.setSelectionPath(treePath);
+        consoleTree.fireTreeExpanded(treePath);
     }
 }

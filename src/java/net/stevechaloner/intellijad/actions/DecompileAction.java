@@ -32,7 +32,7 @@ import net.stevechaloner.intellijad.util.PluginUtil;
  */
 public class DecompileAction extends AnAction
 {
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void update(AnActionEvent e)
     {
         super.update(e);
@@ -41,7 +41,7 @@ public class DecompileAction extends AnAction
         this.getTemplatePresentation().setEnabled(extension != null && "class".equals(extension));
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void actionPerformed(AnActionEvent e)
     {
         DataContext dataContext = e.getDataContext();
@@ -58,8 +58,7 @@ public class DecompileAction extends AnAction
             else
             {
                 IntelliJadConsole console = PluginUtil.getComponent(IntelliJadConsole.class);
-                // todo i18n here
-                console.appendToConsole("file is null");
+//                console.addMessage("message.file-is-null");
             }
         }
     }

@@ -34,14 +34,14 @@ class FileSystemDecompilationDescriptorFactory extends DecompilationDescriptorFa
      */
     private static final Pattern PACKAGE_PATTERN = Pattern.compile("package [\\w|\\.]*;");
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     @NotNull
     public DecompilationDescriptor create(@NotNull VirtualFile target)
     {
         return new FileSystemDecompilationDescriptor(target);
     }
 
-    // javadoc inherited
+    /** {@javadocInherited} */
     public void update(@NotNull DecompilationDescriptor dd,
                        @NotNull String classContent)
     {
