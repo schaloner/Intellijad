@@ -228,4 +228,10 @@ public class MemoryVirtualFile extends VirtualFile
     {
         return 0L;
     }
+
+    /** {@javadocInherited} */
+    @NotNull
+    public String getUrl() {
+        return IntelliJadConstants.INTELLIJAD_PROTOCOL + getPath();
+    }
 }
