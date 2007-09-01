@@ -90,6 +90,7 @@
     <target name="-compile" depends="-init">
         <echo message="Compiling plugin sources"/>
 
+<!--
         <javac destdir="${compiled.dir}"
                debug="true"
                source="1.5"
@@ -98,6 +99,7 @@
             <src path="${src.java.dir}"/>
             <classpath refid="project.classpath"/>
         </javac>
+-->
 
         <!-- Copy plugin.xml -->
         <copy file="${plugin.xml.file}" todir="${compiled.dir}/META-INF"/>
@@ -133,6 +135,7 @@
         <echo message="Cleaning target directories"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${build.dir}"/>
+        <delete dir="${compiled.dir}"/>
     </target>
 
     <!-- Cleans up after build -->
