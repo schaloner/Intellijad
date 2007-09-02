@@ -300,7 +300,7 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/intellijad.iml" filepath="$PROJECT_DIR$/intellijad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/intellijad-6180.iml" filepath="$PROJECT_DIR$/intellijad-6180.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7126" project-jdk-type="IDEA JDK">

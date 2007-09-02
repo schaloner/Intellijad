@@ -20,10 +20,10 @@
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.properties" afterPath="$PROJECT_DIR$/build.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.iml" afterPath="$PROJECT_DIR$/intellijad.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.iml" afterPath="$PROJECT_DIR$/intellijad-6180.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.ipr" afterPath="$PROJECT_DIR$/intellijad.ipr" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.iws" afterPath="$PROJECT_DIR$/intellijad.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.ipr" afterPath="$PROJECT_DIR$/intellijad-6180.ipr" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.iws" afterPath="$PROJECT_DIR$/intellijad-6180.iws" />
     </list>
     <list name="Failed commit: Default" comment="FileSystemDecompilation classes somehow got dropped from SVN (IntelliJ refactoring bug?) - adding them back in" />
   </component>
@@ -203,10 +203,10 @@
     <option name="HIDE_WARNINGS" value="false" />
   </component>
   <component name="FavoritesManager">
-    <favorites_list name="intellijad" />
+    <favorites_list name="intellijad-6180" />
   </component>
   <component name="FavoritesProjectViewPane">
-    <subPane subId="intellijad">
+    <subPane subId="intellijad-6180">
       <PATH>
         <PATH_ELEMENT>
           <option name="myItemId" />
@@ -319,11 +319,11 @@
     <subPane>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad.ipr" />
+          <option name="myItemId" value="intellijad-6180.ipr" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -373,99 +373,99 @@
     <subPane>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src\java" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\java" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src\java\net\stevechaloner\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src\java\net\stevechaloner\intellijad" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src\java" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src\java" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src\java\net\stevechaloner\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src\java\net\stevechaloner\intellijad" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src\java\net\stevechaloner\intellijad\vfs" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src\java\net\stevechaloner\intellijad\vfs" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
+          <option name="myItemId" value="intellijad-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad\src" />
+          <option name="myItemId" value="PsiDirectory:C:\Users\Steve\Projects\intellijad-branches\IDEA-6180\src" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -599,7 +599,7 @@
       </method>
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="intellijad" />
+      <module name="intellijad-6180" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
     </configuration>
@@ -635,7 +635,7 @@
           <option name="myItemId" value="" />
           <option name="myItemType" value="" />
         </PATH_ELEMENT>
-        <PATH_ELEMENT USER_OBJECT="intellijad">
+        <PATH_ELEMENT USER_OBJECT="intellijad-6180">
           <option name="myItemId" value="" />
           <option name="myItemType" value="" />
         </PATH_ELEMENT>
@@ -859,7 +859,7 @@
   </component>
   <component name="com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectRootMasterDetailsConfigurable" proportions="0.16666667,0.5" version="1">
     <option name="myPlainMode" value="false" />
-    <option name="myLastEditedConfigurable" value="intellijad" />
+    <option name="myLastEditedConfigurable" value="intellijad-6180" />
   </component>
   <component name="com.intellij.profile.ui.ErrorOptionsConfigurable" proportions="0.16666667,0.5642857" version="1">
     <option name="myLastEditedConfigurable" value="Default" />
