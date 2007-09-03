@@ -15,33 +15,38 @@
 
 package net.stevechaloner.intellijad.console;
 
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
+import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Steve Chaloner
  */
 class ConsoleTreeModel extends DefaultTreeModel
 {
+    @NotNull
     private final NodeHandler nodeHandler;
 
-    public ConsoleTreeModel(NodeHandler nodeHandler)
+    public ConsoleTreeModel(@NotNull NodeHandler nodeHandler)
     {
         super(new ConsoleTreeNode(IntelliJadConstants.INTELLIJAD_ROOT,
                                   ConsoleEntryType.ROOT));
         this.nodeHandler = nodeHandler;
     }
 
-    void insertNodeInto(ConsoleTreeNode child,
-                               ConsoleTreeNode parent)
+    void insertNodeInto(@NotNull ConsoleTreeNode child,
+                        @NotNull  ConsoleTreeNode parent)
     {
         super.insertNodeInto(child,
                              parent,
                              parent.getChildCount());
     }
 
+    @NotNull
     ConsoleTreeNode getRootNode()
     {
         return (ConsoleTreeNode)getRoot();
@@ -63,7 +68,7 @@ class ConsoleTreeModel extends DefaultTreeModel
      * @param name
      * @return
      */
-    ConsoleContext createConsoleContext(String name)
+    ConsoleContext createConsoleContext(@NotNull String name)
     {
         final ConsoleTreeNode root = getRootNode();
         ConsoleTreeNode contextNode = new ConsoleTreeNode(name,
@@ -78,49 +83,63 @@ class ConsoleTreeModel extends DefaultTreeModel
                                       nodeHandler);
     }
 
-    void addSubsection(String message,
-                       ConsoleContext consoleContext,
-                       ConsoleEntryType type)
+    @NotNull
+    private ConsoleTreeNode addSubsection(@NotNull String message,
+                                          @NotNull ConsoleContext consoleContext,
+                                          @NotNull ConsoleEntryType type)
     {
         final ConsoleTreeNode section = consoleContext.getContextNode();
-        this.insertNodeInto(new ConsoleTreeNode(message,
-                                                type),
+        ConsoleTreeNode subsection = new ConsoleTreeNode(message,
+                                                         type);
+        this.insertNodeInto(subsection,
                             section);
         this.nodesWereInserted(section,
                                new int[]{section.getChildCount() - 1});
+        return subsection;
     }
 
-    private ConsoleTreeNode getCurrentSubsection(ConsoleContext consoleContext)
+    @NotNull
+    private ConsoleTreeNode getSubsection(@NotNull ConsoleContext consoleContext,
+                                          @NotNull ConsoleEntryType entryType)
     {
         ConsoleTreeNode section = consoleContext.getContextNode();
-        ConsoleTreeNode subsection;
-        if (section.getChildCount() > 0)
+        List<ConsoleTreeNode> children = section.getChildren();
+        ConsoleTreeNode subsection = null;
+        for (int i = 0; subsection == null && i < children.size(); i++)
         {
-            subsection = (ConsoleTreeNode)section.getLastChild();
+            ConsoleTreeNode child = children.get(i);
+            if (entryType.equals(child.getType()))
+            {
+                subsection = child;
+            }
         }
-        else
+        if (subsection == null)
         {
-            throw new IllegalStateException("no subsection");
+            subsection = addSubsection(entryType.getMessage(),
+                                       consoleContext,
+                                       entryType);
         }
         return subsection;
     }
 
-    void addMessage(ConsoleContext consoleContext,
-                    String message)
+    void addMessage(@NotNull ConsoleEntryType entryType,
+                    @NotNull ConsoleContext consoleContext,
+                    @NotNull String message)
     {
-        addMessage(getCurrentSubsection(consoleContext),
+        addMessage(getSubsection(consoleContext,
+                                 entryType),
                    message);
     }
 
-    void addSectionMessage(ConsoleContext consoleContext,
-                           String message)
+    void addSectionMessage(@NotNull ConsoleContext consoleContext,
+                           @NotNull String message)
     {
         addMessage(consoleContext.getContextNode(),
                    message);
     }
 
-    private void addMessage(ConsoleTreeNode parent,
-                            String message)
+    private void addMessage(@NotNull ConsoleTreeNode parent,
+                            @NotNull String message)
     {
         this.insertNodeInto(new ConsoleTreeNode(message,
                                                 ConsoleEntryType.MESSAGE),

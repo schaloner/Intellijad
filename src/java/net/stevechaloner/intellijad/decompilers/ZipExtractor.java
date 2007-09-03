@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
+
 /**
  * ZipExtractor will pull a file from a given path and extract it into
  * a directory on the file system.
@@ -64,7 +66,8 @@ class ZipExtractor
             Matcher matcher = p.matcher(name);
             if (matcher.matches())
             {
-                context.getConsoleContext().addMessage("message.extracting",
+                context.getConsoleContext().addMessage(ConsoleEntryType.JAR_OPERATION,
+                                                       "message.extracting",
                                                        entry.getName());
                 InputStream inputStream = zipFile.getInputStream(entry);
                 int lastIndex = name.lastIndexOf("/");

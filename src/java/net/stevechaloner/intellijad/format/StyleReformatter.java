@@ -24,7 +24,9 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
+
 import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 
 /**
@@ -63,7 +65,8 @@ public class StyleReformatter
                             styleManager.reformat(psiFile);
                             fileDocManager.saveDocument(document);
                             result[0] = true;
-                            consoleContext.addSectionMessage("message.reformatting",
+                            consoleContext.addSectionMessage(ConsoleEntryType.INFO,
+                                                             "message.reformatting",
                                                              file.getName());
                         }
                         catch (IncorrectOperationException e)

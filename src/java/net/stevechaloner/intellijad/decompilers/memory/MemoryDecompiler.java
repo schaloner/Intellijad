@@ -22,6 +22,13 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -35,14 +42,9 @@ import net.stevechaloner.intellijad.decompilers.ResultType;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -73,7 +75,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                                            targetClass,
                                                                            output,
                                                                            err);
-                        context.getConsoleContext().addMessage("error",
+                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                               "error",
                                                                err.toString());
                         return file;
                     }
@@ -89,7 +92,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                @NotNull ByteArrayOutputStream err) throws DecompilationException
                     {
                         ConsoleContext consoleContext = context.getConsoleContext();
-                        consoleContext.addMessage("error",
+                        consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                                  "error",
                                                   err.toString());
                         consoleContext.setWorthDisplaying(true);
                         return null;
@@ -157,7 +161,6 @@ public class MemoryDecompiler extends AbstractDecompiler
                 public void run()
                 {
                     ConsoleContext consoleContext = context.getConsoleContext();
-                    consoleContext.addSubsection(ConsoleEntryType.LIBRARY_OPERATION);
                     for (Library library : libraries)
                     {
                         Library.ModifiableModel model = library.getModifiableModel();
@@ -173,7 +176,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                                           OrderRootType.SOURCES);
                             model.commit();
                         }
-                        consoleContext.addMessage("message.associating-source-with-library",
+                        consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                                  "message.associating-source-with-library",
                                                   descriptor.getClassName(),
                                                   library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
                         project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
@@ -186,7 +190,8 @@ public class MemoryDecompiler extends AbstractDecompiler
         }
         else
         {
-            context.getConsoleContext().addMessage("message.library-not-found-for-class",
+            context.getConsoleContext().addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                                   "message.library-not-found-for-class",
                                                    descriptor.getClassName());
         }
 

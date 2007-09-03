@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.console;
 
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,9 +35,9 @@ public class ConsoleContextImpl implements ConsoleContext
     /**
      * Initialises a new instance of this class.
      *
-     * @param consoleTreeModel
-     * @param contextNode
-     * @param nodeHandler
+     * @param consoleTreeModel the tree model containing the log
+     * @param contextNode the node this log is rooted in
+     * @param nodeHandler the handler for node operations
      */
     ConsoleContextImpl(@NotNull ConsoleTreeModel consoleTreeModel,
                        @NotNull ConsoleTreeNode contextNode,
@@ -62,25 +63,19 @@ public class ConsoleContextImpl implements ConsoleContext
     }
 
     /** {@inheritDoc} */
-    public void addSubsection(ConsoleEntryType type,
-                              Object... parameters)
-    {
-        consoleTreeModel.addSubsection(type.getMessage(parameters),
-                                       this,
-                                       type);
-    }
-
-    /** {@inheritDoc} */
-    public void addMessage(String message,
+    public void addMessage(ConsoleEntryType entryType,
+                           String message,
                            Object... parameters)
     {
-        consoleTreeModel.addMessage(this,
+        consoleTreeModel.addMessage(entryType,
+                                    this,
                                     IntelliJadResourceBundle.message(message,
                                                                      parameters));
     }
 
     /** {@inheritDoc} */
-    public void addSectionMessage(String message,
+    public void addSectionMessage(ConsoleEntryType entryType,
+                                  String message,
                                   Object... parameters)
     {
         consoleTreeModel.addSectionMessage(this,

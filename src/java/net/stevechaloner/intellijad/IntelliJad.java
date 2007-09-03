@@ -26,9 +26,15 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
@@ -39,11 +45,8 @@ import net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.memory.MemoryDecompiler;
 import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.PluginUtil;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The central component of the plugin.
@@ -189,14 +192,16 @@ public class IntelliJad implements ApplicationComponent,
                                                       file);
                         }
                     }
-                    consoleContext.addSectionMessage("message.operation-time",
+                    consoleContext.addSectionMessage(ConsoleEntryType.INFO,
+                                                     "message.operation-time",
                                                      System.currentTimeMillis() - startTime);
                 }
             }
             catch (DecompilationException e)
             {
-                consoleContext.addMessage("error",
-                                          e.getMessage());
+                consoleContext.addSectionMessage(ConsoleEntryType.ERROR,
+                                                 "error",
+                                                 e.getMessage());
             }
             consoleContext.close();
             checkConsole(config,
@@ -260,8 +265,9 @@ public class IntelliJad implements ApplicationComponent,
 
         if (message != null)
         {
-            consoleContext.addMessage(message,
-                                      params);
+            consoleContext.addSectionMessage(ConsoleEntryType.ERROR,
+                                             message,
+                                             params);
         }
         return message == null;
     }

@@ -15,13 +15,13 @@
 
 package net.stevechaloner.intellijad.console;
 
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Steve Chaloner
@@ -42,8 +42,14 @@ public class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("fileTypes/java.png")));
             put(ConsoleEntryType.LIBRARY_OPERATION,
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("modules/libraries.png")));
+            final ImageIcon infoIcon = new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource(
+                    "compiler/information.png"));
             put(ConsoleEntryType.MESSAGE,
-                null);
+                infoIcon);
+            put(ConsoleEntryType.INFO,
+                infoIcon);
+            put(ConsoleEntryType.ERROR,
+                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("compiler/error.png")));
         }
     };
 

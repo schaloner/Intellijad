@@ -3,7 +3,7 @@
     <description>Jad Java Decompiler plugin</description>
     <version>0.1</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
-    <idea-version since-build="6180"/>
+    <idea-version since-build="7126"/>
 
     <application-components>
         <component>
@@ -13,8 +13,8 @@
             <implementation-class>net.stevechaloner.intellijad.config.ApplicationConfigComponent</implementation-class>
         </component>
         <component>
-            <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>
             <interface-class>com.intellij.openapi.vfs.VirtualFileSystem</interface-class>
+            <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>
         </component>
     </application-components>
 
@@ -31,11 +31,6 @@
                 description="Decompile classfile">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
-        </action>
-
-        <action id="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction"
-                class="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction" text="decompile byte array">
-            <add-to-group group-id="Debugger.EvaluationDialogPopup" anchor="last"/>
         </action>
     </actions>
 
