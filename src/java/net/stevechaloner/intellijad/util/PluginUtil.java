@@ -15,13 +15,13 @@
 
 package net.stevechaloner.intellijad.util;
 
-import com.intellij.openapi.actionSystem.DataConstants;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+
 import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ProjectConfigComponent;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,17 +47,6 @@ public class PluginUtil
     public static <C> C getComponent(Class<C> clazz)
     {
         return ApplicationManager.getApplication().getComponent(clazz);
-    }
-
-    /**
-     * Gets the current project.
-     *
-     * @param dataContext the context to get the project from
-     * @return the current project
-     */
-    public static Project getProject(@NotNull DataContext dataContext)
-    {
-        return (Project) dataContext.getData(DataConstants.PROJECT);
     }
 
     /**

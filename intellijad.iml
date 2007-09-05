@@ -10,8 +10,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="idea" level="project" />
     <orderEntry type="module-library">
-      <library>
+      <library name="plugin-lib">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/plugin-lib.jar!/" />
         </CLASSES>
@@ -19,7 +20,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="idea" level="project" />
     <orderEntryProperties />
   </component>
 </module>
