@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="IntelliJad" default="build" basedir=".">
+<project name="IntelliJad 6180" default="build" basedir=".">
 
     <!-- A build.properties file must exist -->
     <property file="build.properties"/>
@@ -90,7 +90,7 @@
     <target name="-compile" depends="-init">
         <echo message="Compiling plugin sources"/>
 
-<!--
+
         <javac destdir="${compiled.dir}"
                debug="true"
                source="1.5"
@@ -99,7 +99,6 @@
             <src path="${src.java.dir}"/>
             <classpath refid="project.classpath"/>
         </javac>
--->
 
         <!-- Copy plugin.xml -->
         <copy file="${plugin.xml.file}" todir="${compiled.dir}/META-INF"/>

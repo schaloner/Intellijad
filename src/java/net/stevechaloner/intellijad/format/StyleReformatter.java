@@ -25,6 +25,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 
 /**
@@ -33,10 +34,11 @@ import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 public class StyleReformatter
 {
     /**
+     * Reformats the content of the given file to match the IDE settings.
      *
-     * @param context
-     * @param file
-     * @return
+     * @param context the context the decompilation is occurring in
+     * @param file the file representing the source code
+     * @return true if reformatted
      */
     public static boolean reformat(final DecompilationContext context,
                                    final VirtualFile file)
@@ -63,7 +65,8 @@ public class StyleReformatter
                             styleManager.reformat(psiFile);
                             fileDocManager.saveDocument(document);
                             result[0] = true;
-                            consoleContext.addSectionMessage("message.reformatting",
+                            consoleContext.addSectionMessage(ConsoleEntryType.INFO,
+                                                             "message.reformatting",
                                                              file.getName());
                         }
                         catch (IncorrectOperationException e)

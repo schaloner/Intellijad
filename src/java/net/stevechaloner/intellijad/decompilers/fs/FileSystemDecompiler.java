@@ -29,12 +29,7 @@ import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
-import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
-import net.stevechaloner.intellijad.decompilers.DecompilationContext;
-import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
-import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
-import net.stevechaloner.intellijad.decompilers.DecompilationException;
-import net.stevechaloner.intellijad.decompilers.ResultType;
+import net.stevechaloner.intellijad.decompilers.*;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +70,8 @@ public class FileSystemDecompiler extends AbstractDecompiler
                                                                            targetClass,
                                                                            output,
                                                                            err);
-                        context.getConsoleContext().addMessage("error",
+                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                               "error",
                                                                err.toString());
                         return file;
                     }
@@ -91,7 +87,8 @@ public class FileSystemDecompiler extends AbstractDecompiler
                                                @NotNull ByteArrayOutputStream err) throws DecompilationException
                     {
                         ConsoleContext consoleContext = context.getConsoleContext();
-                        consoleContext.addMessage("error",
+                        consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                  "error",
                                                    err.toString());
                         consoleContext.setWorthDisplaying(true);
 
@@ -165,14 +162,16 @@ public class FileSystemDecompiler extends AbstractDecompiler
             if (!outputDirectory.mkdirs())
             {
                 status = OperationStatus.ABORT;
-                context.getConsoleContext().addMessage("error.could-not-create-output-directory",
+                context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                       "error.could-not-create-output-directory",
                                                        config.getOutputDirectory());
             }
         }
         else if (!outputDirExists)
         {
             status = OperationStatus.ABORT;
-            context.getConsoleContext().addMessage("error.non-existant-output-directory",
+            context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                   "error.non-existant-output-directory",
                                                    config.getOutputDirectory());
         }
         return status;
@@ -209,7 +208,6 @@ public class FileSystemDecompiler extends AbstractDecompiler
                         public void run()
                         {
                             ConsoleContext consoleContext = context.getConsoleContext();
-                            consoleContext.addSubsection(ConsoleEntryType.LIBRARY_OPERATION);
                             for (Library library : libraries)
                             {
                                 Library.ModifiableModel model = library.getModifiableModel();
@@ -227,7 +225,8 @@ public class FileSystemDecompiler extends AbstractDecompiler
                                 }
 
                                 project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
-                                consoleContext.addMessage("message.associating-source-with-library",
+                                consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                                          "message.associating-source-with-library",
                                                           descriptor.getClassName(),
                                                           library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
                             }
@@ -238,8 +237,9 @@ public class FileSystemDecompiler extends AbstractDecompiler
                 }
                 else
                 {
-                    context.getConsoleContext().addMessage("message.library-not-found-for-class",
-                                                    descriptor.getClassName());
+                    context.getConsoleContext().addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                                           "message.library-not-found-for-class",
+                                                           descriptor.getClassName());
                 }
             }
         });

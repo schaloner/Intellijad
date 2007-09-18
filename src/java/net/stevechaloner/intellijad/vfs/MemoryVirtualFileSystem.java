@@ -4,23 +4,15 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileEvent;
-import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * A file system for content that resides only in memory.
@@ -33,11 +25,6 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
      * The files.
      */
     private final Map<String, MemoryVirtualFile> files = new HashMap<String, MemoryVirtualFile>();
-
-    /**
-     * The listeners.
-     */
-    private final List<VirtualFileListener> listeners = new ArrayList<VirtualFileListener>();
 
     /**
      * Add a file to the file system.
@@ -114,7 +101,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
-        // kept for compatibility with Idea 6
+        // no-op
     }
 
     /** {@javadocInherited} */
@@ -174,17 +161,14 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
      */
     private void fireFileCreated(final VirtualFile file)
     {
-        final VirtualFileEvent e = new VirtualFileEvent(null, file, file.getName(), file.getParent());
-        for (VirtualFileListener listener : listeners) {
-            listener.fileCreated(e);
-        }
-//        ApplicationManager.getApplication().runWriteAction(new Runnable()
-//        {
-//            public void run()
-//            {
-//                fireFileCreated(file);
-//            }
-//        });
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                fireFileCreated(null,
+                        file);
+            }
+        });
     }
 
     /** {@javadocInherited} */
@@ -276,33 +260,5 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
     public void projectClosed()
     {
         files.clear();
-    }
-
-    /** {@javadocInherited} */
-    public void addVirtualFileListener(VirtualFileListener listener)
-    {
-        if (listener != null)
-        {
-            listeners.add(listener);
-        }
-    }
-
-    /** {@javadocInherited} */
-    public void removeVirtualFileListener(VirtualFileListener listener)
-    {
-        listeners.remove(listener);
-    }
-
-    /** {@javadocInherited} */
-    protected VirtualFile copyFile(Object o,
-                                   VirtualFile virtualFile,
-                                   VirtualFile virtualFile1,
-                                   String s) throws IOException {
-        return null;
-    }
-
-    /** {@javadocInherited} */
-    public boolean isReadOnly() {
-        return false;
     }
 }

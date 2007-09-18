@@ -15,6 +15,7 @@
 
 package net.stevechaloner.intellijad.util;
 
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,12 +85,14 @@ public class StreamPumper implements Runnable
         }
         catch (InterruptedException e)
         {
-            context.getConsoleContext().addMessage("error",
+            context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                   "error",
                                                    e.getMessage());
         }
         catch (IOException e)
         {
-            context.getConsoleContext().addMessage("error",
+            context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                   "error",
                                                    e.getMessage());
         }
     }

@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+
 <idea-plugin>
     <name>IntelliJad</name>
     <description>Jad Java Decompiler plugin</description>
@@ -31,11 +34,6 @@
                 description="Decompile classfile">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
-        </action>
-
-        <action id="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction"
-                class="net.stevechaloner.intellijad.debugger.DecompileByteArrayAction" text="decompile byte array">
-            <add-to-group group-id="Debugger.EvaluationDialogPopup" anchor="last"/>
         </action>
     </actions>
 

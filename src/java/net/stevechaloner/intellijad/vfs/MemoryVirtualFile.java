@@ -8,11 +8,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +43,7 @@ public class MemoryVirtualFile extends VirtualFile
      * The parent of this file.  If this file is at the root of the file
      * system, it will not have a parent.
      */
+    @Nullable
     private VirtualFile parent;
 
     /**
@@ -133,8 +130,12 @@ public class MemoryVirtualFile extends VirtualFile
         return true;
     }
 
-    /** {@javadocInherited} */
-    public void setParent(VirtualFile parent)
+    /**
+     * Sets the parent of this file.
+     *
+     * @param parent the parent
+     */
+    public void setParent(@Nullable VirtualFile parent)
     {
         this.parent = parent;
     }
@@ -227,11 +228,5 @@ public class MemoryVirtualFile extends VirtualFile
     public long getModificationStamp()
     {
         return 0L;
-    }
-
-    /** {@javadocInherited} */
-    @NotNull
-    public String getUrl() {
-        return IntelliJadConstants.INTELLIJAD_PROTOCOL + getPath();
     }
 }

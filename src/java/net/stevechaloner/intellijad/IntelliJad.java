@@ -29,12 +29,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
+import net.stevechaloner.intellijad.console.ConsoleManager;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
-import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
-import net.stevechaloner.intellijad.decompilers.DecompilationContext;
-import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
-import net.stevechaloner.intellijad.decompilers.DecompilationException;
-import net.stevechaloner.intellijad.decompilers.Decompiler;
+import net.stevechaloner.intellijad.decompilers.*;
 import net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.memory.MemoryDecompiler;
 import net.stevechaloner.intellijad.format.StyleReformatter;
@@ -63,9 +61,9 @@ public class IntelliJad implements ApplicationComponent,
     public static final String INTELLIJAD = "IntelliJad";
 
     /**
-     * The reporting console.
+     * The manager for projects' consoles.
      */
-    private IntelliJadConsole console;
+    private final ConsoleManager consoleManager = new ConsoleManager();
 
     /** {@javadocInherited} */
     @NotNull
@@ -77,7 +75,6 @@ public class IntelliJad implements ApplicationComponent,
     /** {@javadocInherited} */
     public void projectOpened(Project project)
     {
-        console = new IntelliJadConsole(project);
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
                             new ArrayList<Library>());
 
@@ -100,7 +97,7 @@ public class IntelliJad implements ApplicationComponent,
     {
         NavigationDecompileListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
         FileEditorManager.getInstance(project).removeFileEditorManagerListener(listener);
-        console.disposeConsole();
+        consoleManager.disposeConsole(project);
     }
 
     /** {@javadocInherited} */
@@ -146,17 +143,18 @@ public class IntelliJad implements ApplicationComponent,
                           DecompilationDescriptor descriptor)
     {
         long startTime = System.currentTimeMillis();
+        Project project = envContext.getProject();
+        IntelliJadConsole console = consoleManager.getConsole(project);
         console.openConsole();
         final ConsoleContext consoleContext = console.createConsoleContext("message.class",
                                                                            descriptor.getClassName());
-        Config config = PluginUtil.getConfig(envContext.getProject());
+        Config config = PluginUtil.getConfig(project);
         if (validateOptions(config,
                             consoleContext))
         {
             StringBuilder sb = new StringBuilder();
             sb.append(config.getJadPath()).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
-            Project project = envContext.getProject();
             DecompilationContext context = new DecompilationContext(project,
                                                                     consoleContext,
                                                                     sb.toString());
@@ -189,17 +187,20 @@ public class IntelliJad implements ApplicationComponent,
                                                       file);
                         }
                     }
-                    consoleContext.addSectionMessage("message.operation-time",
+                    consoleContext.addSectionMessage(ConsoleEntryType.INFO,
+                                                     "message.operation-time",
                                                      System.currentTimeMillis() - startTime);
                 }
             }
             catch (DecompilationException e)
             {
-                consoleContext.addMessage("error",
-                                          e.getMessage());
+                consoleContext.addSectionMessage(ConsoleEntryType.ERROR,
+                                                 "error",
+                                                 e.getMessage());
             }
             consoleContext.close();
             checkConsole(config,
+                         console,
                          consoleContext);
         }
     }
@@ -208,9 +209,11 @@ public class IntelliJad implements ApplicationComponent,
      * Check if the console can be closed.
      *
      * @param config the plugin configuration
+     * @param console the console
      * @param consoleContext the console context
      */
     private void checkConsole(Config config,
+                              IntelliJadConsole console,
                               ConsoleContext consoleContext)
     {
         if (config.isClearAndCloseConsoleOnSuccess() &&
@@ -260,8 +263,9 @@ public class IntelliJad implements ApplicationComponent,
 
         if (message != null)
         {
-            consoleContext.addMessage(message,
-                                      params);
+            consoleContext.addSectionMessage(ConsoleEntryType.ERROR,
+                                             message,
+                                             params);
         }
         return message == null;
     }

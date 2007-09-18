@@ -71,8 +71,6 @@ public abstract class AbstractDecompiler implements Decompiler
                         boolean successful = false;
                         if (jarFile != null)
                         {
-                            ConsoleContext consoleContext = context.getConsoleContext();
-                            consoleContext.addSubsection(ConsoleEntryType.JAR_OPERATION);
                             extractClassFiles(jarFile,
                                               context,
                                               descriptor);
@@ -83,8 +81,6 @@ public abstract class AbstractDecompiler implements Decompiler
                 });
         }
     };
-
-
 
     /**
      * Perform pre-compilation operations.
@@ -117,13 +113,13 @@ public abstract class AbstractDecompiler implements Decompiler
             if (prepared)
             {
                 ConsoleContext consoleContext = context.getConsoleContext();
-                consoleContext.addSubsection(ConsoleEntryType.DECOMPILATION_OPERATION);
                 File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
 
                 StringBuilder command = new StringBuilder(context.getCommand());
                 updateCommand(command);
                 command.append(targetClass.getAbsolutePath());
-                consoleContext.addMessage("message.executing-jad",
+                consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                          "message.executing-jad",
                                           command.toString());
 
                 try
@@ -236,7 +232,8 @@ public abstract class AbstractDecompiler implements Decompiler
         try
         {
             ZipFile lib = JarFileSystem.getInstance().getJarFile(jarFile);
-            context.getConsoleContext().addMessage("message.examining",
+            context.getConsoleContext().addMessage(ConsoleEntryType.JAR_OPERATION,
+                                                   "message.examining",
                                                    jarFile.getPath());
             ZipExtractor zipExtractor = new ZipExtractor();
             zipExtractor.extract(context,
