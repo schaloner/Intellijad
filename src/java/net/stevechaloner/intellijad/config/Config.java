@@ -15,6 +15,9 @@
 
 package net.stevechaloner.intellijad.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.stevechaloner.idea.util.properties.DOMable;
 import net.stevechaloner.idea.util.properties.DOMableCollectionContentType;
 import net.stevechaloner.idea.util.properties.DOMableGeneric;
@@ -25,11 +28,9 @@ import net.stevechaloner.idea.util.properties.PropertyContainer;
 import net.stevechaloner.idea.util.properties.PropertyDescriptor;
 import net.stevechaloner.idea.util.properties.converters.ConverterFactory;
 import net.stevechaloner.intellijad.config.rules.RuleContext;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The IntelliJad configuration.
@@ -38,11 +39,12 @@ import java.util.List;
  */
 public class Config implements DOMable
 {
-    private static final PropertyDescriptor<String> CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE = new ImmutablePropertyDescriptor<String>("confirm-navigation-triggered-decompile");
+    private static final PropertyDescriptor<String> DECOMPILE_ON_NAVIGATION = new ImmutablePropertyDescriptor<String>("decompile-on-navigation",
+                                                                                                                                     NavigationTriggeredDecompile.ALWAYS.getName());
     private static final PropertyDescriptor<Boolean> CREATE_OUTPUT_DIRECTORY = new ImmutablePropertyDescriptor<Boolean>("create-output-directory");
     private static final PropertyDescriptor<Boolean> ALWAYS_EXCLUDE_RECURSIVELY = new ImmutablePropertyDescriptor<Boolean>("always-exclude-recursively");
     private static final PropertyDescriptor<Boolean> CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS = new ImmutablePropertyDescriptor<Boolean>("clear-and-close-console-on-success");
-    private static final PropertyDescriptor<Boolean> DECOMPILE_TO_MEMORY = new ImmutablePropertyDescriptor<Boolean>("decompile-to-memory");
+    private static final PropertyDescriptor<Boolean> DECOMPILE_TO_MEMORY = new ImmutablePropertyDescriptor<Boolean>("decompile-to-memory", Boolean.TRUE);
     private static final PropertyDescriptor<ExclusionTableModel> EXCLUSION_TABLE_MODEL = new ImmutablePropertyDescriptor<ExclusionTableModel>("exclusion-table-model");
     private static final PropertyDescriptor<String> JAD_PATH = new ImmutablePropertyDescriptor<String>("jad-path");
     private static final PropertyDescriptor<Integer> LIMIT_INDENTATION = new ImmutablePropertyDescriptor<Integer>("indentation", 4);
@@ -75,7 +77,7 @@ public class Config implements DOMable
         registerBooleanProperty(JadOptions.ANNOTATE_FULLY, dpc);
         registerBooleanProperty(JadOptions.CLEAR_PREFIXES, dpc);
         registerBooleanProperty(CREATE_OUTPUT_DIRECTORY, dpc);
-        registerStringProperty(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE, dpc);
+        registerStringProperty(DECOMPILE_ON_NAVIGATION, dpc);
         registerBooleanProperty(CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS, dpc);
         registerBooleanProperty(ALWAYS_EXCLUDE_RECURSIVELY, dpc);
         registerBooleanProperty(JadOptions.DEAD, dpc);
@@ -233,12 +235,12 @@ public class Config implements DOMable
 
     public String getConfirmNavigationTriggeredDecompile()
     {
-        return CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE.getValue(propertyContainer.get(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE));
+        return DECOMPILE_ON_NAVIGATION.getValue(propertyContainer.get(DECOMPILE_ON_NAVIGATION));
     }
 
     public void setConfirmNavigationTriggeredDecompile(String confirmNavigationTriggeredDecompile)
     {
-        DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(CONFIRM_NAVIGATION_TRIGGERED_DECOMPILE);
+        DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(DECOMPILE_ON_NAVIGATION);
         value.setValue(confirmNavigationTriggeredDecompile);
     }
 

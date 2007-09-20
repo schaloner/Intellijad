@@ -4,9 +4,9 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>Jad Java Decompiler plugin</description>
-    <version>0.1</version>
+    <version>0.2</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
-    <idea-version since-build="6180"/>
+    <idea-version since-build="6180" until-build="6180"/>
 
     <application-components>
         <component>
@@ -38,6 +38,15 @@
     </actions>
 
     <helpset file="intellijad-help.jar" path="/helpset.hs"/>
+
+    <change-notes>
+        <![CDATA[
+        <ul>
+            <li>0.2 - Added more icons to console tree renderer; added more help content.</li>
+            <li>0.1 - Initial release.</li>
+        </ul>
+        ]]>
+    </change-notes>
 
 </idea-plugin>
 

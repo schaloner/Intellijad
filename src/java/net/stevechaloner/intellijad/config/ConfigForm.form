@@ -59,7 +59,7 @@
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.confirm-navigation-triggered-decompile"/>
+                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.decompile-on-navigation"/>
                 </properties>
               </component>
               <component id="2e560" class="javax.swing.JComboBox" binding="navTriggeredDecomp">

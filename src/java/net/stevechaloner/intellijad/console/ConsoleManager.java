@@ -15,17 +15,17 @@
 package net.stevechaloner.intellijad.console;
 
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Manages consoles on a per-project basis.
  */
 public class ConsoleManager
 {
-
     /**
      * The consoles.
      */

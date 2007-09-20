@@ -15,19 +15,25 @@
 
 package net.stevechaloner.intellijad.console;
 
+import com.intellij.openapi.ui.MultiLineLabelUI;
+
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
+ * Console tree node renderer to provide a more attractive view on what happened.
  * @author Steve Chaloner
  */
-public class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
+class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
 {
+    /**
+     * Mapping for console entry types to icons.
+     */
     private static final Map<ConsoleEntryType, Icon> ICONS = new HashMap<ConsoleEntryType, Icon>()
 
     {
@@ -42,10 +48,24 @@ public class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("fileTypes/java.png")));
             put(ConsoleEntryType.LIBRARY_OPERATION,
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("modules/libraries.png")));
+            final ImageIcon infoIcon = new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource(
+                    "compiler/information.png"));
             put(ConsoleEntryType.MESSAGE,
-                null);
+                infoIcon);
+            put(ConsoleEntryType.INFO,
+                infoIcon);
+            put(ConsoleEntryType.ERROR,
+                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("compiler/error.png")));
         }
     };
+
+    /**
+     * Initialises a new instance of this class.
+     */
+    public ConsoleTreeCellRenderer() {
+        super();
+        setUI(new MultiLineLabelUI());
+    }
 
     /** {@inheritDoc} */
     public Component getTreeCellRendererComponent(JTree tree,
@@ -56,7 +76,6 @@ public class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
                                                   int row,
                                                   boolean hasFocus)
     {
-
         super.getTreeCellRendererComponent(tree,
                                            value,
                                            sel,
@@ -66,7 +85,6 @@ public class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
                                            hasFocus);
         ConsoleTreeNode node = (ConsoleTreeNode)value;
         setIcon(ICONS.get(node.getType()));
-
         return this;
     }
 }

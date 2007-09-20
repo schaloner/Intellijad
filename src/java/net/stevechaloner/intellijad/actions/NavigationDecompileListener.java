@@ -19,8 +19,16 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import net.stevechaloner.intellijad.EnvironmentContext;
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
@@ -28,11 +36,8 @@ import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
-import net.stevechaloner.intellijad.util.SwingUtil;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Steve Chaloner
@@ -64,19 +69,32 @@ public class NavigationDecompileListener implements FileEditorManagerListener
                 new NavigationOption()
                 {
                     public void execute(@NotNull Config config,
-                                        @NotNull DecompilationDescriptor descriptor)
+                                        @NotNull final DecompilationDescriptor descriptor)
                     {
                         boolean excluded = isExcluded(config,
                                                       descriptor);
                         if (!excluded)
                         {
-                            DecompileDialog dialog = new DecompileDialog(descriptor,
-                                                                         project,
-                                                                         decompilationListener);
-                            dialog.pack();
-                            SwingUtil.center(dialog);
-
-                            dialog.setVisible(true);
+                            DialogBuilder builder = new DialogBuilder(project);
+                            builder.setTitle(IntelliJadResourceBundle.message("plugin.name"));
+                            builder.addOkAction().setText(IntelliJadResourceBundle.message("option.decompile"));
+                            builder.addCancelAction().setText(IntelliJadResourceBundle.message("option.do-not-decompile"));
+                            final DecompilePopup decompilePopup = new DecompilePopup(descriptor,
+                                                                                     project);
+                            builder.setCenterPanel(decompilePopup.getContentPane());
+                            builder.setHelpId(IntelliJadConstants.CONFIGURATION_HELP_TOPIC);
+                            builder.setOkActionEnabled(true);
+                            switch (builder.show())
+                            {
+                                case DialogWrapper.CANCEL_EXIT_CODE:
+                                    decompilePopup.persistConfig();
+                                    break;
+                                case DialogWrapper.OK_EXIT_CODE:
+                                    decompilePopup.persistConfig();
+                                    decompilationListener.decompile(new EnvironmentContext(project),
+                                                                    descriptor);
+                                    break;
+                            }
                         }
                     }
                 });
