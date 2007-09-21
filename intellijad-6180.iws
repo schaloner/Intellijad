@@ -19,26 +19,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.form" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.form" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/SwingUtil.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.ipr" afterPath="$PROJECT_DIR$/intellijad-6180.ipr" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeNode.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeNode.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompilePopup.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeCellRenderer.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeCellRenderer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.iws" afterPath="$PROJECT_DIR$/intellijad-6180.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/NavigationDecompileListener.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/NavigationDecompileListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/help/help-content/images/navdialog-options.png" afterPath="$PROJECT_DIR$/src/help/help-content/images/navdialog-options.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.properties" afterPath="$PROJECT_DIR$/build.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.form" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.form" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileDialog.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileDialog.form" afterPath="" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompilePopup.form" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/NodeHandler.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/NodeHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/help/help-content/excludes.html" afterPath="$PROJECT_DIR$/src/help/help-content/excludes.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/help/help-content/images/navdialog-question.png" afterPath="$PROJECT_DIR$/src/help/help-content/images/navdialog-question.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad-6180.iws" afterPath="$PROJECT_DIR$/intellijad-6180.iws" />
     </list>
     <list name="Failed commit: Default" comment="FileSystemDecompilation classes somehow got dropped from SVN (IntelliJ refactoring bug?) - adding them back in" />
   </component>
@@ -234,15 +221,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="NavigationDecompileListener.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/NavigationDecompileListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="0" selection-start="4398" selection-end="4713" vertical-scroll-proportion="0.015527951">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="messages-i18n.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties">
           <provider selected="true" editor-type-id="text-editor">
@@ -255,7 +233,7 @@
       <file leaf-file-name="Config.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="241" column="86" selection-start="11821" selection-end="11821" vertical-scroll-proportion="3.3229814">
+            <state line="241" column="5" selection-start="11735" selection-end="11735" vertical-scroll-proportion="0.015527951">
               <folding />
             </state>
           </provider>
@@ -264,7 +242,7 @@
       <file leaf-file-name="ExclusionTableModel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="57" selection-start="2868" selection-end="2868" vertical-scroll-proportion="0.81469977">
+            <state line="86" column="13" selection-start="2811" selection-end="2811" vertical-scroll-proportion="0.79917186">
               <folding />
             </state>
           </provider>
@@ -438,192 +416,6 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="DecompilePopup" />
-          <option name="myItemType" value="com.intellij.uiDesigner.projectView.FormNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad-6180" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/META-INF" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
     </subPane>
   </component>
   <component name="ProjectReloadState">
@@ -637,7 +429,7 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <showStructure Favorites="false" ProjectPane="false" Scope="false" PackagesPane="false" />
+      <showStructure Favorites="false" PackagesPane="false" Scope="false" ProjectPane="false" />
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
@@ -725,19 +517,6 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <module name="" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -756,6 +535,19 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
     </configuration>
     <configuration default="false" name="intellijad" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="intellijad-6180" />
@@ -866,15 +658,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="1174" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="SQL" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3273196" order="2" />
       <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32796392" order="0" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32796392" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32538167" order="1" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27963918" order="7" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28737113" order="7" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3148855" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="5" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="5" />
@@ -917,7 +709,7 @@
     <option name="PERFORM_COMMIT_IN_BACKGROUND" value="false" />
     <option name="PUT_FOCUS_INTO_COMMENT" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added console manager for dealing with multiple projects" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Deleted SwingUtil&#10;- Updated exclusion help" />
     <option name="SAVE_LAST_COMMIT_MESSAGE" value="true" />
     <option name="CHECKIN_DIALOG_SPLITTER_PROPORTION" value="0.8" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
@@ -930,7 +722,6 @@
     <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Fixed memory-decompilation stream pumping" />
     <MESSAGE value="Added Ant build file" />
     <MESSAGE value="- Fixed Javac2 classpath for building plugin outside of IntelliJ&#10;- Added build.properties file" />
     <MESSAGE value="- Added license notices to all source files&#10;- Added skeletal help files" />
@@ -940,6 +731,7 @@
     <MESSAGE value="- Decompilation to file system now loads content earlier to check various bits and bobs&#10;- Some minor changes to the decompilation class structure&#10;- Need to sit down and clean up the structure soon before it starts losing the plot with all these refactorings!" />
     <MESSAGE value="- Started changes to logging system.  Todo - needs further abstraction and a more refined sectioning policy" />
     <MESSAGE value="Added console manager for dealing with multiple projects" />
+    <MESSAGE value="- Deleted SwingUtil&#10;- Updated exclusion help" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1011,13 +803,6 @@
     <option name="myLastEditedConfigurable" value="Default" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/Disposable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/ui/DialogBuilder.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -1051,16 +836,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="30" selection-start="1309" selection-end="1339" vertical-scroll-proportion="0.015527951">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="57" selection-start="2868" selection-end="2868" vertical-scroll-proportion="0.81469977">
+        <state line="86" column="13" selection-start="2811" selection-end="2811" vertical-scroll-proportion="0.79917186">
           <folding />
         </state>
       </provider>
@@ -1107,9 +885,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="30" selection-start="1309" selection-end="1339" vertical-scroll-proportion="0.015527951">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="241" column="86" selection-start="11821" selection-end="11821" vertical-scroll-proportion="3.3229814">
+        <state line="241" column="5" selection-start="11735" selection-end="11735" vertical-scroll-proportion="0.015527951">
           <folding />
         </state>
       </provider>
