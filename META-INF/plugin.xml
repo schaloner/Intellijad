@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>Jad Java Decompiler plugin</description>
-    <version>0.2</version>
+    <version>0.3</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="6180" until-build="6180"/>
 
@@ -42,6 +42,7 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.3 - Memory decompilation now results in source code that is debuggable.</li>
             <li>0.2 - Added more icons to console tree renderer; added more help content.</li>
             <li>0.1 - Initial release.</li>
         </ul>
