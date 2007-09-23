@@ -52,14 +52,14 @@ public class ProjectConfigComponent implements ProjectComponent,
      */
     private final ConfigComponent configComponent = new ConfigComponent()
     {
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         @Nls
         public String getDisplayName()
         {
             return "IntelliJad Project";
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         @NotNull
         public JComponent createComponent()
         {
@@ -83,12 +83,12 @@ public class ProjectConfigComponent implements ProjectComponent,
         this.project = project;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void initComponent()
     {
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void disposeComponent()
     {
     }

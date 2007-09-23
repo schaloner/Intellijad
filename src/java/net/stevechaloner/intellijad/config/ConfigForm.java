@@ -18,17 +18,11 @@ package net.stevechaloner.intellijad.config;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
+import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
+import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+import org.jetbrains.annotations.Nullable;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Field;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,12 +37,16 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
-import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
-import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
-
-import org.jetbrains.annotations.Nullable;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 
 /**
  * IntelliJad configuration form.  This class deals with both application- and
@@ -601,7 +599,7 @@ public class ConfigForm
             setValue(value);
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public void setValue(Object object)
         {
             int value = ((Number) object).intValue();
@@ -612,7 +610,7 @@ public class ConfigForm
             super.setValue(object);
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public Object getNextValue()
         {
             Number number = getNumber();
@@ -634,7 +632,7 @@ public class ConfigForm
             return next;
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public Object getPreviousValue()
         {
             Number number = getNumber();

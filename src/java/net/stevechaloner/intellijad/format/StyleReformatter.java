@@ -29,6 +29,8 @@ import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 
 /**
+ * Reformats the source code of a file to match the preferred source formatting.
+ * 
  * @author Steve Chaloner
  */
 public class StyleReformatter

@@ -12,7 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * A file system for content that resides only in memory.
@@ -38,13 +42,13 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         fireFileCreated(file);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public String getProtocol()
     {
         return IntelliJadConstants.INTELLIJAD_PROTOCOL;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public VirtualFile findFileByPath(String string)
     {
@@ -85,33 +89,35 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void refresh(boolean b)
     {
+        // no-op
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public VirtualFile refreshAndFindFileByPath(String string)
     {
         return files.get(string);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
         // no-op
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void deleteFile(Object object,
                               VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
+        fireFileDeleted(virtualFile);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void moveFile(Object object,
                             VirtualFile virtualFile,
                             VirtualFile virtualFile1) throws IOException
@@ -121,7 +127,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile1);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void renameFile(Object object,
                               VirtualFile virtualFile,
                               String string) throws IOException
@@ -131,7 +137,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
                   (MemoryVirtualFile) virtualFile);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected MemoryVirtualFile createChildFile(Object object,
                                                 VirtualFile parent,
                                                 String name) throws IOException
@@ -143,7 +149,7 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected MemoryVirtualFile createChildDirectory(Object object,
                                                      VirtualFile parent,
                                                      String name) throws IOException
@@ -152,6 +158,21 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         ((MemoryVirtualFile)parent).addChild(file);
         addFile(file);
         return file;
+    }
+
+    private void fireFileDeleted(final VirtualFile file)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                fireFileDeleted(null,
+                                file,
+                                file.getName(),
+                                file.isDirectory(),
+                                file.getParent());
+            }
+        });
     }
 
     /**
@@ -166,12 +187,12 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
             public void run()
             {
                 fireFileCreated(null,
-                        file);
+                                file);
             }
         });
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NonNls
     @NotNull
     public String getComponentName()
@@ -179,14 +200,14 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return "MemoryFileSystem";
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void initComponent()
     {
         MemoryVirtualFile root = new MemoryVirtualFile(IntelliJadConstants.INTELLIJAD_ROOT);
         addFile(root);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void disposeComponent()
     {
         files.clear();
@@ -251,12 +272,12 @@ public class MemoryVirtualFileSystem extends VirtualFileSystem implements Applic
         return child;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectOpened()
     {
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectClosed()
     {
         files.clear();

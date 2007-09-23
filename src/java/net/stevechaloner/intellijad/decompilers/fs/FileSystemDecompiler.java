@@ -29,7 +29,12 @@ import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
-import net.stevechaloner.intellijad.decompilers.*;
+import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
+import net.stevechaloner.intellijad.decompilers.DecompilationException;
+import net.stevechaloner.intellijad.decompilers.ResultType;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,9 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A decompiler that outputs the result to the file system and builds
@@ -52,104 +55,61 @@ public class FileSystemDecompiler extends AbstractDecompiler
     /**
      *
      */
-    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
-    {
+    public FileSystemDecompiler()
         {
-            put(ResultType.NON_FATAL_ERROR,
-                new DecompilationAftermathHandler()
+            setSuccessfulDecompilationAftermathHandler(new DecompilationAftermathHandler()
+            {
+                private VirtualFile getFile(DecompilationContext context,
+                                            DecompilationDescriptor descriptor)
                 {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    final LocalFileSystem vfs = getLocalFileSystem();
+                    final Config config = context.getConfig();
+                    final File td = new File(config.getOutputDirectory() + '/' + descriptor.getPackageNameAsPath() + descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
+                    final VirtualFile[] files = new VirtualFile[1];
+                    ApplicationManager.getApplication().runWriteAction(new Runnable()
                     {
-                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
-                                                                           descriptor,
-                                                                           targetClass,
-                                                                           output,
-                                                                           err);
-                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
-                                                               "error",
-                                                               err.toString());
-                        return file;
-                    }
-                });
-            put(ResultType.FATAL_ERROR,
-                new DecompilationAftermathHandler()
+                        public void run()
+                        {
+                            files[0] = vfs.refreshAndFindFileByIoFile(td);
+                        }
+                    });
+                    return files[0];
+                }
+
+                @Nullable
+                public VirtualFile execute(@NotNull DecompilationContext context,
+                                           @NotNull DecompilationDescriptor descriptor,
+                                           @NotNull File targetClass,
+                                           @NotNull ByteArrayOutputStream output,
+                                           @NotNull ByteArrayOutputStream err) throws DecompilationException
                 {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    // todo this sucks - rewrite
+                    VirtualFile file = getFile(context,
+                                               descriptor);
+                    String content = null;
+                    try
                     {
-                        ConsoleContext consoleContext = context.getConsoleContext();
-                        consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
-                                                  "error",
-                                                   err.toString());
-                        consoleContext.setWorthDisplaying(true);
-
-                        return null;
+                        content = StreamUtil.readText(file.getInputStream());
                     }
-                });
-            put(ResultType.SUCCESS,
-                new DecompilationAftermathHandler()
-                {
-                    private VirtualFile getFile(DecompilationContext context,
-                                                DecompilationDescriptor descriptor)
+                    catch (IOException e)
                     {
-                        final LocalFileSystem vfs = getLocalFileSystem();
-                        final Config config = context.getConfig();
-                        final File td = new File(config.getOutputDirectory() + '/' + descriptor.getPackageNameAsPath() + descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
-                        final VirtualFile[] files = new VirtualFile[1];
-                        ApplicationManager.getApplication().runWriteAction(new Runnable()
-                        {
-                            public void run()
-                            {
-                                files[0] = vfs.refreshAndFindFileByIoFile(td);
-                            }
-                        });
-                        return files[0];
+                        throw new DecompilationException(e);
                     }
 
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
                     {
-                        // todo this sucks - rewrite
-                        VirtualFile file = getFile(context,
-                                                   descriptor);
-                        String content = null;
-                        try
-                        {
-                            content = StreamUtil.readText(file.getInputStream());
-                        }
-                        catch (IOException e)
-                        {
-                            throw new DecompilationException(e);
-                        }
-
-                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
-                        {
-                            DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
-                                                                                                 content);
-                        }
-
-                        return processOutput(descriptor,
-                                             context,
-                                             file);
+                        DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
+                                                                                             content);
                     }
-                });
+
+                    return processOutput(descriptor,
+                                         context,
+                                         file);
+                }
+            });
         }
-    };
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
@@ -232,6 +192,10 @@ public class FileSystemDecompiler extends AbstractDecompiler
                             }
                         }
                     });
+
+                    reformatToStyle(context,
+                                    file);
+
                     FileEditorManager.getInstance(project).openFile(file,
                                                                     true);
                 }
@@ -248,7 +212,7 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void updateCommand(StringBuilder builder)
     {
         builder.append(" -o -r ");
@@ -288,16 +252,11 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
     }
 
-    @NotNull
-    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
-    {
-        return decompilationAftermathHandlers.get(resultType);
-    }
-
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
+        // todo somewhere around here we need to reorder the code
         final LocalFileSystem vfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
         VirtualFile file = vfs.findFileByPath(descriptor.getPath());
         // todo implement this!

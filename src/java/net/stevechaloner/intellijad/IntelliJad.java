@@ -26,19 +26,25 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.WindowManager;
 import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.console.ConsoleManager;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
-import net.stevechaloner.intellijad.decompilers.*;
+import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.decompilers.DecompilationException;
+import net.stevechaloner.intellijad.decompilers.Decompiler;
 import net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.memory.MemoryDecompiler;
-import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +71,14 @@ public class IntelliJad implements ApplicationComponent,
      */
     private final ConsoleManager consoleManager = new ConsoleManager();
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     public String getComponentName()
     {
         return COMPONENT_NAME;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectOpened(Project project)
     {
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
@@ -85,14 +91,14 @@ public class IntelliJad implements ApplicationComponent,
                             navigationListener);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public boolean canCloseProject(Project project)
     {
         // no-op
         return true;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectClosed(Project project)
     {
         NavigationDecompileListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
@@ -100,7 +106,7 @@ public class IntelliJad implements ApplicationComponent,
         consoleManager.disposeConsole(project);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectClosing(final Project project)
     {
         ApplicationManager.getApplication().runWriteAction(new Runnable()
@@ -126,19 +132,19 @@ public class IntelliJad implements ApplicationComponent,
         });
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void initComponent()
     {
         ProjectManager.getInstance().addProjectManagerListener(this);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void disposeComponent()
     {
         ProjectManager.getInstance().removeProjectManagerListener(this);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void decompile(EnvironmentContext envContext,
                           DecompilationDescriptor descriptor)
     {
@@ -149,8 +155,9 @@ public class IntelliJad implements ApplicationComponent,
         final ConsoleContext consoleContext = console.createConsoleContext("message.class",
                                                                            descriptor.getClassName());
         Config config = PluginUtil.getConfig(project);
-        if (validateOptions(config,
-                            consoleContext))
+        String validationMessage = validateOptions(config,
+                                                   consoleContext);
+        if (validationMessage == null)
         {
             StringBuilder sb = new StringBuilder();
             sb.append(config.getJadPath()).append(' ');
@@ -181,11 +188,6 @@ public class IntelliJad implements ApplicationComponent,
                         editorManager.closeFile(descriptor.getClassFile());
                         editorManager.openFile(file,
                                                true);
-                        if (config.isReformatAccordingToStyle())
-                        {
-                            StyleReformatter.reformat(context,
-                                                      file);
-                        }
                     }
                     consoleContext.addSectionMessage(ConsoleEntryType.INFO,
                                                      "message.operation-time",
@@ -202,6 +204,11 @@ public class IntelliJad implements ApplicationComponent,
             checkConsole(config,
                          console,
                          consoleContext);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(WindowManager.getInstance().suggestParentWindow(project),
+                                          validationMessage);
         }
     }
 
@@ -229,10 +236,11 @@ public class IntelliJad implements ApplicationComponent,
      *
      * @param config the config to check
      * @param consoleContext the console context to report issues to
-     * @return true iff the path is ok
+     * @return the error message if necessary, or null if no error
      */
-    private boolean validateOptions(@NotNull Config config,
-                                    @NotNull ConsoleContext consoleContext)
+    @Nullable
+    private String validateOptions(@NotNull Config config,
+                                   @NotNull ConsoleContext consoleContext)
     {
         String message = null;
         Object[] params = {};
@@ -256,18 +264,23 @@ public class IntelliJad implements ApplicationComponent,
             }
         }
 
-        if (!config.isDecompileToMemory() && StringUtil.isEmptyOrSpaces(config.getOutputDirectory()))
+        if (message == null &&
+            !config.isDecompileToMemory() &&
+            StringUtil.isEmptyOrSpaces(config.getOutputDirectory()))
         {
             message = IntelliJadResourceBundle.message("error.unspecified-output-directory");
         }
 
+        String rtnVal = null;
         if (message != null)
         {
+            rtnVal = IntelliJadResourceBundle.message(message,
+                                                      params);
             consoleContext.addSectionMessage(ConsoleEntryType.ERROR,
                                              message,
                                              params);
         }
-        return message == null;
+        return rtnVal;
     }
 
     /**

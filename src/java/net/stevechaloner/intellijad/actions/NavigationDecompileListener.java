@@ -22,10 +22,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
@@ -36,8 +32,10 @@ import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Steve Chaloner
@@ -135,7 +133,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         this.decompilationListener = decompilationListener;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void fileOpened(FileEditorManager fileEditorManager,
                            VirtualFile file)
     {
@@ -181,14 +179,14 @@ public class NavigationDecompileListener implements FileEditorManagerListener
         return exclude;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void fileClosed(FileEditorManager fileEditorManager,
                            VirtualFile virtualFile)
     {
         // no-op
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void selectionChanged(FileEditorManagerEvent fileEditorManagerEvent)
     {
         // no-op

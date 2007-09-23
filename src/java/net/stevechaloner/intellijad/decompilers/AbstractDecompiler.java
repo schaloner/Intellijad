@@ -15,11 +15,14 @@
 
 package net.stevechaloner.intellijad.decompilers;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
+import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.StreamPumper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,15 +37,66 @@ import java.util.zip.ZipFile;
 /**
  * The generic decompilation operations required to decompile and display a class.
  *
- * @todo this class and its children need some serious refactoring to reduce duplication
  * @author Steve Chaloner
+ * @todo this class and its children need some serious refactoring to reduce duplication
  */
 public abstract class AbstractDecompiler implements Decompiler
 {
     /**
      * Operational continue/cancel flags.
      */
-    protected enum OperationStatus { CONTINUE, ABORT }
+    protected enum OperationStatus
+    {
+        CONTINUE, ABORT
+    }
+
+    /**
+     *
+     */
+    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
+    {
+        {
+            put(ResultType.NON_FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
+                                                                           descriptor,
+                                                                           targetClass,
+                                                                           output,
+                                                                           err);
+                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                               "error",
+                                                               err.toString());
+                        return file;
+                    }
+                });
+            put(ResultType.FATAL_ERROR,
+                new DecompilationAftermathHandler()
+                {
+                    @Nullable
+                    public VirtualFile execute(@NotNull DecompilationContext context,
+                                               @NotNull DecompilationDescriptor descriptor,
+                                               @NotNull File targetClass,
+                                               @NotNull ByteArrayOutputStream output,
+                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
+                    {
+                        ConsoleContext consoleContext = context.getConsoleContext();
+                        consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                  "error",
+                                                  err.toString());
+                        consoleContext.setWorthDisplaying(true);
+                        return null;
+                    }
+                });
+        }
+    };
 
     /**
      * Class preparation handlers.
@@ -83,8 +137,31 @@ public abstract class AbstractDecompiler implements Decompiler
     };
 
     /**
+     * Sets the aftermath handler for successful decompilations.
+     *
+     * @param handler the aftermath handler
+     */
+    protected void setSuccessfulDecompilationAftermathHandler(@NotNull DecompilationAftermathHandler handler)
+    {
+        decompilationAftermathHandlers.put(ResultType.SUCCESS,
+                                           handler);
+    }
+
+    /**
+     * Gets a handler for the result of the decompilation.
+     *
+     * @param resultType the result of the decompilation operation.
+     * @return a handler
+     */
+    @NotNull
+    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
+    {
+        return decompilationAftermathHandlers.get(resultType);
+    }
+
+    /**
      * Perform pre-compilation operations.
-     * 
+     *
      * @param descriptor the decompilation descriptor
      * @param context    the decompilation context
      * @return the last chance to abort the operation before decompilation
@@ -94,13 +171,40 @@ public abstract class AbstractDecompiler implements Decompiler
                                              DecompilationContext context) throws DecompilationException;
 
     /**
+     * Reformats the content of the file to match the preferred code style.
+     *
+     * @param context the decompilation context
+     * @param file    the file to reformat
+     */
+    protected void reformatToStyle(@NotNull final DecompilationContext context,
+                                   @NotNull final VirtualFile file)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                Config config = context.getConfig();
+                if (config.isReformatAccordingToStyle())
+                {
+                    StyleReformatter.reformat(context,
+                                              file);
+                }
+            }
+        });
+    }
+
+    /**
      * Updates the command to insert any specific arguments.
      *
      * @param command the process execution string
      */
-    protected abstract void updateCommand(StringBuilder command);
+    protected abstract void updateCommand
+            (StringBuilder
+                    command);
 
-    /** {@javadocInherited} */
+    /**
+     * {@inheritDoc}
+     */
     public VirtualFile decompile(DecompilationDescriptor descriptor,
                                  DecompilationContext context) throws DecompilationException
     {
@@ -164,10 +268,10 @@ public abstract class AbstractDecompiler implements Decompiler
      *
      * @param command the command to execute in the process
      * @param context the context of the decompilation
-     * @param output stream containing the process's output
-     * @param err stream containing the process's error output
+     * @param output  stream containing the process's output
+     * @param err     stream containing the process's error output
      * @return the result of the operation
-     * @throws IOException if an IO exception occurs at any point
+     * @throws IOException          if an IO exception occurs at any point
      * @throws InterruptedException if the stream pumping operations fail
      */
     private ResultType runExternalDecompiler(String command,
@@ -209,15 +313,6 @@ public abstract class AbstractDecompiler implements Decompiler
                                                            ByteArrayOutputStream output);
 
     /**
-     * Gets a handler for the result of the decompilation.
-     *
-     * @param resultType the result of the decompilation operation.
-     * @return a handler
-     */
-    @NotNull
-    protected abstract DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType);
-
-    /**
      * Extract the class files from the library to the target directory.
      *
      * @param jarFile                 the library containing the class files
@@ -255,11 +350,11 @@ public abstract class AbstractDecompiler implements Decompiler
         /**
          * Handle the aftermath of the decompilation process.
          *
-         * @param context the decompilation context
-         * @param descriptor the decompilation descriptor
+         * @param context     the decompilation context
+         * @param descriptor  the decompilation descriptor
          * @param targetClass the decompiled class
-         * @param output the output of the process
-         * @param err the error stream of the process
+         * @param output      the output of the process
+         * @param err         the error stream of the process
          * @return a virtual file representing the decompiled output
          * @throws DecompilationException if something goes awry.
          */
@@ -279,7 +374,7 @@ public abstract class AbstractDecompiler implements Decompiler
         /**
          * Prepares the class for decompilation.
          *
-         * @param context the decompilation context
+         * @param context    the decompilation context
          * @param descriptor the descriptor of the class to decompile
          * @return true if the class was prepared successfully
          * @throws DecompilationException if the class can't be prepared

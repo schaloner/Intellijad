@@ -32,7 +32,7 @@ import net.stevechaloner.intellijad.util.PluginUtil;
  */
 public class DecompileAction extends AnAction
 {
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void update(AnActionEvent e)
     {
         super.update(e);
@@ -41,7 +41,7 @@ public class DecompileAction extends AnAction
         this.getTemplatePresentation().setEnabled(extension != null && "class".equals(extension));
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void actionPerformed(AnActionEvent e)
     {
         DataContext dataContext = e.getDataContext();

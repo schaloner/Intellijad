@@ -80,7 +80,7 @@ public class JarDecompilationDescriptor extends DecompilationDescriptor
         return ClassPathType.JAR;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     public File getSourceFile(@NotNull File availableDirectory)
     {

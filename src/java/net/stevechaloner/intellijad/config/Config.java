@@ -15,9 +15,6 @@
 
 package net.stevechaloner.intellijad.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.stevechaloner.idea.util.properties.DOMable;
 import net.stevechaloner.idea.util.properties.DOMableCollectionContentType;
 import net.stevechaloner.idea.util.properties.DOMableGeneric;
@@ -28,9 +25,11 @@ import net.stevechaloner.idea.util.properties.PropertyContainer;
 import net.stevechaloner.idea.util.properties.PropertyDescriptor;
 import net.stevechaloner.idea.util.properties.converters.ConverterFactory;
 import net.stevechaloner.intellijad.config.rules.RuleContext;
-
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The IntelliJad configuration.
@@ -813,13 +812,13 @@ public class Config implements DOMable
         return domable.write();
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void read(@NotNull Element element)
     {
         domable.read(element);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public Object getValue()
     {
         return null;
