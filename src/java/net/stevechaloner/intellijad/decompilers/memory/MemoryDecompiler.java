@@ -16,17 +16,11 @@
 package net.stevechaloner.intellijad.decompilers.memory;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.List;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -38,12 +32,16 @@ import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.ResultType;
 import net.stevechaloner.intellijad.format.SourceReorganiser;
+import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -114,41 +112,11 @@ public class MemoryDecompiler extends AbstractDecompiler
 
         if (!libraries.isEmpty())
         {
-            ApplicationManager.getApplication().runWriteAction(new Runnable()
-            {
-                public void run()
-                {
-                    ConsoleContext consoleContext = context.getConsoleContext();
-                    for (Library library : libraries)
-                    {
-                        Library.ModifiableModel model = library.getModifiableModel();
-                        String[] urls = model.getUrls(OrderRootType.SOURCES);
-                        boolean found = false;
-                        for (int i = 0; !found && i < urls.length; i++)
-                        {
-                            found = IntelliJadConstants.ROOT_URI.equals(urls[i]);
-                        }
-                        if (!found)
-                        {
-                            model.addRoot(vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT),
-                                          OrderRootType.SOURCES);
-                            model.commit();
-                        }
-                        consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
-                                                  "message.associating-source-with-library",
-                                                  descriptor.getClassName(),
-                                                  library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
-                        project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
-                    }
-                }
-            });
-
-            reformatToStyle(context, file);
-            file.setWritable(false);
-
-            FileEditorManager.getInstance(project).openFile(file,
-                                                            true);
-
+            attachSourceToLibraries(descriptor,
+                                    context,
+                                    vfs,
+                                    project,
+                                    libraries);
         }
         else
         {
@@ -157,7 +125,43 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                    descriptor.getClassName());
         }
 
+        StyleReformatter.reindent(context,
+                                  file);
+        file.setWritable(false);
+
         return file;
+    }
+
+    private void attachSourceToLibraries(final DecompilationDescriptor descriptor, final DecompilationContext context, final MemoryVirtualFileSystem vfs, final Project project, final List<Library> libraries)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                ConsoleContext consoleContext = context.getConsoleContext();
+                for (Library library : libraries)
+                {
+                    Library.ModifiableModel model = library.getModifiableModel();
+                    String[] urls = model.getUrls(OrderRootType.SOURCES);
+                    boolean found = false;
+                    for (int i = 0; !found && i < urls.length; i++)
+                    {
+                        found = IntelliJadConstants.ROOT_URI.equals(urls[i]);
+                    }
+                    if (!found)
+                    {
+                        model.addRoot(vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT),
+                                      OrderRootType.SOURCES);
+                        model.commit();
+                    }
+                    consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
+                                              "message.associating-source-with-library",
+                                              descriptor.getClassName(),
+                                              library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
+                    project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
+                }
+            }
+        });
     }
 
     /** {@inheritDoc} */

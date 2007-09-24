@@ -19,15 +19,16 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Reformats the source code of a file to match the preferred source formatting.
@@ -43,8 +44,8 @@ public class StyleReformatter
      * @param file the file representing the source code
      * @return true if reformatted
      */
-    public static boolean reformat(final DecompilationContext context,
-                                   final VirtualFile file)
+    public static boolean reformat(@NotNull final DecompilationContext context,
+                                   @NotNull final VirtualFile file)
     {
         boolean reformatted = false;
         final FileDocumentManager fileDocManager = FileDocumentManager.getInstance();
@@ -83,5 +84,51 @@ public class StyleReformatter
         }
 
         return reformatted;
+    }
+
+    /**
+     * Reindents the contents of the file.
+     *
+     * @param context the decompilation context
+     * @param file the file to reindent
+     * @return true if reindented
+     */
+    public static boolean reindent(@NotNull final DecompilationContext context,
+                                   @NotNull final VirtualFile file)
+    {
+        boolean reindent = false;
+        final FileDocumentManager fileDocManager = FileDocumentManager.getInstance();
+        final Document document = fileDocManager.getDocument(file);
+        if (document != null)
+        {
+            final Project project = context.getProject();
+            final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+            if (psiFile != null)
+            {
+                final boolean[] result = {false};
+                ApplicationManager.getApplication().runWriteAction(new Runnable()
+                {
+                    public void run()
+                    {
+                        CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
+                        try
+                        {
+                            styleManager.adjustLineIndent(psiFile,
+                                                          new TextRange(0,
+                                                                        document.getTextLength()));
+                            fileDocManager.saveDocument(document);
+                            result[0] = true;
+                        }
+                        catch (IncorrectOperationException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                reindent = result[0];
+            }
+        }
+
+        return reindent;
     }
 }

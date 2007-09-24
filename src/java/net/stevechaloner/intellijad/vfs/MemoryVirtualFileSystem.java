@@ -1,32 +1,32 @@
 package net.stevechaloner.intellijad.vfs;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.DeprecatedVirtualFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.newvfs.NewVirtualFileSystem;
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * A file system for content that resides only in memory.
  *
  * @author Steve Chaloner
  */
-public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem implements ApplicationComponent
+public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements ApplicationComponent
 {
     /**
      * The files.
@@ -34,9 +34,26 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
     private final Map<String, MemoryVirtualFile> files = new HashMap<String, MemoryVirtualFile>();
 
     /**
-     * The listeners.
+     * Listeners for file system events.
      */
     private final List<VirtualFileListener> listeners = new ArrayList<VirtualFileListener>();
+
+    /** {@inheritDoc} */
+    public void addVirtualFileListener(VirtualFileListener virtualFileListener)
+    {
+        super.addVirtualFileListener(virtualFileListener);
+        if (virtualFileListener != null)
+        {
+            listeners.add(virtualFileListener);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void removeVirtualFileListener(VirtualFileListener virtualFileListener)
+    {
+        super.removeVirtualFileListener(virtualFileListener);
+        listeners.remove(virtualFileListener);
+    }
 
     /**
      * Add a file to the file system.
@@ -48,6 +65,23 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         files.put(file.getName(),
                   file);
         fireFileCreated(file);
+    }
+
+    /**
+     * Notifies listeners of a new file.
+     *
+     * @param file the new file
+     */
+    private void fireFileCreated(MemoryVirtualFile file)
+    {
+        VirtualFileEvent e = new VirtualFileEvent(this,
+                                                  file,
+                                                  file.getName(),
+                                                  file.getParent());
+        for (VirtualFileListener listener : listeners)
+        {
+            listener.fileCreated(e);
+        }
     }
 
     /** {@inheritDoc} */
@@ -110,23 +144,16 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
     }
 
     /** {@inheritDoc} */
-    public void forceRefreshFiles(boolean b,
-                                  @NotNull VirtualFile... virtualFiles)
-    {
-        // kept for compatibility with Idea 6
-    }
-
-    /** {@inheritDoc} */
-    protected void deleteFile(Object object,
-                              VirtualFile virtualFile) throws IOException
+    public void deleteFile(Object object,
+                           VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
     }
 
     /** {@inheritDoc} */
-    protected void moveFile(Object object,
-                            VirtualFile virtualFile,
-                            VirtualFile virtualFile1) throws IOException
+    public void moveFile(Object object,
+                         VirtualFile virtualFile,
+                         VirtualFile virtualFile1) throws IOException
     {
         files.remove(virtualFile.getName());
         files.put(virtualFile1.getName(),
@@ -134,9 +161,9 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
     }
 
     /** {@inheritDoc} */
-    protected void renameFile(Object object,
-                              VirtualFile virtualFile,
-                              String string) throws IOException
+    public void renameFile(Object object,
+                           VirtualFile virtualFile,
+                           String string) throws IOException
     {
         files.remove(virtualFile.getName());
         files.put(string,
@@ -144,43 +171,26 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
     }
 
     /** {@inheritDoc} */
-    protected MemoryVirtualFile createChildFile(Object object,
-                                                VirtualFile parent,
-                                                String name) throws IOException
+    public MemoryVirtualFile createChildFile(Object object,
+                                             VirtualFile parent,
+                                             String name) throws IOException
     {
         final MemoryVirtualFile file = new MemoryVirtualFile(name,
-                                                       null);
+                                                             null);
         file.setParent(parent);
         addFile(file);
         return file;
     }
 
     /** {@inheritDoc} */
-    protected MemoryVirtualFile createChildDirectory(Object object,
-                                                     VirtualFile parent,
-                                                     String name) throws IOException
+    public MemoryVirtualFile createChildDirectory(Object object,
+                                                  VirtualFile parent,
+                                                  String name) throws IOException
     {
         MemoryVirtualFile file = new MemoryVirtualFile(name);
         ((MemoryVirtualFile)parent).addChild(file);
         addFile(file);
         return file;
-    }
-
-    /**
-     * Fires an event to notify listeners of file creation.
-     *
-     * @param file the new file
-     */
-    private void fireFileCreated(final VirtualFile file)
-    {
-        ApplicationManager.getApplication().runWriteAction(new Runnable()
-        {
-            public void run()
-            {
-                fireFileCreated(null,
-                                file);
-            }
-        });
     }
 
     /** {@inheritDoc} */
@@ -274,31 +284,81 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         files.clear();
     }
 
-    /** {@inheritDoc} */
-    public void addVirtualFileListener(VirtualFileListener listener)
+    public boolean isCaseSensitive()
     {
-        if (listener != null)
-        {
-            listeners.add(listener);
-        }
+        return true;
+    }
+
+    protected String extractRootPath(@NotNull String s)
+    {
+        return s;
+    }
+
+    public int getRank()
+    {
+        return 0;
     }
 
     /** {@inheritDoc} */
-    public void removeVirtualFileListener(VirtualFileListener listener)
-    {
-        listeners.remove(listener);
-    }
-
-    /** {@inheritDoc} */
-    protected VirtualFile copyFile(Object o,
-                                   VirtualFile virtualFile,
-                                   VirtualFile virtualFile1,
-                                   String s) throws IOException {
+    public VirtualFile copyFile(Object o,
+                                VirtualFile virtualFile,
+                                VirtualFile virtualFile1,
+                                String s) throws IOException {
         return null;
     }
 
     /** {@inheritDoc} */
     public boolean isReadOnly() {
         return false;
+    }
+
+    public boolean exists(VirtualFile virtualFile)
+    {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String[] list(VirtualFile virtualFile)
+    {
+        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean isDirectory(VirtualFile virtualFile)
+    {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public long getTimeStamp(VirtualFile virtualFile)
+    {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void setTimeStamp(VirtualFile virtualFile, long l) throws IOException
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean isWritable(VirtualFile virtualFile)
+    {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void setWritable(VirtualFile virtualFile, boolean b) throws IOException
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public InputStream getInputStream(VirtualFile virtualFile) throws IOException
+    {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public OutputStream getOutputStream(VirtualFile virtualFile, Object o, long l, long l1) throws IOException
+    {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public long getLength(VirtualFile virtualFile)
+    {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

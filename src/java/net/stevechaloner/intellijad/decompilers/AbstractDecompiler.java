@@ -176,18 +176,12 @@ public abstract class AbstractDecompiler implements Decompiler
     protected void reformatToStyle(@NotNull final DecompilationContext context,
                                    @NotNull final VirtualFile file)
     {
-        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        Config config = context.getConfig();
+        if (config.isReformatAccordingToStyle())
         {
-            public void run()
-            {
-                Config config = context.getConfig();
-                if (config.isReformatAccordingToStyle())
-                {
-                    StyleReformatter.reformat(context,
-                                              file);
-                }
-            }
-        });
+            StyleReformatter.reformat(context,
+                                      file);
+        }
     }
 
     /**

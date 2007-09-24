@@ -62,7 +62,9 @@ public class SourceReorganiser
             in = new LineNumberReader(new StringReader(content));
             List<String> lines = reformat(in);
             Block currentBlock = new Block();
-            currentBlock.add(new Line("/* Decompiled through IntelliJad */", 1));
+            currentBlock.add(new Line("/* Decompiled through IntelliJad */",
+                                      1,
+                                      false));
             for (String line : lines)
             {
                 Matcher lineNumberMatcher = LINE_NUMBER_PATTERN.matcher(line);
@@ -75,18 +77,20 @@ public class SourceReorganiser
                     if (currentBlock.getLastLine() != null && currentBlock.getLastLine().getNumber() == lineNumber)
                     {
                         // if the last line exists and has the same number, add this line to it without number
-                        currentBlock.getLastLine().add(lineStringWithoutNumber + (retainLineNumbers ? "// " + lineNumber : ""));
+                        currentBlock.getLastLine().add(lineStringWithoutNumber);
                     }
                     else
                     {
                         // if this line is a new line, i.e. the last line has a different number, add a new line to the block
-                        currentBlock.add(new Line(lineStringWithoutNumber + (retainLineNumbers ? "// " + lineNumber : ""),
-                                                  lineNumber));
+                        currentBlock.add(new Line(lineStringWithoutNumber,
+                                                  lineNumber,
+                                                  retainLineNumbers));
                     }
                     String lastLine = currentBlock.getLastLine().getContent();
                     if (lastLine.endsWith("{"))
                     {
-                        currentBlock = new Block(currentBlock, currentBlock.removeLastLine());
+                        currentBlock = new Block(currentBlock,
+                                                 currentBlock.removeLastLine());
                     }
                 }
                 else
@@ -236,19 +240,24 @@ public class SourceReorganiser
 
     private class Line extends Element
     {
-
         private int number = -1;
         private String content;
+        private boolean lineNumberAsSuffix;
 
         public Line(String content)
         {
-            this(content, -1);
+            this(content,
+                 -1,
+                 false);
         }
 
-        public Line(String content, int number)
+        public Line(String content,
+                    int number,
+                    boolean lineNumberAsSuffix)
         {
             this.number = number;
             this.content = content;
+            this.lineNumberAsSuffix = lineNumberAsSuffix;
         }
 
         public void add(String content)
@@ -463,13 +472,17 @@ public class SourceReorganiser
                         int linesToSkip = nextLineWithNumber.getNumber() - currentLine - linesInbetween;
                         if (lastLineHadNumber)
                         {
-                            linesToSkip = Math.min(1, linesToSkip);
+                            linesToSkip = Math.min(1,
+                                                   linesToSkip);
                         }
                         for (int k = 0, max = linesToSkip; k < max; k++)
                         {
                             out.write(LINE_SEPARATOR);
                             currentLine++;
-                            checkOffLines(offLines, line, currentLine, out);
+                            checkOffLines(offLines,
+                                          line,
+                                          currentLine,
+                                          out);
                         }
                     }
                     else
@@ -478,7 +491,8 @@ public class SourceReorganiser
                         currentLine++;
                         checkOffLines(offLines,
                                       line,
-                                      currentLine, out);
+                                      currentLine,
+                                      out);
                     }
                     lastLineHadNumber = false;
                 }
