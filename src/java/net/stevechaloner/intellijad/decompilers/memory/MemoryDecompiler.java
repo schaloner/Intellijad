@@ -25,9 +25,7 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
@@ -39,6 +37,7 @@ import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.ResultType;
+import net.stevechaloner.intellijad.format.SourceReorganiser;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
@@ -55,53 +54,12 @@ import org.jetbrains.annotations.Nullable;
 public class MemoryDecompiler extends AbstractDecompiler
 {
     /**
-     *
+     * Initialises a new instance of this class.
      */
-    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
+    public MemoryDecompiler()
     {
+        setSuccessfulDecompilationAftermathHandler(new DecompilationAftermathHandler()
         {
-            put(ResultType.NON_FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
-                                                                           descriptor,
-                                                                           targetClass,
-                                                                           output,
-                                                                           err);
-                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
-                                                               "error",
-                                                               err.toString());
-                        return file;
-                    }
-                });
-            put(ResultType.FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        ConsoleContext consoleContext = context.getConsoleContext();
-                        consoleContext.addMessage(ConsoleEntryType.LIBRARY_OPERATION,
-                                                  "error",
-                                                  err.toString());
-                        consoleContext.setWorthDisplaying(true);
-                        return null;
-                    }
-                });
-            put(ResultType.SUCCESS,
-                new DecompilationAftermathHandler()
-                {
                     @Nullable
                     public VirtualFile execute(@NotNull DecompilationContext context,
                                                @NotNull DecompilationDescriptor descriptor,
@@ -121,9 +79,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                     }
                 });
         }
-    };
-    
-    /** {@javadocInherited} */
+
+    /** {@inheritDoc} */
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
@@ -144,7 +101,8 @@ public class MemoryDecompiler extends AbstractDecompiler
     {
         final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
         MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION,
-                                                       content);
+                                                       new SourceReorganiser().reorganise(context,
+                                                                                          content));
         vfs.addFile(file);
 
         final Project project = context.getProject();
@@ -184,6 +142,10 @@ public class MemoryDecompiler extends AbstractDecompiler
                     }
                 }
             });
+
+            reformatToStyle(context, file);
+            file.setWritable(false);
+
             FileEditorManager.getInstance(project).openFile(file,
                                                             true);
 
@@ -198,10 +160,15 @@ public class MemoryDecompiler extends AbstractDecompiler
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void updateCommand(StringBuilder command)
     {
         command.append(" -p ");
+        if (command.indexOf(" -lnc ") == -1)
+        {
+            // technically it wouldn't hurt to have this present twice, but this is neater
+            command.append(" -lnc ");
+        }
     }
 
     /**
@@ -236,14 +203,7 @@ public class MemoryDecompiler extends AbstractDecompiler
         return resultType;
     }
 
-    /** {@javadocInherited} */
-    @NotNull
-    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
-    {
-        return decompilationAftermathHandlers.get(resultType);
-    }
-
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {

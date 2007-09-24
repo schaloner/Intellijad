@@ -50,13 +50,13 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         fireFileCreated(file);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public String getProtocol()
     {
         return IntelliJadConstants.INTELLIJAD_PROTOCOL;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public VirtualFile findFileByPath(@NotNull String string)
     {
@@ -97,33 +97,33 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void refresh(boolean b)
     {
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public VirtualFile refreshAndFindFileByPath(String string)
     {
         return files.get(string);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void forceRefreshFiles(boolean b,
                                   @NotNull VirtualFile... virtualFiles)
     {
         // kept for compatibility with Idea 6
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void deleteFile(Object object,
                               VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void moveFile(Object object,
                             VirtualFile virtualFile,
                             VirtualFile virtualFile1) throws IOException
@@ -133,7 +133,7 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
                   (MemoryVirtualFile) virtualFile1);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void renameFile(Object object,
                               VirtualFile virtualFile,
                               String string) throws IOException
@@ -143,7 +143,7 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
                   (MemoryVirtualFile) virtualFile);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected MemoryVirtualFile createChildFile(Object object,
                                                 VirtualFile parent,
                                                 String name) throws IOException
@@ -155,7 +155,7 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected MemoryVirtualFile createChildDirectory(Object object,
                                                      VirtualFile parent,
                                                      String name) throws IOException
@@ -173,13 +173,6 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
      */
     private void fireFileCreated(final VirtualFile file)
     {
-//        final VirtualFileEvent e = new VirtualFileEvent(null,
-//                                                        file,
-//                                                        file.getName(),
-//                                                        file.getParent());
-//        for (VirtualFileListener listener : listeners) {
-//            listener.fileCreated(e);
-//        }
         ApplicationManager.getApplication().runWriteAction(new Runnable()
         {
             public void run()
@@ -190,7 +183,7 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         });
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NonNls
     @NotNull
     public String getComponentName()
@@ -198,14 +191,14 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         return "MemoryFileSystem";
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void initComponent()
     {
         MemoryVirtualFile root = new MemoryVirtualFile(IntelliJadConstants.INTELLIJAD_ROOT);
         addFile(root);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void disposeComponent()
     {
         files.clear();
@@ -270,34 +263,33 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         return child;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectOpened()
     {
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void projectClosed()
     {
         files.clear();
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void addVirtualFileListener(VirtualFileListener listener)
     {
-        System.out.println("MemoryVirtualFileSystem.addVirtualFileListener: " + listener);
         if (listener != null)
         {
             listeners.add(listener);
         }
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void removeVirtualFileListener(VirtualFileListener listener)
     {
         listeners.remove(listener);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected VirtualFile copyFile(Object o,
                                    VirtualFile virtualFile,
                                    VirtualFile virtualFile1,
@@ -305,7 +297,7 @@ public class MemoryVirtualFileSystem extends DeprecatedVirtualFileSystem impleme
         return null;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public boolean isReadOnly() {
         return false;
     }

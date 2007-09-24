@@ -1,7 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+
 <idea-plugin>
     <name>IntelliJad</name>
     <description>Jad Java Decompiler plugin</description>
-    <version>0.1</version>
+    <version>0.4</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -13,8 +16,8 @@
             <implementation-class>net.stevechaloner.intellijad.config.ApplicationConfigComponent</implementation-class>
         </component>
         <component>
-            <interface-class>com.intellij.openapi.vfs.VirtualFileSystem</interface-class>
             <implementation-class>net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem</implementation-class>
+            <interface-class>com.intellij.openapi.vfs.VirtualFileSystem</interface-class>
         </component>
     </application-components>
 
@@ -35,6 +38,16 @@
     </actions>
 
     <helpset file="intellijad-help.jar" path="/helpset.hs"/>
+
+    <change-notes>
+        <![CDATA[
+        <ul>
+            <li>0.3 - Memory decompilation now results in source code that is debuggable.</li>
+            <li>0.2 - Added more icons to console tree renderer; added more help content.</li>
+            <li>0.1 - Initial release.</li>
+        </ul>
+        ]]>
+    </change-notes>
 
 </idea-plugin>
 

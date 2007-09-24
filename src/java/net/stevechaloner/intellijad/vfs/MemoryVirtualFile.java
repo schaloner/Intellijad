@@ -49,7 +49,13 @@ public class MemoryVirtualFile extends VirtualFile
      * The parent of this file.  If this file is at the root of the file
      * system, it will not have a parent.
      */
+    @Nullable
     private VirtualFile parent;
+
+    /**
+     * Immutability flag
+     */
+    private boolean writable = true;
 
     /**
      * Initialises a new instance of this class.
@@ -95,7 +101,7 @@ public class MemoryVirtualFile extends VirtualFile
         this.isDirectory = isDirectory;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     @NonNls
     public String getName()
@@ -103,45 +109,59 @@ public class MemoryVirtualFile extends VirtualFile
         return name;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     public VirtualFileSystem getFileSystem()
     {
         return VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public String getPath()
     {
         VirtualFile parent = getParent();
         return (parent == null) ? name : parent.getPath() + '/' + name;
     }
 
-    /** {@javadocInherited} */
-    public boolean isWritable()
+    /**
+     * Sets the writable status of the file.
+     *
+     * @param writable true if the file is writable
+     */
+    public void setWritable(boolean writable)
     {
-        return true;
+        this.writable = writable;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
+    public boolean isWritable()
+    {
+        return writable;
+    }
+
+    /** {@inheritDoc} */
     public boolean isDirectory()
     {
         return isDirectory;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public boolean isValid()
     {
         return true;
     }
 
-    /** {@javadocInherited} */
-    public void setParent(VirtualFile parent)
+    /**
+     * Sets the parent of this file.
+     *
+     * @param parent the parent
+     */
+    public void setParent(@Nullable VirtualFile parent)
     {
         this.parent = parent;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public VirtualFile getParent()
     {
@@ -168,13 +188,13 @@ public class MemoryVirtualFile extends VirtualFile
         }
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public VirtualFile[] getChildren()
     {
         return children.values().toArray(new VirtualFile[children.size()]);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public OutputStream getOutputStream(Object object,
                                         long l,
                                         long l1) throws IOException
@@ -182,32 +202,32 @@ public class MemoryVirtualFile extends VirtualFile
         return new ByteArrayOutputStream();
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public byte[] contentsToByteArray() throws IOException
     {
         return content.getBytes();
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public long getTimeStamp()
     {
         return 0L;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public long getLength()
     {
         return content.getBytes().length;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void refresh(boolean b,
                         boolean b1,
                         Runnable runnable)
     {
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public InputStream getInputStream() throws IOException
     {
         return new ByteArrayInputStream(content.getBytes());
@@ -225,13 +245,13 @@ public class MemoryVirtualFile extends VirtualFile
         return children.get(name);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public long getModificationStamp()
     {
         return 0L;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     public String getUrl() {
         return IntelliJadConstants.INTELLIJAD_SCHEMA + getPath();

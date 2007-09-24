@@ -15,11 +15,11 @@
 
 package net.stevechaloner.intellijad.console;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Steve Chaloner
@@ -59,6 +59,7 @@ class ConsoleTreeNode extends DefaultMutableTreeNode
         return children;
     }
 
+    /** {@inheritDoc} */
     public String toString()
     {
         return message;

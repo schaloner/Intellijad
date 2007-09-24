@@ -52,7 +52,7 @@ class JarDecompilationDescriptorFactory extends DecompilationDescriptorFactory
                                               getJarFile(target));
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public void update(@NotNull DecompilationDescriptor dd,
                        @NotNull String classContent)
     {

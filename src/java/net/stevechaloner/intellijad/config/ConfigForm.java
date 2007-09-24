@@ -95,8 +95,8 @@ public class ConfigForm
     @Control private JButton browseButton1;
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
+    @Control private JCheckBox reformatAccordingToStyleCheckBox;
     private JCheckBox useProjectSpecificIntelliJadCheckBox;
-    private JCheckBox reformatAccordingToStyleCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
@@ -599,7 +599,7 @@ public class ConfigForm
             setValue(value);
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public void setValue(Object object)
         {
             int value = ((Number) object).intValue();
@@ -610,7 +610,7 @@ public class ConfigForm
             super.setValue(object);
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public Object getNextValue()
         {
             Number number = getNumber();
@@ -632,7 +632,7 @@ public class ConfigForm
             return next;
         }
 
-        /** {@javadocInherited} */
+        /** {@inheritDoc} */
         public Object getPreviousValue()
         {
             Number number = getNumber();

@@ -59,52 +59,10 @@ public class FileSystemDecompiler extends AbstractDecompiler
     /**
      *
      */
-    private final Map<ResultType, DecompilationAftermathHandler> decompilationAftermathHandlers = new HashMap<ResultType, DecompilationAftermathHandler>()
+    public FileSystemDecompiler()
     {
+            setSuccessfulDecompilationAftermathHandler(new DecompilationAftermathHandler()
         {
-            put(ResultType.NON_FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        VirtualFile file = get(ResultType.SUCCESS).execute(context,
-                                                                           descriptor,
-                                                                           targetClass,
-                                                                           output,
-                                                                           err);
-                        context.getConsoleContext().addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
-                                                               "error",
-                                                               err.toString());
-                        return file;
-                    }
-                });
-            put(ResultType.FATAL_ERROR,
-                new DecompilationAftermathHandler()
-                {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        ConsoleContext consoleContext = context.getConsoleContext();
-                        consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
-                                                  "error",
-                                                   err.toString());
-                        consoleContext.setWorthDisplaying(true);
-
-                        return null;
-                    }
-                });
-            put(ResultType.SUCCESS,
-                new DecompilationAftermathHandler()
-                {
                     private VirtualFile getFile(DecompilationContext context,
                                                 DecompilationDescriptor descriptor)
                     {
@@ -154,9 +112,8 @@ public class FileSystemDecompiler extends AbstractDecompiler
                     }
                 });
         }
-    };
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected OperationStatus setup(DecompilationDescriptor descriptor,
                                     DecompilationContext context) throws DecompilationException
     {
@@ -239,6 +196,10 @@ public class FileSystemDecompiler extends AbstractDecompiler
                             }
                         }
                     });
+
+                    reformatToStyle(context,
+                                    file);
+
                     FileEditorManager.getInstance(project).openFile(file,
                                                                     true);
                 }
@@ -255,7 +216,7 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return file;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     protected void updateCommand(StringBuilder builder)
     {
         builder.append(" -o -r ");
@@ -295,16 +256,11 @@ public class FileSystemDecompiler extends AbstractDecompiler
         return (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
     }
 
-    @NotNull
-    protected DecompilationAftermathHandler getDecompilationAftermathHandler(@NotNull ResultType resultType)
-    {
-        return decompilationAftermathHandlers.get(resultType);
-    }
-
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
+        // todo somewhere around here we need to reorder the code
         final LocalFileSystem vfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
         VirtualFile file = vfs.findFileByPath(descriptor.getPath());
         // todo implement this!

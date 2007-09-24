@@ -38,14 +38,14 @@ public class FileSystemDecompilationDescriptor extends DecompilationDescriptor
         super(classFile);
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @Nullable
     public ClassPathType getClassPathType()
     {
         return ClassPathType.FS;
     }
 
-    /** {@javadocInherited} */
+    /** {@inheritDoc} */
     @NotNull
     public File getSourceFile(@NotNull File availableDirectory)
     {

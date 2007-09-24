@@ -73,7 +73,11 @@ public class ConsoleManager {
     {
         synchronized (consoles)
         {
-            consoles.get(project).disposeConsole();
+            IntelliJadConsole console = consoles.get(project);
+            if (console != null)
+            {
+                console.disposeConsole();
+            }
             consoles.remove(project);
         }
     }

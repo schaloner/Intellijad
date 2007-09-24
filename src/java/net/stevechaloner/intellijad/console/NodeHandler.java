@@ -8,23 +8,23 @@ package net.stevechaloner.intellijad.console;
 public interface NodeHandler
 {
     /**
-     * Expand the given node.
+     * Expands the given node.
      *
      * @param node the node to expand
      */
     void expand(ConsoleTreeNode node);
 
     /**
-     * Collapse the given node.
+     * Collapses the given node.
      *
-     * @param node the node to collape
+     * @param node the node to collapse
      */
     void collapse(ConsoleTreeNode node);
 
     /**
      * Select the given node.
      *
-     * @param node the node to select
+     * @param node
      */
     void select(ConsoleTreeNode node);
 }

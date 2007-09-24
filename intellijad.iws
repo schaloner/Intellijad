@@ -5,7 +5,7 @@
     <option name="ANALYSIS_IN_BACKGROUND" value="true" />
   </component>
   <component name="BookmarkManager">
-    <editor_bookmark url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" line="169" />
+    <editor_bookmark url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" line="172" />
   </component>
   <component name="ChangeBrowserSettings">
     <option name="MAIN_SPLITTER_PROPORTION" value="0.3" />
@@ -23,13 +23,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleEntryType.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleEntryType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigComponent.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigComponent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/help/help-content/excludes.html" afterPath="$PROJECT_DIR$/src/help/help-content/excludes.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileDialog.form" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptor.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/LibraryUtil.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/LibraryUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeModel.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeModel.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.form" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/NavigationTriggeredDecompile.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/NavigationTriggeredDecompile.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/SwingUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/DebugAligner.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/StyleReformatter.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/StyleReformatter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/JarDecompilationDescriptorFactory.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/JarDecompilationDescriptorFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/JarDecompilationDescriptor.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/JarDecompilationDescriptor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/messages-i18n.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ProjectConfigComponent.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ProjectConfigComponent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ImmutableCommandLinePropertyDescriptor.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ImmutableCommandLinePropertyDescriptor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompilePopup.form" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileDialog.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ApplicationConfigComponent.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ApplicationConfigComponent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFileSystem.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFileSystem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileAction.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.iml" afterPath="$PROJECT_DIR$/intellijad.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory/MemoryDecompiler.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory/MemoryDecompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompilePopup.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/SourceReorganiser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptorFactory.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptorFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeCellRenderer.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeCellRenderer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.form" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.ipr" afterPath="$PROJECT_DIR$/intellijad.ipr" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/PluginUtil.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/PluginUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.iml" afterPath="$PROJECT_DIR$/intellijad.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/StreamPumper.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/StreamPumper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/NodeHandler.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/NodeHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeNode.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleTreeNode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ExclusionTableModel.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijad.iws" afterPath="$PROJECT_DIR$/intellijad.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/NavigationDecompileListener.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/NavigationDecompileListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFile.java" afterPath="$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFile.java" />
     </list>
     <list name="Failed commit: Default" comment="FileSystemDecompilation classes somehow got dropped from SVN (IntelliJ refactoring bug?) - adding them back in" />
   </component>
@@ -99,7 +138,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java" line="309" class="net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler" package="net.stevechaloner.intellijad.decompilers.fs">
+      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java" line="265" class="net.stevechaloner.intellijad.decompilers.fs.FileSystemDecompiler" package="net.stevechaloner.intellijad.decompilers.fs">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -112,7 +151,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java" line="113" class="net.stevechaloner.intellijad.decompilers.AbstractDecompiler" package="net.stevechaloner.intellijad.decompilers">
+      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java" line="206" class="net.stevechaloner.intellijad.decompilers.AbstractDecompiler" package="net.stevechaloner.intellijad.decompilers">
         <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -125,33 +164,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptorFactory.java" line="46" class="net.stevechaloner.intellijad.decompilers.FileSystemDecompilationDescriptorFactory" package="net.stevechaloner.intellijad.decompilers">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory/MemoryDecompiler.java" line="174" class="Class at MemoryDecompiler.java:174" package="net.stevechaloner.intellijad.decompilers.memory">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java" line="152" class="net.stevechaloner.intellijad.console.IntelliJadConsole" package="net.stevechaloner.intellijad.console">
+      <breakpoint url="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/FileSystemDecompilationDescriptorFactory.java" line="47" class="net.stevechaloner.intellijad.decompilers.FileSystemDecompilationDescriptorFactory" package="net.stevechaloner.intellijad.decompilers">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -199,22 +212,22 @@
     </breakpoint_any>
     <breakpoint_rules />
     <ui_properties>
-      <property name="exception_breakpoints_flattenPackages" value="true" />
-      <property name="line_breakpoints_groupByClasses" value="true" />
-      <property name="exception_breakpoints_groupByMethods" value="false" />
-      <property name="method_breakpoints_viewId" value="TABLE" />
+      <property name="line_breakpoints_groupByMethods" value="false" />
       <property name="line_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_flattenPackages" value="true" />
+      <property name="method_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_flattenPackages" value="true" />
+      <property name="exception_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_groupByMethods" value="false" />
+      <property name="method_breakpoints_viewId" value="TABLE" />
+      <property name="line_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_groupByClasses" value="true" />
+      <property name="exception_breakpoints_viewId" value="TABLE" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
-      <property name="field_breakpoints_flattenPackages" value="true" />
-      <property name="line_breakpoints_flattenPackages" value="true" />
-      <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_groupByClasses" value="true" />
-      <property name="method_breakpoints_flattenPackages" value="true" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
-      <property name="line_breakpoints_groupByMethods" value="false" />
-      <property name="method_breakpoints_groupByClasses" value="true" />
-      <property name="field_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
   <component name="ErrorTreeViewConfiguration">
@@ -236,20 +249,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PluginUtil.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/PluginUtil.java">
+      <file leaf-file-name="LibraryUtil.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/LibraryUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="0" selection-start="636" selection-end="636" vertical-scroll-proportion="0.06185567">
+            <state line="35" column="13" selection-start="1283" selection-end="1283" vertical-scroll-proportion="-0.31432974">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MemoryVirtualFileSystem.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFileSystem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="38" column="44" selection-start="1191" selection-end="1191" vertical-scroll-proportion="-3.8690293">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DecompileAction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileAction.java">
+      <file leaf-file-name="AbstractDecompiler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="104" selection-start="2329" selection-end="2329" vertical-scroll-proportion="0.47938144">
-              <folding />
+            <state line="57" column="5" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.4622496">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -257,69 +283,18 @@
       <file leaf-file-name="MemoryDecompiler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory/MemoryDecompiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="174" column="0" selection-start="8561" selection-end="8561" vertical-scroll-proportion="0.0154639175">
+            <state line="97" column="14" selection-start="4196" selection-end="4196" vertical-scroll-proportion="1.6163328">
               <folding>
-                <marker date="1188817279000" expanded="false" signature="657:2071" placeholder="..." />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DecompilationDescriptor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/DecompilationDescriptor.java">
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="105" column="8" selection-start="2956" selection-end="2956" vertical-scroll-proportion="0.0154639175">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileSystemDecompiler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="13" selection-start="2289" selection-end="2289" vertical-scroll-proportion="0.0154639175">
-              <folding>
-                <marker date="1188817279000" expanded="false" signature="653:2119" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StyleReformatter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/StyleReformatter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="61" selection-start="2728" selection-end="2745" vertical-scroll-proportion="0.6494845">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IntelliJad.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="152" column="62" selection-start="5788" selection-end="5788" vertical-scroll-proportion="0.0154639175">
-              <folding>
-                <marker date="1188892238000" expanded="false" signature="638:2308" placeholder="..." />
-                <marker date="1188892238000" expanded="true" signature="8782:8972" placeholder="/**...*/" />
-                <marker date="1188892238000" expanded="true" signature="9140:9351" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IntelliJadConstants.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJadConstants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="39" selection-end="629" vertical-scroll-proportion="0.0154639175">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ConsoleManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="12" selection-start="1633" selection-end="1633" vertical-scroll-proportion="0.57216495">
+            <state line="4" column="26" selection-start="164" selection-end="164" vertical-scroll-proportion="0.0952381">
               <folding />
             </state>
           </provider>
@@ -348,12 +323,124 @@
     <subPane>
       <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad.ipr" />
+          <option name="myItemId" value="intellijad" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="intellijad" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="com" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="com" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellij" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="com" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellij" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="openapi" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="net.stevechaloner.intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="net.stevechaloner.intellijad" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="util" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
         </PATH_ELEMENT>
       </PATH>
     </subPane>
@@ -409,88 +496,6 @@
           <option name="myItemId" value="intellijad" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Libraries" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugin-lib" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar!/net/stevechaloner/idea/util" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Libraries" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugin-lib" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar!/net/stevechaloner/idea/util" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar!/net/stevechaloner/idea/util/paths" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Libraries" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugin-lib" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/lib/plugin-lib.jar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Libraries" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
-        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -503,160 +508,6 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -709,43 +560,43 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <showStructure PackagesPane="false" Scope="false" Favorites="false" ProjectPane="false" />
+      <showStructure Favorites="false" Scope="false" PackagesPane="false" ProjectPane="false" />
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
     </navigator>
   </component>
   <component name="PropertiesComponent">
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="cvs_file_history_treeWidth0" value="230" />
-    <property name="cvs_file_history_flatWidth2" value="230" />
-    <property name="cvs_file_history_treeOrder1" value="1" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="cvs_file_history_flatOrder1" value="1" />
-    <property name="cvs_file_history_flatWidth1" value="230" />
-    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
-    <property name="cvs_file_history_treeWidth1" value="230" />
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="cvs_file_history_flatOrder2" value="2" />
-    <property name="cvs_file_history_treeWidth2" value="230" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="cvs_file_history_flatOrder3" value="3" />
-    <property name="RunManagerConfig.showSettingsBeforeRunnig" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="RunManagerConfig.compileBeforeRunning" value="true" />
-    <property name="cvs_file_history_flatOrder0" value="0" />
-    <property name="cvs_file_history_treeOrder3" value="3" />
-    <property name="last_opened_file_path" value="/home/steve/intellijad-help/help-content" />
-    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
-    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
-    <property name="cvs_file_history_treeWidth3" value="229" />
     <property name="cvs_file_history_treeOrder2" value="2" />
+    <property name="cvs_file_history_treeOrder1" value="1" />
+    <property name="RunManagerConfig.showSettingsBeforeRunnig" value="false" />
+    <property name="cvs_file_history_treeOrder3" value="3" />
     <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
-    <property name="cvs_file_history_flatWidth0" value="230" />
-    <property name="cvs_file_history_flatWidth3" value="229" />
-    <property name="cvs_file_history_treeOrder0" value="0" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="last_opened_file_path" value="/home/steve/intellijad-help/help-content" />
     <property name="ExternalAnnotations" value="true" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="cvs_file_history_treeWidth0" value="230" />
+    <property name="cvs_file_history_treeWidth1" value="230" />
+    <property name="cvs_file_history_treeWidth2" value="230" />
+    <property name="cvs_file_history_flatWidth2" value="230" />
+    <property name="cvs_file_history_treeWidth3" value="229" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="cvs_file_history_treeOrder0" value="0" />
+    <property name="cvs_file_history_flatWidth3" value="229" />
+    <property name="cvs_file_history_flatWidth0" value="230" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="cvs_file_history_flatWidth1" value="230" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="RunManagerConfig.compileBeforeRunning" value="true" />
+    <property name="cvs_file_history_flatOrder2" value="2" />
+    <property name="cvs_file_history_flatOrder3" value="3" />
+    <property name="cvs_file_history_flatOrder0" value="0" />
+    <property name="cvs_file_history_flatOrder1" value="1" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -770,31 +621,56 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RunManager" selected="Plugin.intellijad">
-    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <module name="" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="intellijad" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="intellijad" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG" enabled="false" merge="false">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+      <method>
+        <option name="Make" value="true" />
+      </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <module name="" />
@@ -816,17 +692,19 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <module name="" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
     </configuration>
     <configuration default="false" name="intellijad" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="intellijad" />
@@ -845,6 +723,9 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Plugin.intellijad" />
+    </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -883,6 +764,32 @@
           <option name="myItemType" value="" />
         </PATH_ELEMENT>
         <PATH_ELEMENT USER_OBJECT="net/stevechaloner/intellijad">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT USER_OBJECT="Root">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT USER_OBJECT="intellijad">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT USER_OBJECT="src">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT USER_OBJECT="java">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT USER_OBJECT="net/stevechaloner/intellijad">
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT USER_OBJECT="util">
           <option name="myItemId" value="" />
           <option name="myItemType" value="" />
         </PATH_ELEMENT>
@@ -1052,39 +959,39 @@
     <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32753062" order="3" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.243069" order="0" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3269962" order="1" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24564797" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3165399" order="8" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39942804" order="5" />
-      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
-      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="10" />
-      <window_info id="Palette" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32221162" order="16" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32946485" order="1" />
-      <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32792208" order="11" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32794678" order="2" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24923077" order="2" />
+      <window_info id="Palette" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32221162" order="16" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32495165" order="1" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3269962" order="1" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45627376" order="3" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32419354" order="13" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31558937" order="8" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" order="7" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24564797" order="1" />
+      <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
+      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24693745" order="0" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="10" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24923077" order="2" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39942804" order="5" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298279" order="8" />
-      <window_info id="SVN Repositories" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32903227" order="14" />
-      <window_info id="SQL" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32794678" order="2" />
       <window_info id="DSM" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" order="3" x="100" y="100" width="1400" height="974" />
-      <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32923076" order="3" />
+      <window_info id="simpleUML" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.9927386" order="3" />
+      <window_info id="SVN Repositories" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32903227" order="14" />
+      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="5" />
+      <window_info id="RMI Explorer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="6" />
+      <window_info id="SQL" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="0" />
       <window_info id="IntelliJad Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32604563" order="9" />
-      <window_info id="simpleUML" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.9927386" order="3" />
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="15" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
-      <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="4" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="6" />
-      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="5" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="0" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
-      <window_info id="RMI Explorer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
+      <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="4" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="15" />
+      <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
     </layout>
   </component>
   <component name="VCS.FileViewConfiguration">
@@ -1108,13 +1015,11 @@
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
     <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
     <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
-    <option name="ERROR_OCCURED" value="false" />
     <option name="ACTIVE_VCS_NAME" value="svn" />
     <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Updated plugin-lib" />
     <MESSAGE value="Fixed memory-decompilation stream pumping" />
     <MESSAGE value="Added Ant build file" />
     <MESSAGE value="- Fixed Javac2 classpath for building plugin outside of IntelliJ&#10;- Added build.properties file" />
@@ -1166,24 +1071,6 @@
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="true" />
     <option name="FILTER_TARGETS" value="true" />
-    <buildFile url="file://$PROJECT_DIR$/build.xml">
-      <antCommandLine value="" />
-      <runInBackground value="true" />
-      <targetFilters>
-        <filter targetName="-cleanup" isVisible="false" />
-        <filter targetName="-compile" isVisible="false" />
-        <filter targetName="-compile.forms" isVisible="false" />
-        <filter targetName="-init" isVisible="false" />
-        <filter targetName="-jar-help" isVisible="false" />
-        <filter targetName="-package.src" isVisible="false" />
-        <filter targetName="-zip" isVisible="false" />
-        <filter targetName="build" isVisible="true" />
-        <filter targetName="clean" isVisible="true" />
-      </targetFilters>
-      <treeView value="true" />
-      <verbose value="true" />
-      <viewClosedWhenNoErrors value="false" />
-    </buildFile>
   </component>
   <component name="com.intellij.ide.util.scopeChooser.ScopeChooserConfigurable" proportions="" version="1">
     <option name="myLastEditedConfigurable" />
@@ -1196,118 +1083,114 @@
     <option name="myLastEditedConfigurable" value="Default" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/vfs/VirtualFileSystem.class">
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="45" column="10" selection-start="1683" selection-end="1683" vertical-scroll-proportion="0.31512606">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFileSystem.java">
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ApplicationConfigComponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="54" selection-start="1668" selection-end="1668" vertical-scroll-proportion="0.0154639175">
-          <folding>
-            <marker date="1188817279000" expanded="false" signature="50:771" placeholder="..." />
-          </folding>
+        <state line="142" column="10" selection-start="3558" selection-end="3558" vertical-scroll-proportion="0.7828335">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/actionSystem/DataConstants.class">
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="820" column="10" selection-start="30932" selection-end="30932" vertical-scroll-proportion="0.2909664">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="172" column="10" selection-start="4406" selection-end="4406" vertical-scroll-proportion="0.6691176">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ConfigForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="634" column="14" selection-start="25735" selection-end="25735" vertical-scroll-proportion="0.44852942">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/ImmutableCommandLinePropertyDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="10" selection-start="3572" selection-end="3572" vertical-scroll-proportion="0.4642857">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/config/CommandLinePropertyDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="17" selection-start="1043" selection-end="1043" vertical-scroll-proportion="0.18907563">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="236" column="52" selection-start="5690" selection-end="5690" vertical-scroll-proportion="0.89484537">
+        <state line="16" column="11" selection-start="470" selection-end="470" vertical-scroll-proportion="0.25210086">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="19" selection-start="2784" selection-end="2784" vertical-scroll-proportion="0.024193548">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/plugin-lib.jar!/net/stevechaloner/idea/util/paths/Path.class">
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/wm/ToolWindowManager.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/PluginUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/IntelliJadConsole.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="636" selection-end="636" vertical-scroll-proportion="0.06185567">
+        <state line="166" column="52" selection-start="5239" selection-end="5239" vertical-scroll-proportion="0.014910537">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/actions/DecompileAction.java">
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/util/LibraryUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="104" selection-start="2329" selection-end="2329" vertical-scroll-proportion="0.47938144">
+        <state line="35" column="13" selection-start="1283" selection-end="1283" vertical-scroll-proportion="-0.31432974">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/vfs/MemoryVirtualFileSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="44" selection-start="1191" selection-end="1191" vertical-scroll-proportion="-3.8690293">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/AbstractDecompiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="5" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.4622496">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/memory/MemoryDecompiler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="174" column="0" selection-start="8561" selection-end="8561" vertical-scroll-proportion="0.0154639175">
+        <state line="97" column="14" selection-start="4196" selection-end="4196" vertical-scroll-proportion="1.6163328">
           <folding>
-            <marker date="1188817279000" expanded="false" signature="657:2071" placeholder="..." />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/DecompilationDescriptor.java">
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="8" selection-start="2956" selection-end="2956" vertical-scroll-proportion="0.0154639175">
+        <state line="4" column="26" selection-start="164" selection-end="164" vertical-scroll-proportion="0.0952381">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/decompilers/fs/FileSystemDecompiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="13" selection-start="2289" selection-end="2289" vertical-scroll-proportion="0.0154639175">
-          <folding>
-            <marker date="1188817279000" expanded="false" signature="653:2119" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/format/StyleReformatter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="61" selection-start="2728" selection-end="2745" vertical-scroll-proportion="0.6494845">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJadConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="39" selection-end="629" vertical-scroll-proportion="0.0154639175">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/console/ConsoleManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="12" selection-start="1633" selection-end="1633" vertical-scroll-proportion="0.57216495">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/net/stevechaloner/intellijad/IntelliJad.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="152" column="62" selection-start="5788" selection-end="5788" vertical-scroll-proportion="0.0154639175">
-          <folding>
-            <marker date="1188892238000" expanded="false" signature="638:2308" placeholder="..." />
-            <marker date="1188892238000" expanded="true" signature="8782:8972" placeholder="/**...*/" />
-            <marker date="1188892238000" expanded="true" signature="9140:9351" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>

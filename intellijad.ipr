@@ -2,13 +2,6 @@
 <project relativePaths="false" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
-    <buildFile url="file://$PROJECT_DIR$/build.xml">
-      <additionalClassPath />
-      <antReference projectDefault="true" />
-      <customJdkName value="" />
-      <maximumHeapSize value="128" />
-      <properties />
-    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -83,59 +76,59 @@
   </component>
   <component name="IntelliJadProjectConfigComponent">
     <config>
-      <dis type="boolean">false</dis>
       <lnc type="boolean">false</lnc>
-      <lradix type="integer">10</lradix>
-      <pp type="string">_prm</pp>
-      <pc type="string">_cls</pc>
-      <pf type="string">_fld</pf>
-      <noconv type="boolean">false</noconv>
-      <pe type="string">_ex</pe>
-      <noinner type="boolean">false</noinner>
-      <nonlb type="boolean">false</nonlb>
-      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
-      <a type="boolean">false</a>
-      <af type="boolean">false</af>
-      <nocast type="boolean">false</nocast>
-      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
       <v type="boolean">false</v>
-      <confirm-navigation-triggered-decompile type="string">Ask</confirm-navigation-triggered-decompile>
-      <nolvt type="boolean">false</nolvt>
-      <t type="boolean">false</t>
-      <o type="boolean">false</o>
-      <f type="boolean">false</f>
-      <dead type="boolean">false</dead>
       <clear type="boolean">false</clear>
-      <read-only type="boolean">false</read-only>
-      <ff type="boolean">false</ff>
-      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
-      <pl type="string">_lcl</pl>
-      <safe type="boolean">false</safe>
-      <reformat-according-to-style type="boolean">false</reformat-according-to-style>
-      <nl type="boolean">false</nl>
-      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
-      <i type="boolean">false</i>
-      <nodos type="boolean">false</nodos>
-      <nocode type="boolean">false</nocode>
-      <decompile-to-memory type="boolean">false</decompile-to-memory>
-      <stat type="boolean">false</stat>
-      <radix type="integer">10</radix>
-      <create-output-directory type="boolean">false</create-output-directory>
-      <nofd type="boolean">false</nofd>
-      <pa type="string" />
-      <pm type="string">_mth</pm>
-      <b type="boolean">false</b>
       <noclass type="boolean">false</noclass>
-      <sort type="boolean">false</sort>
-      <indentation type="integer">4</indentation>
-      <noctor type="boolean">false</noctor>
-      <d type="string" />
-      <pv type="integer">3</pv>
-      <s type="string">java</s>
+      <af type="boolean">false</af>
       <l type="integer">64</l>
+      <nofd type="boolean">false</nofd>
+      <b type="boolean">false</b>
+      <pl type="string">_lcl</pl>
+      <pv type="integer">3</pv>
+      <a type="boolean">false</a>
+      <pf type="string">_fld</pf>
+      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
+      <t type="boolean">false</t>
+      <noctor type="boolean">false</noctor>
+      <pc type="string">_cls</pc>
+      <reformat-according-to-style type="boolean">false</reformat-according-to-style>
+      <nocode type="boolean">false</nocode>
+      <pe type="string">_ex</pe>
+      <radix type="integer">10</radix>
       <jad-path type="string" />
+      <stat type="boolean">false</stat>
+      <nodos type="boolean">false</nodos>
+      <noconv type="boolean">false</noconv>
+      <i type="boolean">false</i>
+      <d type="string" />
+      <f type="boolean">false</f>
+      <dis type="boolean">false</dis>
+      <pp type="string">_prm</pp>
+      <ff type="boolean">false</ff>
+      <sort type="boolean">false</sort>
+      <create-output-directory type="boolean">false</create-output-directory>
+      <indentation type="integer">4</indentation>
+      <confirm-navigation-triggered-decompile type="string">Ask</confirm-navigation-triggered-decompile>
+      <decompile-to-memory type="boolean">false</decompile-to-memory>
+      <read-only type="boolean">false</read-only>
+      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
+      <lradix type="integer">10</lradix>
       <space type="boolean">false</space>
+      <pa type="string" />
+      <nocast type="boolean">false</nocast>
+      <nonlb type="boolean">false</nonlb>
+      <safe type="boolean">false</safe>
+      <o type="boolean">false</o>
+      <dead type="boolean">false</dead>
+      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
       <r type="boolean">false</r>
+      <pm type="string">_mth</pm>
+      <noinner type="boolean">false</noinner>
+      <nl type="boolean">false</nl>
+      <s type="string">java</s>
+      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
+      <nolvt type="boolean">false</nolvt>
     </config>
   </component>
   <component name="JavacSettings">
@@ -325,6 +318,25 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://intellijad.googlecode.com/svn/branches" />
+                  <option value="https://intellijad.googlecode.com/svn/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://intellijad.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />

@@ -60,7 +60,7 @@
                 </constraints>
                 <properties>
                   <labelFor value="2e560"/>
-                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.confirm-navigation-triggered-decompile"/>
+                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.decompile-on-navigation"/>
                 </properties>
               </component>
               <component id="2e560" class="javax.swing.JComboBox" binding="navTriggeredDecomp">

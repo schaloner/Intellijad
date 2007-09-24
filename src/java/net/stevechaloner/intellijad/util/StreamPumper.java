@@ -15,14 +15,13 @@
 
 package net.stevechaloner.intellijad.util;
 
+import net.stevechaloner.intellijad.console.ConsoleEntryType;
+import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import net.stevechaloner.intellijad.console.ConsoleEntryType;
-import net.stevechaloner.intellijad.decompilers.DecompilationContext;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Pumps the input stream of a process, ensuring it doesn't block.

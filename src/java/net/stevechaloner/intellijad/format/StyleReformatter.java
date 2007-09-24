@@ -30,15 +30,18 @@ import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 
 /**
+ * Reformats the source code of a file to match the preferred source formatting.
+ *
  * @author Steve Chaloner
  */
 public class StyleReformatter
 {
     /**
+     * Reformats the content of the given file to match the IDE settings.
      *
-     * @param context
-     * @param file
-     * @return
+     * @param context the context the decompilation is occurring in
+     * @param file the file representing the source code
+     * @return true if reformatted
      */
     public static boolean reformat(final DecompilationContext context,
                                    final VirtualFile file)

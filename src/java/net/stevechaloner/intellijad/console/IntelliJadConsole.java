@@ -20,23 +20,27 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
-import net.stevechaloner.intellijad.IntelliJad;
-import net.stevechaloner.intellijad.IntelliJadConstants;
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginUtil;
-import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.util.PluginUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The console for IntelliJad messages to the user.
@@ -75,6 +79,7 @@ public class IntelliJadConsole implements NodeHandler
     private JTree consoleTree;
     private JButton expandAll;
     private JButton collapseAll;
+    private JScrollPane scrollPane;
 
     /**
      * Initialisation flag for JIT setup.
@@ -103,6 +108,7 @@ public class IntelliJadConsole implements NodeHandler
         {
             consoleTree.setModel(treeModel);
             consoleTree.setCellRenderer(new ConsoleTreeCellRenderer());
+            consoleTree.setScrollsOnExpand(true);
 
             toolbar.setFloatable(false);
             clearAndCloseOnSuccess.setSelected(PluginUtil.getConfig(project).isClearAndCloseConsoleOnSuccess());
@@ -265,9 +271,12 @@ public class IntelliJadConsole implements NodeHandler
 
     public void select(ConsoleTreeNode node)
     {
-        TreePath treePath = new TreePath((node.getPath()));
-        consoleTree.expandPath(treePath);
-        consoleTree.setSelectionPath(treePath);
-        consoleTree.fireTreeExpanded(treePath);
+        TreePath path = new TreePath((node.getPath()));
+        consoleTree.expandPath(path);
+        consoleTree.setSelectionPath(path);
+        consoleTree.fireTreeExpanded(path);
+
+        List<ConsoleTreeNode> children = node.getChildren();
+        consoleTree.scrollPathToVisible(!children.isEmpty() ? path.pathByAddingChild(children.get(children.size() - 1)) : path);
     }
 }

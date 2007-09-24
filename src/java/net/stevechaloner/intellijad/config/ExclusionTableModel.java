@@ -15,10 +15,11 @@
 
 package net.stevechaloner.intellijad.config;
 
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.table.DefaultTableModel;
+
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Table model for managing automatic decompilation exclusions.
@@ -84,7 +85,7 @@ public class ExclusionTableModel extends DefaultTableModel
             containsPackage = packageName.equals(getValueAt(i, 0));
             if (containsPackage)
             {
-                exclusionType = ((Boolean)getValueAt(i, 0)) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
+                exclusionType = ((Boolean)getValueAt(i, 2)) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
             }
         }
         return exclusionType;

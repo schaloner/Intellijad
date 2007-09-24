@@ -15,22 +15,30 @@
 
 package net.stevechaloner.intellijad.console;
 
-import java.util.List;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
-
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import java.util.List;
+
 /**
+ * Tree model for the console entries, generally of a single project.
  * @author Steve Chaloner
  */
 class ConsoleTreeModel extends DefaultTreeModel
 {
+    /**
+     * The node handler used to control node operations.
+     */
     @NotNull
     private final NodeHandler nodeHandler;
 
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param nodeHandler the node handler
+     */
     public ConsoleTreeModel(@NotNull NodeHandler nodeHandler)
     {
         super(new ConsoleTreeNode(IntelliJadConstants.INTELLIJAD_ROOT,
@@ -38,6 +46,12 @@ class ConsoleTreeModel extends DefaultTreeModel
         this.nodeHandler = nodeHandler;
     }
 
+    /**
+     * Inserts the given child into the given parent.
+     *
+     * @param child the child
+     * @param parent the parent
+     */
     void insertNodeInto(@NotNull ConsoleTreeNode child,
                         @NotNull  ConsoleTreeNode parent)
     {
@@ -46,12 +60,20 @@ class ConsoleTreeModel extends DefaultTreeModel
                              parent.getChildCount());
     }
 
+    /**
+     * Gets the root node of the model.
+     *
+     * @return the root node
+     */
     @NotNull
     ConsoleTreeNode getRootNode()
     {
         return (ConsoleTreeNode)getRoot();
     }
 
+    /**
+     * Clears all entries from the model except the root node.
+     */
     void clear()
     {
         final ConsoleTreeNode root = getRootNode();
@@ -64,9 +86,10 @@ class ConsoleTreeModel extends DefaultTreeModel
     }
 
     /**
+     * Creates a console context (second-level node) within the model.
      *
-     * @param name
-     * @return
+     * @param name the name of the context
+     * @return the context
      */
     ConsoleContext createConsoleContext(@NotNull String name)
     {
@@ -83,6 +106,14 @@ class ConsoleTreeModel extends DefaultTreeModel
                                       nodeHandler);
     }
 
+    /**
+     * Adds a subsection to the given context.
+     *
+     * @param message the message to display as the subsection title
+     * @param consoleContext the context to add the subsection to
+     * @param type the type of the subsection
+     * @return a node containing the subsection
+     */
     @NotNull
     private ConsoleTreeNode addSubsection(@NotNull String message,
                                           @NotNull ConsoleContext consoleContext,
@@ -98,6 +129,13 @@ class ConsoleTreeModel extends DefaultTreeModel
         return subsection;
     }
 
+    /**
+     * Gets a subsection of the given type from the context.
+     *
+     * @param consoleContext the context containing the subsection
+     * @param entryType the entry type of the subsection
+     * @return a node containing the subsection
+     */
     @NotNull
     private ConsoleTreeNode getSubsection(@NotNull ConsoleContext consoleContext,
                                           @NotNull ConsoleEntryType entryType)
@@ -122,6 +160,13 @@ class ConsoleTreeModel extends DefaultTreeModel
         return subsection;
     }
 
+    /**
+     * Adds a message to the indicated subsection.
+     *
+     * @param entryType the entry type indicating the subsection
+     * @param consoleContext the context to place the message in
+     * @param message the message
+     */
     void addMessage(@NotNull ConsoleEntryType entryType,
                     @NotNull ConsoleContext consoleContext,
                     @NotNull String message)
@@ -131,6 +176,12 @@ class ConsoleTreeModel extends DefaultTreeModel
                    message);
     }
 
+    /**
+     * Adds a context-level message.
+     *
+     * @param consoleContext the context to place the message in
+     * @param message the message
+     */
     void addSectionMessage(@NotNull ConsoleContext consoleContext,
                            @NotNull String message)
     {
@@ -138,6 +189,12 @@ class ConsoleTreeModel extends DefaultTreeModel
                    message);
     }
 
+    /**
+     * Inserts a message node into the given parent.
+     *
+     * @param parent the parent
+     * @param message the message
+     */
     private void addMessage(@NotNull ConsoleTreeNode parent,
                             @NotNull String message)
     {
