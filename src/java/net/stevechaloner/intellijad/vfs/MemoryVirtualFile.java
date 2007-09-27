@@ -43,7 +43,7 @@ public class MemoryVirtualFile extends VirtualFile
     /**
      * The children of this file, if the file is a directory.
      */
-    private Map<String, MemoryVirtualFile> children = new HashMap<String, MemoryVirtualFile>();
+    private final Map<String, MemoryVirtualFile> children = new HashMap<String, MemoryVirtualFile>();
 
     /**
      * The parent of this file.  If this file is at the root of the file
@@ -255,5 +255,14 @@ public class MemoryVirtualFile extends VirtualFile
     @NotNull
     public String getUrl() {
         return IntelliJadConstants.INTELLIJAD_SCHEMA + getPath();
+    }
+
+    /**
+     *
+     * @param memoryVirtualFile
+     */
+    public void deleteChild(MemoryVirtualFile memoryVirtualFile)
+    {
+        children.remove(memoryVirtualFile.getName());
     }
 }

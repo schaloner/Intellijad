@@ -17,7 +17,7 @@ package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
-import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
+import net.stevechaloner.intellijad.actions.NavigationListener;
 
 import java.util.List;
 
@@ -71,5 +71,5 @@ public class IntelliJadConstants
     /**
      * The key for retrieving the decompilation listener from the user data.
      */
-    public static final Key<NavigationDecompileListener> DECOMPILE_LISTENER = new Key<NavigationDecompileListener>("decompile-listener");
+    public static final Key<NavigationListener> DECOMPILE_LISTENER = new Key<NavigationListener>("decompile-listener");
 }

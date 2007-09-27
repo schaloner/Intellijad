@@ -76,59 +76,59 @@
   </component>
   <component name="IntelliJadProjectConfigComponent">
     <config>
-      <lnc type="boolean">false</lnc>
-      <v type="boolean">false</v>
-      <clear type="boolean">false</clear>
-      <noclass type="boolean">false</noclass>
-      <af type="boolean">false</af>
-      <l type="integer">64</l>
-      <nofd type="boolean">false</nofd>
-      <b type="boolean">false</b>
-      <pl type="string">_lcl</pl>
-      <pv type="integer">3</pv>
-      <a type="boolean">false</a>
-      <pf type="string">_fld</pf>
-      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
-      <t type="boolean">false</t>
-      <noctor type="boolean">false</noctor>
-      <pc type="string">_cls</pc>
-      <reformat-according-to-style type="boolean">false</reformat-according-to-style>
-      <nocode type="boolean">false</nocode>
-      <pe type="string">_ex</pe>
-      <radix type="integer">10</radix>
-      <jad-path type="string" />
-      <stat type="boolean">false</stat>
-      <nodos type="boolean">false</nodos>
-      <noconv type="boolean">false</noconv>
-      <i type="boolean">false</i>
-      <d type="string" />
-      <f type="boolean">false</f>
-      <dis type="boolean">false</dis>
-      <pp type="string">_prm</pp>
-      <ff type="boolean">false</ff>
-      <sort type="boolean">false</sort>
-      <create-output-directory type="boolean">false</create-output-directory>
-      <indentation type="integer">4</indentation>
-      <confirm-navigation-triggered-decompile type="string">Ask</confirm-navigation-triggered-decompile>
-      <decompile-to-memory type="boolean">false</decompile-to-memory>
       <read-only type="boolean">false</read-only>
-      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
-      <lradix type="integer">10</lradix>
-      <space type="boolean">false</space>
-      <pa type="string" />
-      <nocast type="boolean">false</nocast>
-      <nonlb type="boolean">false</nonlb>
-      <safe type="boolean">false</safe>
-      <o type="boolean">false</o>
-      <dead type="boolean">false</dead>
-      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
-      <r type="boolean">false</r>
-      <pm type="string">_mth</pm>
-      <noinner type="boolean">false</noinner>
       <nl type="boolean">false</nl>
-      <s type="string">java</s>
-      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
+      <lnc type="boolean">false</lnc>
+      <pp type="string">_prm</pp>
+      <nofd type="boolean">false</nofd>
+      <a type="boolean">false</a>
+      <safe type="boolean">false</safe>
+      <b type="boolean">false</b>
+      <l type="integer">64</l>
+      <dis type="boolean">false</dis>
+      <create-output-directory type="boolean">false</create-output-directory>
+      <o type="boolean">false</o>
+      <noclass type="boolean">false</noclass>
       <nolvt type="boolean">false</nolvt>
+      <nonlb type="boolean">false</nonlb>
+      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
+      <i type="boolean">false</i>
+      <sort type="boolean">false</sort>
+      <pm type="string">_mth</pm>
+      <radix type="integer">10</radix>
+      <lradix type="integer">10</lradix>
+      <noctor type="boolean">false</noctor>
+      <pe type="string">_ex</pe>
+      <jad-path type="string" />
+      <space type="boolean">false</space>
+      <pv type="integer">3</pv>
+      <reformat-according-to-style type="boolean">false</reformat-according-to-style>
+      <d type="string" />
+      <pf type="string">_fld</pf>
+      <nodos type="boolean">false</nodos>
+      <ff type="boolean">false</ff>
+      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
+      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
+      <pa type="string" />
+      <noinner type="boolean">false</noinner>
+      <r type="boolean">false</r>
+      <decompile-to-memory type="boolean">false</decompile-to-memory>
+      <s type="string">java</s>
+      <stat type="boolean">false</stat>
+      <af type="boolean">false</af>
+      <dead type="boolean">false</dead>
+      <clear type="boolean">false</clear>
+      <noconv type="boolean">false</noconv>
+      <f type="boolean">false</f>
+      <t type="boolean">false</t>
+      <v type="boolean">false</v>
+      <nocast type="boolean">false</nocast>
+      <pl type="string">_lcl</pl>
+      <nocode type="boolean">false</nocode>
+      <decompile-on-navigation type="string">Always</decompile-on-navigation>
+      <indentation type="integer">4</indentation>
+      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
+      <pc type="string">_cls</pc>
     </config>
   </component>
   <component name="JavacSettings">
@@ -296,7 +296,7 @@
       <module fileurl="file://$PROJECT_DIR$/intellijad.iml" filepath="$PROJECT_DIR$/intellijad.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7126" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7294" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="RMI Configuration">
@@ -341,6 +341,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>

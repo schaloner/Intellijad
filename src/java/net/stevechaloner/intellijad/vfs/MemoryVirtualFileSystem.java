@@ -148,6 +148,10 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
                            VirtualFile virtualFile) throws IOException
     {
         files.remove(virtualFile.getName());
+
+        MemoryVirtualFile memFile = (MemoryVirtualFile)virtualFile;
+        MemoryVirtualFile parent = (MemoryVirtualFile)virtualFile.getParent();
+        parent.deleteChild((MemoryVirtualFile)virtualFile);
     }
 
     /** {@inheritDoc} */
@@ -312,53 +316,68 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
         return false;
     }
 
+    /** {@inheritDoc} */
     public boolean exists(VirtualFile virtualFile)
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return files.containsValue(virtualFile);
     }
 
+    /** {@inheritDoc} */
     public String[] list(VirtualFile virtualFile)
     {
-        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new String[0];
     }
 
+    /** {@inheritDoc} */
     public boolean isDirectory(VirtualFile virtualFile)
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.isDirectory();
     }
 
+    /** {@inheritDoc} */
     public long getTimeStamp(VirtualFile virtualFile)
     {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.getTimeStamp();
     }
 
-    public void setTimeStamp(VirtualFile virtualFile, long l) throws IOException
+    /** {@inheritDoc} */
+    public void setTimeStamp(VirtualFile virtualFile,
+                             long l) throws IOException
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
+    /** {@inheritDoc} */
     public boolean isWritable(VirtualFile virtualFile)
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.isWritable();
     }
 
-    public void setWritable(VirtualFile virtualFile, boolean b) throws IOException
+    /** {@inheritDoc} */
+    public void setWritable(VirtualFile virtualFile,
+                            boolean b) throws IOException
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // no-op
     }
 
+    /** {@inheritDoc} */
     public InputStream getInputStream(VirtualFile virtualFile) throws IOException
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.getInputStream();
     }
 
-    public OutputStream getOutputStream(VirtualFile virtualFile, Object o, long l, long l1) throws IOException
+    /** {@inheritDoc} */
+    public OutputStream getOutputStream(VirtualFile virtualFile,
+                                        Object o,
+                                        long l,
+                                        long l1) throws IOException
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.getOutputStream(o, l, l1);
     }
 
+    /** {@inheritDoc} */
     public long getLength(VirtualFile virtualFile)
     {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return virtualFile.getLength();
     }
 }

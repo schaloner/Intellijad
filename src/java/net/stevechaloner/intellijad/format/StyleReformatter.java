@@ -25,7 +25,6 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import org.jetbrains.annotations.NotNull;
@@ -47,43 +46,31 @@ public class StyleReformatter
     public static boolean reformat(@NotNull final DecompilationContext context,
                                    @NotNull final VirtualFile file)
     {
-        boolean reformatted = false;
-        final FileDocumentManager fileDocManager = FileDocumentManager.getInstance();
-        final Document document = fileDocManager.getDocument(file);
-        if (document != null)
+        final boolean[] result = { false };
+        Reformatter reformatter = new Reformatter()
         {
-            final Project project = context.getProject();
-            final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-            if (psiFile != null)
+            public void run()
             {
-                final boolean[] result = {false};
-                final ConsoleContext consoleContext = context.getConsoleContext();
-                ApplicationManager.getApplication().runWriteAction(new Runnable()
+                CodeStyleManager styleManager = CodeStyleManager.getInstance(context.getProject());
+                try
                 {
-                    public void run()
-                    {
-                        CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
-                        try
-                        {
-                            styleManager.optimizeImports(psiFile);
-                            styleManager.reformat(psiFile);
-                            fileDocManager.saveDocument(document);
-                            result[0] = true;
-                            consoleContext.addSectionMessage(ConsoleEntryType.INFO,
-                                                             "message.reformatting",
-                                                             file.getName());
-                        }
-                        catch (IncorrectOperationException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                reformatted = result[0];
+                    styleManager.optimizeImports(psiFile);
+                    styleManager.reformat(psiFile);
+                    fileDocManager.saveDocument(document);
+                    context.getConsoleContext().addSectionMessage(ConsoleEntryType.INFO,
+                                                                  "message.reformatting",
+                                                                  file.getName());
+                    result[0] = true;
+                }
+                catch (IncorrectOperationException e)
+                {
+                    e.printStackTrace();
+                }
             }
-        }
-
-        return reformatted;
+        };
+        reformatter.execute(context,
+                            file);
+        return result[0];
     }
 
     /**
@@ -96,39 +83,71 @@ public class StyleReformatter
     public static boolean reindent(@NotNull final DecompilationContext context,
                                    @NotNull final VirtualFile file)
     {
-        boolean reindent = false;
-        final FileDocumentManager fileDocManager = FileDocumentManager.getInstance();
-        final Document document = fileDocManager.getDocument(file);
-        if (document != null)
+        final boolean[] result = { false };
+        Reformatter reformatter = new Reformatter()
         {
-            final Project project = context.getProject();
-            final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-            if (psiFile != null)
+            public void run()
             {
-                final boolean[] result = {false};
-                ApplicationManager.getApplication().runWriteAction(new Runnable()
+                CodeStyleManager styleManager = CodeStyleManager.getInstance(context.getProject());
+                try
                 {
-                    public void run()
-                    {
-                        CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
-                        try
-                        {
-                            styleManager.adjustLineIndent(psiFile,
-                                                          new TextRange(0,
-                                                                        document.getTextLength()));
-                            fileDocManager.saveDocument(document);
-                            result[0] = true;
-                        }
-                        catch (IncorrectOperationException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                reindent = result[0];
+                    styleManager.adjustLineIndent(psiFile,
+                                                  new TextRange(0,
+                                                                document.getTextLength()));
+                    fileDocManager.saveDocument(document);
+                    result[0] = true;
+                }
+                catch (IncorrectOperationException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+        reformatter.execute(context,
+                            file);
+        return result[0];
+    }
+
+    /**
+     * Contains common functionality for reformatting operations.
+     */
+    private abstract static class Reformatter implements Runnable
+    {
+        /**
+         * The PSI file.
+         */
+        PsiFile psiFile;
+
+        /**
+         * The file document manager.
+         */
+        FileDocumentManager fileDocManager;
+
+        /**
+         * The document containing the source.
+         */
+        Document document;
+
+        /**
+         * Executes the reformatting operation.
+         * 
+         * @param context the decompilation context
+         * @param file the file representing the source
+         */
+        void execute(@NotNull final DecompilationContext context,
+                     @NotNull final VirtualFile file)
+        {
+            fileDocManager = FileDocumentManager.getInstance();
+            document = fileDocManager.getDocument(file);
+            if (document != null)
+            {
+                final Project project = context.getProject();
+                psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+                if (psiFile != null)
+                {
+                    ApplicationManager.getApplication().runWriteAction(this);
+                }
             }
         }
-
-        return reindent;
     }
 }

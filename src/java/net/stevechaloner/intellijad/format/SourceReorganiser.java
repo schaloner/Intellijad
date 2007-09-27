@@ -244,14 +244,14 @@ public class SourceReorganiser
         private String content;
         private boolean lineNumberAsSuffix;
 
-        public Line(String content)
+        Line(String content)
         {
             this(content,
                  -1,
                  false);
         }
 
-        public Line(String content,
+        Line(String content,
                     int number,
                     boolean lineNumberAsSuffix)
         {
@@ -260,7 +260,7 @@ public class SourceReorganiser
             this.lineNumberAsSuffix = lineNumberAsSuffix;
         }
 
-        public void add(String content)
+        void add(String content)
         {
             this.content = this.content + " " + content.trim();
         }
@@ -275,9 +275,14 @@ public class SourceReorganiser
             return number != -1;
         }
 
-        public String getContent()
+        String getContent()
         {
             return content;
+        }
+
+        boolean getLineNumberAsSuffix()
+        {
+            return lineNumberAsSuffix;
         }
     }
 
@@ -287,12 +292,12 @@ public class SourceReorganiser
         private Block parent;
         private List<Element> elements;
 
-        public Block()
+        Block()
         {
             elements = new ArrayList<Element>();
         }
 
-        public Block(Block parent, Line firstLine)
+        Block(Block parent, Line firstLine)
         {
             this();
             this.parent = parent;
@@ -303,7 +308,7 @@ public class SourceReorganiser
             add(firstLine);
         }
 
-        public void sort()
+        void sort()
         {
             if (isSorted())
             {
@@ -349,12 +354,12 @@ public class SourceReorganiser
             }
         }
 
-        public Block getParent()
+        Block getParent()
         {
             return parent;
         }
 
-        public Line getLastLine()
+        Line getLastLine()
         {
             Object lastElement = elements.get(elements.size() - 1);
             if (lastElement instanceof Line)
@@ -364,7 +369,7 @@ public class SourceReorganiser
             return null;
         }
 
-        public Line removeLastLine()
+        Line removeLastLine()
         {
             Object lastElement = elements.get(elements.size() - 1);
             if (lastElement instanceof Line)
@@ -375,7 +380,7 @@ public class SourceReorganiser
             return null;
         }
 
-        public void add(Element element)
+        void add(Element element)
         {
             elements.add(element);
         }
@@ -406,7 +411,7 @@ public class SourceReorganiser
          *
          * @return true if the lines are sorted
          */
-        public boolean isSorted()
+        boolean isSorted()
         {
             int currentLineNumber = 0;
             for (Element element : elements)
@@ -427,7 +432,7 @@ public class SourceReorganiser
             return true;
         }
 
-        public void write(StringWriter out)
+        void write(StringWriter out)
         {
             List<Line> lines = getLines();
             Map<Integer, Line> offLines = findOffLines(lines);
@@ -496,7 +501,7 @@ public class SourceReorganiser
                     }
                     lastLineHadNumber = false;
                 }
-                out.write(line.getContent());
+                out.write(line.getContent() + (line.hasNumber() && line.getLineNumberAsSuffix() ? " // " + line.getNumber() : ""));
             }
         }
 

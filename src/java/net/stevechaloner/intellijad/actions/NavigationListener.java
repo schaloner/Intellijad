@@ -22,6 +22,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadConstants;
@@ -33,16 +38,15 @@ import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.util.PluginUtil;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Steve Chaloner
  */
-public class NavigationDecompileListener implements FileEditorManagerListener {
+public class NavigationListener implements FileEditorManagerListener {
     /**
      * Handler classes for the result of navigation actions.
      */
@@ -125,7 +129,7 @@ public class NavigationDecompileListener implements FileEditorManagerListener {
      * @param project               the project this object is listening for
      * @param decompilationListener the decompilation listener
      */
-    public NavigationDecompileListener(@NotNull Project project,
+    public NavigationListener(@NotNull Project project,
                                        @NotNull DecompilationChoiceListener decompilationListener) {
         this.project = project;
         this.decompilationListener = decompilationListener;
@@ -181,7 +185,19 @@ public class NavigationDecompileListener implements FileEditorManagerListener {
      */
     public void fileClosed(FileEditorManager fileEditorManager,
                            VirtualFile virtualFile) {
-        // no-op
+        if (virtualFile instanceof MemoryVirtualFile)
+        {
+            final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+            try
+            {
+                vfs.deleteFile(this,
+                               virtualFile);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

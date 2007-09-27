@@ -27,7 +27,7 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.WindowManager;
-import net.stevechaloner.intellijad.actions.NavigationDecompileListener;
+import net.stevechaloner.intellijad.actions.NavigationListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
@@ -86,7 +86,7 @@ public class IntelliJad implements ApplicationComponent,
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
                             new ArrayList<Library>());
 
-        NavigationDecompileListener navigationListener = new NavigationDecompileListener(project,
+        NavigationListener navigationListener = new NavigationListener(project,
                                                                                          this);
         FileEditorManager.getInstance(project).addFileEditorManagerListener(navigationListener);
         project.putUserData(IntelliJadConstants.DECOMPILE_LISTENER,
@@ -103,7 +103,7 @@ public class IntelliJad implements ApplicationComponent,
     /** {@inheritDoc} */
     public void projectClosed(Project project)
     {
-        NavigationDecompileListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
+        NavigationListener listener = project.getUserData(IntelliJadConstants.DECOMPILE_LISTENER);
         FileEditorManager.getInstance(project).removeFileEditorManagerListener(listener);
         consoleManager.disposeConsole(project);
     }
@@ -216,7 +216,7 @@ public class IntelliJad implements ApplicationComponent,
         {
             JOptionPane.showMessageDialog(WindowManager.getInstance().suggestParentWindow(project),
                                           validationMessage);
-    }
+        }
     }
 
     /**
