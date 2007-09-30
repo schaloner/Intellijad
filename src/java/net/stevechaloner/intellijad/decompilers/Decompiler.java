@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.VirtualFile;
+
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -42,6 +43,7 @@ public interface Decompiler
      * @param context the context of the decompilation
      * @return the virtual file
      */
+    @Nullable
     VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                DecompilationContext context);
 }

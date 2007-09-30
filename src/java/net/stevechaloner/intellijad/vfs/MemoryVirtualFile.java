@@ -4,6 +4,12 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
 
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,12 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A memory-based file.
@@ -33,7 +33,7 @@ public class MemoryVirtualFile extends VirtualFile
     /**
      * The content of the file.
      */
-    private final String content;
+    private String content;
 
     /**
      * A flag to indicate if this file represents a directory.
@@ -231,6 +231,27 @@ public class MemoryVirtualFile extends VirtualFile
     public InputStream getInputStream() throws IOException
     {
         return new ByteArrayInputStream(content.getBytes());
+    }
+
+    /**
+     * Sets the content of the file.
+     *
+     * @param content the content
+     */
+    public void setContent(@NotNull String content)
+    {
+        this.content = content;
+    }
+
+    /**
+     * Gets the content of the file.
+     *
+     * @return the content of the file
+     */
+    @NotNull
+    public String getContent()
+    {
+        return content;
     }
 
     /**

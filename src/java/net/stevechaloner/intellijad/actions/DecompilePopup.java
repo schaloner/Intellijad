@@ -17,15 +17,6 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
@@ -35,6 +26,15 @@ import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class DecompilePopup {
     private JPanel contentPane;
@@ -82,7 +82,7 @@ public class DecompilePopup {
         comboBox1.addItem(NavigationTriggeredDecompile.ALWAYS);
         comboBox1.addItem(NavigationTriggeredDecompile.ASK);
         comboBox1.addItem(NavigationTriggeredDecompile.NEVER);
-        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(config.getConfirmNavigationTriggeredDecompile()));
+        comboBox1.setSelectedItem(NavigationTriggeredDecompile.getByName(config.getDecompileOnNavigation()));
     }
 
     void persistConfig()
@@ -91,7 +91,7 @@ public class DecompilePopup {
         if (config != null)
         {
             NavigationTriggeredDecompile option = (NavigationTriggeredDecompile) comboBox1.getSelectedItem();
-            config.setConfirmNavigationTriggeredDecompile(option.getName());
+            config.setDecompileOnNavigation(option.getName());
 
             String packageName = decompilationDescriptor.getPackageName();
             if (packageName != null && excludePackageCheckBox.isSelected())
@@ -112,7 +112,7 @@ public class DecompilePopup {
      */
     public boolean isModified(Config data)
     {
-        return !((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName().equals(data.getConfirmNavigationTriggeredDecompile());
+        return !((NavigationTriggeredDecompile) comboBox1.getSelectedItem()).getName().equals(data.getDecompileOnNavigation());
     }
 
     /**

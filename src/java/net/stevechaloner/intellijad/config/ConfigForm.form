@@ -63,12 +63,6 @@
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.decompile-on-navigation"/>
                 </properties>
               </component>
-              <component id="2e560" class="javax.swing.JComboBox" binding="navTriggeredDecomp">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-              </component>
               <vspacer id="35d8a">
                 <constraints>
                   <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
@@ -141,13 +135,25 @@
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.use-project-intellijad-settings"/>
                 </properties>
               </component>
-              <component id="86a4f" class="javax.swing.JCheckBox" binding="reformatAccordingToStyleCheckBox" default-binding="true">
+              <component id="2578e" class="javax.swing.JLabel" binding="configReformatAccordingToLabel" default-binding="true">
                 <constraints>
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.reformat-according-to-style"/>
+                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.reformat.to"/>
                 </properties>
+              </component>
+              <component id="d105d" class="javax.swing.JComboBox" binding="reformatStyle">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="2e560" class="javax.swing.JComboBox" binding="navTriggeredDecomp">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
               </component>
             </children>
           </grid>

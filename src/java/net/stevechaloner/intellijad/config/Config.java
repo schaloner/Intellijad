@@ -25,6 +25,7 @@ import net.stevechaloner.idea.util.properties.PropertyContainer;
 import net.stevechaloner.idea.util.properties.PropertyDescriptor;
 import net.stevechaloner.idea.util.properties.converters.ConverterFactory;
 import net.stevechaloner.intellijad.config.rules.RuleContext;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,13 +34,13 @@ import java.util.List;
 
 /**
  * The IntelliJad configuration.
- * 
+ *
  * @author Steve Chaloner
  */
 public class Config implements DOMable
 {
     private static final PropertyDescriptor<String> DECOMPILE_ON_NAVIGATION = new ImmutablePropertyDescriptor<String>("decompile-on-navigation",
-                                                                                                                                     NavigationTriggeredDecompile.ALWAYS.getName());
+                                                                                                                      NavigationTriggeredDecompile.ALWAYS.getName());
     private static final PropertyDescriptor<Boolean> CREATE_OUTPUT_DIRECTORY = new ImmutablePropertyDescriptor<Boolean>("create-output-directory");
     private static final PropertyDescriptor<Boolean> ALWAYS_EXCLUDE_RECURSIVELY = new ImmutablePropertyDescriptor<Boolean>("always-exclude-recursively");
     private static final PropertyDescriptor<Boolean> CLEAR_AND_CLOSE_CONSOLE_ON_SUCCESS = new ImmutablePropertyDescriptor<Boolean>("clear-and-close-console-on-success");
@@ -50,7 +51,8 @@ public class Config implements DOMable
     private static final PropertyDescriptor<Boolean> READ_ONLY = new ImmutablePropertyDescriptor<Boolean>("read-only");
     private static final PropertyDescriptor<Boolean> SORT = new ImmutablePropertyDescriptor<Boolean>("sort");
     private static final PropertyDescriptor<Boolean> USE_PROJECT_SPECIFIC_SETTINGS = new ImmutablePropertyDescriptor<Boolean>("use-project-specific-settings");
-    private static final PropertyDescriptor<Boolean> REFORMAT_ACCORDING_TO_STYLE = new ImmutablePropertyDescriptor<Boolean>("reformat-according-to-style");
+    private static final PropertyDescriptor<String> REFORMAT_STYLE = new ImmutablePropertyDescriptor<String>("reformat-style",
+                                                                                                             CodeStyle.PREFERRED_STYLE.getName());
 
     /**
      * The persistence model.
@@ -123,7 +125,7 @@ public class Config implements DOMable
         registerBooleanProperty(JadOptions.VERBOSE, dpc);
         registerStringProperty(JAD_PATH, dpc);
         registerBooleanProperty(USE_PROJECT_SPECIFIC_SETTINGS, dpc);
-        registerBooleanProperty(REFORMAT_ACCORDING_TO_STYLE, dpc);
+        registerStringProperty(REFORMAT_STYLE, dpc);
 
         dpc.put(EXCLUSION_TABLE_MODEL,
                 new DOMableTableModel(EXCLUSION_TABLE_MODEL,
@@ -135,8 +137,8 @@ public class Config implements DOMable
 
     /**
      * Register the property with the container.
-     * 
-     * @param pd the property's descriptor
+     *
+     * @param pd  the property's descriptor
      * @param dpc the property container
      */
     private void registerBooleanProperty(PropertyDescriptor<Boolean> pd,
@@ -153,7 +155,7 @@ public class Config implements DOMable
      * the command line property manager.
      *
      * @param clpd the command line property's descriptor
-     * @param dpc the property container
+     * @param dpc  the property container
      */
     private void registerBooleanProperty(CommandLinePropertyDescriptor<Boolean> clpd,
                                          DOMablePropertyContainer dpc)
@@ -169,7 +171,7 @@ public class Config implements DOMable
     /**
      * Register the property with the container.
      *
-     * @param pd the property's descriptor
+     * @param pd  the property's descriptor
      * @param dpc the property container
      */
     private void registerIntegerProperty(PropertyDescriptor<Integer> pd,
@@ -186,7 +188,7 @@ public class Config implements DOMable
      * the command line property manager.
      *
      * @param clpd the command line property's descriptor
-     * @param dpc the property container
+     * @param dpc  the property container
      */
     private void registerIntegerProperty(CommandLinePropertyDescriptor<Integer> clpd,
                                          DOMablePropertyContainer dpc)
@@ -202,7 +204,7 @@ public class Config implements DOMable
     /**
      * Register the property with the container.
      *
-     * @param pd the property's descriptor
+     * @param pd  the property's descriptor
      * @param dpc the property container
      */
     private void registerStringProperty(PropertyDescriptor<String> pd,
@@ -219,7 +221,7 @@ public class Config implements DOMable
      * the command line property manager.
      *
      * @param clpd the command line property's descriptor
-     * @param dpc the property container
+     * @param dpc  the property container
      */
     private void registerStringProperty(CommandLinePropertyDescriptor<String> clpd,
                                         DOMablePropertyContainer dpc)
@@ -232,12 +234,12 @@ public class Config implements DOMable
         commandLinePropertyDescriptors.add(clpd);
     }
 
-    public String getConfirmNavigationTriggeredDecompile()
+    public String getDecompileOnNavigation()
     {
         return DECOMPILE_ON_NAVIGATION.getValue(propertyContainer.get(DECOMPILE_ON_NAVIGATION));
     }
 
-    public void setConfirmNavigationTriggeredDecompile(String confirmNavigationTriggeredDecompile)
+    public void setDecompileOnNavigation(String confirmNavigationTriggeredDecompile)
     {
         DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(DECOMPILE_ON_NAVIGATION);
         value.setValue(confirmNavigationTriggeredDecompile);
@@ -789,15 +791,15 @@ public class Config implements DOMable
         value.setValue(useProjectSpecificSettings);
     }
 
-    public boolean isReformatAccordingToStyle()
+    public String getReformatStyle()
     {
-        return REFORMAT_ACCORDING_TO_STYLE.getValue(propertyContainer.get(REFORMAT_ACCORDING_TO_STYLE));
+        return REFORMAT_STYLE.getValue(propertyContainer.get(REFORMAT_STYLE));
     }
 
-    public void setReformatAccordingToStyle(boolean reformatAccordingToStyle)
+    public void setReformatStyle(String reformatStyle)
     {
-        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(REFORMAT_ACCORDING_TO_STYLE);
-        value.setValue(reformatAccordingToStyle);
+        DOMableGeneric<String> value = (DOMableGeneric<String>) propertyContainer.get(REFORMAT_STYLE);
+        value.setValue(reformatStyle);
     }
 
     @NotNull
@@ -812,13 +814,17 @@ public class Config implements DOMable
         return domable.write();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void read(@NotNull Element element)
     {
         domable.read(element);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Object getValue()
     {
         return null;

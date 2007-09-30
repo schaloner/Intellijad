@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.format;
 
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -51,15 +52,15 @@ public class SourceReorganiser
 
     private static final int LINE_NUMBER_MARKER_LENGTH = 8;
 
-    public String reorganise(DecompilationContext context,
-                             String content)
+    public static void reorganise(DecompilationContext context,
+                                  MemoryVirtualFile file)
     {
         LineNumberReader in = null;
         StringWriter out = new StringWriter();
         boolean retainLineNumbers = context.getConfig().isLineNumbersAsComments();
         try
         {
-            in = new LineNumberReader(new StringReader(content));
+            in = new LineNumberReader(new StringReader(file.getContent()));
             List<String> lines = reformat(in);
             Block currentBlock = new Block();
             currentBlock.add(new Line("/* Decompiled through IntelliJad */",
@@ -171,10 +172,10 @@ public class SourceReorganiser
                 }
             }
         }
-        return out.getBuffer().toString();
+        file.setContent(out.getBuffer().toString());
     }
 
-    private List<String> reformat(LineNumberReader in)
+    private static List<String> reformat(LineNumberReader in)
     {
         String lineString;
         int lastIndent = 0;
@@ -231,14 +232,14 @@ public class SourceReorganiser
         return lines;
     }
 
-    private abstract class Element
+    private static abstract class Element
     {
         public abstract boolean hasNumber();
 
         public abstract int getNumber();
     }
 
-    private class Line extends Element
+    private static class Line extends Element
     {
         private int number = -1;
         private String content;
@@ -286,7 +287,7 @@ public class SourceReorganiser
         }
     }
 
-    private class Block extends Element
+    private static class Block extends Element
     {
 
         private Block parent;

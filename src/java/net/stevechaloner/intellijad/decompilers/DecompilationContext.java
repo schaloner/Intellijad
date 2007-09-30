@@ -16,12 +16,17 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
+
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The context a decompilation occurs in.
@@ -49,6 +54,11 @@ public class DecompilationContext
      * The project this decompiation is occurring in.
      */
     private final Project project;
+
+    /**
+     * User data.
+     */
+    private final Map<Key, Object> userData = new HashMap<Key, Object>();
 
     /**
      * Initialises a new instance of this class.
@@ -98,6 +108,31 @@ public class DecompilationContext
     public Config getConfig()
     {
         return PluginUtil.getConfig(project);
+    }
 
+    // javadoc unnecessary
+    public <T> void addUserData(@NotNull Key<T> key,
+                                @NotNull T value)
+    {
+        userData.put(key,
+                     value);
+    }
+
+    // javadoc unnecessary
+    public <T> T getUserData(@NotNull Key<T> key)
+    {
+        return (T)userData.get(key);
+    }
+
+    // javadoc unnecessary
+    public <T> T removeUserData(@NotNull Key<T> key)
+    {
+        return (T)userData.remove(key);
+    }
+
+    // javadoc unnecessary
+    public <T> boolean containsUserData(Key<T> key)
+    {
+        return userData.containsKey(key);
     }
 }

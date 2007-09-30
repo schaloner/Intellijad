@@ -18,15 +18,18 @@ package net.stevechaloner.intellijad.config;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+
 import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
 import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
 import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -95,8 +98,9 @@ public class ConfigForm
     @Control private JButton browseButton1;
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
-    @Control private JCheckBox reformatAccordingToStyleCheckBox;
+    private JLabel configReformatAccordingToLabel;
     private JCheckBox useProjectSpecificIntelliJadCheckBox;
+    @Control private JComboBox reformatStyle;
 
     private ExclusionTableModel exclusionTableModel;
 
@@ -119,6 +123,9 @@ public class ConfigForm
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ALWAYS);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.ASK);
         navTriggeredDecomp.addItem(NavigationTriggeredDecompile.NEVER);
+
+        reformatStyle.addItem(CodeStyle.PREFERRED_STYLE);
+        reformatStyle.addItem(CodeStyle.DEBUGGABLE_STYLE);
 
         packFieldsWithTheSpinner.setModel(createSpinnerModel());
         splitStringsIntoPiecesSpinner.setModel(createSpinnerModel());
@@ -315,9 +322,9 @@ public class ConfigForm
         spacesForIndentationSpinner.setValue(data.getIndentation());
         displayLongsUsingRadixSpinner.setValue(data.getLongRadix());
         displayIntegersUsingRadixSpinner.setValue(data.getIntRadix());
-        navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getConfirmNavigationTriggeredDecompile()));
+        navTriggeredDecomp.setSelectedItem(NavigationTriggeredDecompile.getByName(data.getDecompileOnNavigation()));
+        reformatStyle.setSelectedItem(CodeStyle.getByName(data.getReformatStyle()));
         useProjectSpecificIntelliJadCheckBox.setSelected(data.isUseProjectSpecificSettings());
-
     }
 
     /**
@@ -332,7 +339,8 @@ public class ConfigForm
         data.setIndentation((Integer) spacesForIndentationSpinner.getValue());
         data.setLongRadix((Integer) displayLongsUsingRadixSpinner.getValue());
         data.setIntRadix((Integer) displayIntegersUsingRadixSpinner.getValue());
-        data.setConfirmNavigationTriggeredDecompile(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
+        data.setDecompileOnNavigation(((NavigationTriggeredDecompile) navTriggeredDecomp.getSelectedItem()).getName());
+        data.setReformatStyle(((CodeStyle) reformatStyle.getSelectedItem()).getName());
         data.setUseProjectSpecificSettings(useProjectSpecificIntelliJadCheckBox.isSelected());
     }
 
@@ -365,7 +373,11 @@ public class ConfigForm
         {
             return true;
         }
-        if (!data.getConfirmNavigationTriggeredDecompile().equals(navTriggeredDecomp.getSelectedItem()))
+        if (!data.getDecompileOnNavigation().equals(navTriggeredDecomp.getSelectedItem()))
+        {
+            return true;
+        }
+        if (!data.getReformatStyle().equals(reformatStyle.getSelectedItem()))
         {
             return true;
         }
@@ -397,7 +409,6 @@ public class ConfigForm
         createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
         decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
         markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
-        reformatAccordingToStyleCheckBox.setSelected(data.isReformatAccordingToStyle());
         printDefaultInitializersForCheckBox.setSelected(data.isDefaultInitializers());
         generateFullyQualifiedNamesCheckBox.setSelected(data.isFullyQualifiedNames());
         clearAllPrefixesIncludingCheckBox.setSelected(data.isClearPrefixes());
@@ -430,7 +441,6 @@ public class ConfigForm
         data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
         data.setDecompileToMemory(decompileToMemoryCheckBox.isSelected());
         data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
-        data.setReformatAccordingToStyle(reformatAccordingToStyleCheckBox.isSelected());
         data.setDefaultInitializers(printDefaultInitializersForCheckBox.isSelected());
         data.setFullyQualifiedNames(generateFullyQualifiedNamesCheckBox.isSelected());
         data.setClearPrefixes(clearAllPrefixesIncludingCheckBox.isSelected());
@@ -477,10 +487,6 @@ public class ConfigForm
             return true;
         }
         if (markDecompiledFilesAsCheckBox.isSelected() != data.isReadOnly())
-        {
-            return true;
-        }
-        if (reformatAccordingToStyleCheckBox.isSelected() != data.isReformatAccordingToStyle())
         {
             return true;
         }

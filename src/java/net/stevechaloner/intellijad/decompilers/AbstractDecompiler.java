@@ -15,15 +15,19 @@
 
 package net.stevechaloner.intellijad.decompilers;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import net.stevechaloner.intellijad.config.CodeStyle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
+import net.stevechaloner.intellijad.format.SourceReorganiser;
 import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.StreamPumper;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -174,13 +178,19 @@ public abstract class AbstractDecompiler implements Decompiler
      * @param file    the file to reformat
      */
     protected void reformatToStyle(@NotNull final DecompilationContext context,
-                                   @NotNull final VirtualFile file)
+                                   @NotNull final MemoryVirtualFile file)
     {
         Config config = context.getConfig();
-        if (config.isReformatAccordingToStyle())
+        switch (CodeStyle.getByName(config.getReformatStyle()))
         {
-            StyleReformatter.reformat(context,
-                                      file);
+            case DEBUGGABLE_STYLE:
+                SourceReorganiser.reorganise(context,
+                                             file);
+                break;
+            case PREFERRED_STYLE:
+            default:
+                StyleReformatter.reformat(context,
+                                          file);
         }
     }
 

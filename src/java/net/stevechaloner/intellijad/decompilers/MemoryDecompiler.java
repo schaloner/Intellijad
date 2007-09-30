@@ -13,7 +13,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package net.stevechaloner.intellijad.decompilers.memory;
+package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -21,21 +21,15 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
-import net.stevechaloner.intellijad.decompilers.AbstractDecompiler;
-import net.stevechaloner.intellijad.decompilers.DecompilationContext;
-import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
-import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
-import net.stevechaloner.intellijad.decompilers.DecompilationException;
-import net.stevechaloner.intellijad.decompilers.ResultType;
-import net.stevechaloner.intellijad.format.SourceReorganiser;
-import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,25 +52,25 @@ public class MemoryDecompiler extends AbstractDecompiler
     {
         setSuccessfulDecompilationAftermathHandler(new DecompilationAftermathHandler()
         {
-                    @Nullable
-                    public VirtualFile execute(@NotNull DecompilationContext context,
-                                               @NotNull DecompilationDescriptor descriptor,
-                                               @NotNull File targetClass,
-                                               @NotNull ByteArrayOutputStream output,
-                                               @NotNull ByteArrayOutputStream err) throws DecompilationException
-                    {
-                        String content = output.toString();
-                        if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
-                        {
-                            DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
-                                                                                                 content);
-                        }
-                        return processOutput(descriptor,
-                                             context,
-                                             content);
-                    }
-                });
-        }
+            @Nullable
+            public VirtualFile execute(@NotNull DecompilationContext context,
+                                       @NotNull DecompilationDescriptor descriptor,
+                                       @NotNull File targetClass,
+                                       @NotNull ByteArrayOutputStream output,
+                                       @NotNull ByteArrayOutputStream err) throws DecompilationException
+            {
+                String content = output.toString();
+                if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
+                {
+                    DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,
+                                                                                         content);
+                }
+                return processOutput(descriptor,
+                                     context,
+                                     content);
+            }
+        });
+    }
 
     /** {@inheritDoc} */
     protected OperationStatus setup(DecompilationDescriptor descriptor,
@@ -93,20 +87,24 @@ public class MemoryDecompiler extends AbstractDecompiler
      * @return a file representing the decompiled file
      * @throws DecompilationException if the processing fails
      */
-    private VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
-                                      @NotNull final DecompilationContext context,
-                                      @NotNull final String content) throws DecompilationException
+    protected VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
+                                        @NotNull final DecompilationContext context,
+                                        @NotNull final String content) throws DecompilationException
     {
         final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
         MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION,
-                                                       new SourceReorganiser().reorganise(context,
-                                                                                          content));
-        vfs.addFile(file);
+                                                       content);
+
+        this.reformatToStyle(context,
+                             file);
+
+
+        insertIntoFileSystem(descriptor,
+                             context,
+                             vfs,
+                             file);
 
         final Project project = context.getProject();
-        MemoryVirtualFile showdom = vfs.getFileForPackage(descriptor.getPackageName());
-        showdom.addChild(file);
-
         final List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
                                                                          project);
 
@@ -115,7 +113,6 @@ public class MemoryDecompiler extends AbstractDecompiler
             attachSourceToLibraries(descriptor,
                                     context,
                                     vfs,
-                                    project,
                                     libraries);
         }
         else
@@ -125,14 +122,41 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                    descriptor.getClassName());
         }
 
-        StyleReformatter.reindent(context,
-                                  file);
         file.setWritable(false);
 
         return file;
     }
 
-    private void attachSourceToLibraries(final DecompilationDescriptor descriptor, final DecompilationContext context, final MemoryVirtualFileSystem vfs, final Project project, final List<Library> libraries)
+    /**
+     * Inserts the file into the file system.
+     *
+     * @param descriptor the decompilation descriptor
+     * @param context the decompilation context
+     * @param vfs the virtual file system
+     * @param file the file to insert
+     */
+    protected void insertIntoFileSystem(@NotNull DecompilationDescriptor descriptor,
+                                        @NotNull final DecompilationContext context,
+                                        @NotNull MemoryVirtualFileSystem vfs, 
+                                        @NotNull MemoryVirtualFile file)
+    {
+        vfs.addFile(file);
+        MemoryVirtualFile packageFile = vfs.getFileForPackage(descriptor.getPackageName());
+        packageFile.addChild(file);
+    }
+
+    /**
+     * Attaches the decompiled source to the relevant libraries.
+     *
+     * @param descriptor the decompilation descriptor
+     * @param context the decompilation context
+     * @param vfs the memory virtual file system
+     * @param libraries the libraries containing class files that match the decompiled source
+     */
+    protected void attachSourceToLibraries(@NotNull final DecompilationDescriptor descriptor,
+                                           @NotNull final DecompilationContext context,
+                                           @NotNull final MemoryVirtualFileSystem vfs,
+                                           @NotNull final List<Library> libraries)
     {
         ApplicationManager.getApplication().runWriteAction(new Runnable()
         {
@@ -158,7 +182,7 @@ public class MemoryDecompiler extends AbstractDecompiler
                                               "message.associating-source-with-library",
                                               descriptor.getClassName(),
                                               library.getName() == null ? IntelliJadResourceBundle.message("message.unnamed-library") : library.getName());
-                    project.getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
+                    context.getProject().getUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES).add(library);
                 }
             }
         });
@@ -208,6 +232,7 @@ public class MemoryDecompiler extends AbstractDecompiler
     }
 
     /** {@inheritDoc} */
+    @Nullable
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
