@@ -17,12 +17,12 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 
-import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
 import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
+import net.stevechaloner.intellijad.environment.EnvironmentContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;

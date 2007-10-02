@@ -13,10 +13,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package net.stevechaloner.intellijad;
+package net.stevechaloner.intellijad.environment;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
