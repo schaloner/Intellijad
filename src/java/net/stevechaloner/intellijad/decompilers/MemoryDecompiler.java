@@ -99,10 +99,10 @@ public class MemoryDecompiler extends AbstractDecompiler
                              file);
 
 
-        insertIntoFileSystem(descriptor,
-                             context,
-                             vfs,
-                             file);
+        VirtualFile actualFile = insertIntoFileSystem(descriptor,
+                                                      context,
+                                                      vfs,
+                                                      file);
 
         final Project project = context.getProject();
         final List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
@@ -124,7 +124,7 @@ public class MemoryDecompiler extends AbstractDecompiler
 
         file.setWritable(false);
 
-        return file;
+        return actualFile;
     }
 
     /**
@@ -134,15 +134,18 @@ public class MemoryDecompiler extends AbstractDecompiler
      * @param context the decompilation context
      * @param vfs the virtual file system
      * @param file the file to insert
+     * @return the file inserted into the file system
      */
-    protected void insertIntoFileSystem(@NotNull DecompilationDescriptor descriptor,
-                                        @NotNull final DecompilationContext context,
-                                        @NotNull MemoryVirtualFileSystem vfs, 
-                                        @NotNull MemoryVirtualFile file)
+    protected VirtualFile insertIntoFileSystem(@NotNull DecompilationDescriptor descriptor,
+                                               @NotNull final DecompilationContext context,
+                                               @NotNull MemoryVirtualFileSystem vfs,
+                                               @NotNull MemoryVirtualFile file)
     {
         vfs.addFile(file);
         MemoryVirtualFile packageFile = vfs.getFileForPackage(descriptor.getPackageName());
         packageFile.addChild(file);
+
+        return file;
     }
 
     /**

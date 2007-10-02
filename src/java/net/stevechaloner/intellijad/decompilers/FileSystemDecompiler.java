@@ -16,6 +16,8 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
@@ -23,21 +25,24 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
+import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A decompiler that takes the file created by the memory decompiler and copies it to the file system.  This allows
@@ -117,18 +122,19 @@ public class FileSystemDecompiler extends MemoryDecompiler
     }
 
     /* {@inheritDoc} */
-    protected void insertIntoFileSystem(@NotNull DecompilationDescriptor descriptor,
-                                        @NotNull final DecompilationContext context,
-                                        @NotNull MemoryVirtualFileSystem vfs,
-                                        @NotNull MemoryVirtualFile file)
+    protected VirtualFile insertIntoFileSystem(@NotNull DecompilationDescriptor descriptor,
+                                               @NotNull final DecompilationContext context,
+                                               @NotNull MemoryVirtualFileSystem vfs,
+                                               @NotNull MemoryVirtualFile file)
     {
         Boolean storeInMemory = context.getUserData(STORE_IN_MEMORY);
+        VirtualFile insertFile;
         if (storeInMemory)
         {
-            super.insertIntoFileSystem(descriptor,
-                                       context,
-                                       vfs,
-                                       file);
+            insertFile = super.insertIntoFileSystem(descriptor,
+                                                    context,
+                                                    vfs,
+                                                    file);
         }
         else
         {
@@ -136,30 +142,52 @@ public class FileSystemDecompiler extends MemoryDecompiler
             final Config config = context.getConfig();
             final File localPath = new File(config.getOutputDirectory() + '/' +
                                             descriptor.getPackageNameAsPath());
-            final VirtualFile[] files = new VirtualFile[1];
-            ApplicationManager.getApplication().runWriteAction(new Runnable()
+            if (localPath.exists() & localPath.canWrite() || localPath.mkdirs())
             {
-                public void run()
+                try
                 {
-                    files[0] = lvfs.refreshAndFindFileByIoFile(localPath);
-                }
-            });
+                    final File localFile = new File(localPath,
+                                                    descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
+                    FileWriter writer = new FileWriter(localFile);
+                    writer.write(file.getContent());
+                    writer.close();
+                    final VirtualFile[] files = new VirtualFile[1];
+                    ApplicationManager.getApplication().runWriteAction(new Runnable()
+                    {
+                        public void run()
+                        {
+                            files[0] = lvfs.refreshAndFindFileByIoFile(localFile);
+                        }
+                    });
 
-            try
-            {
-                VirtualFile localFile = lvfs.copyFile(this,
-                                                      file,
-                                                      files[0],
-                                                      descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
-                context.addUserData(LOCAL_FS_FILE,
-                                    localFile);
-                
+                    insertFile = files[0];
+                    context.addUserData(LOCAL_FS_FILE,
+                                        files[0]);
+                }
+                catch (IOException e)
+                {
+                    // todo log this
+                    insertFile = super.insertIntoFileSystem(descriptor,
+                                                            context,
+                                                            vfs,
+                                                            file);
+                    context.addUserData(STORE_IN_MEMORY,
+                                        true);
+                }
             }
-            catch (IOException e)
+            else
             {
-                e.printStackTrace();
+                // todo log this
+                insertFile = super.insertIntoFileSystem(descriptor,
+                                                        context,
+                                                        vfs,
+                                                        file);
+                context.addUserData(STORE_IN_MEMORY,
+                                    true);
             }
         }
+
+        return insertFile;
     }
 
     /* {@inheritDoc} */
@@ -180,14 +208,15 @@ public class FileSystemDecompiler extends MemoryDecompiler
         }
         else
         {
-
+            attachSource(descriptor,
+                         context,
+                         context.getUserData(LOCAL_FS_FILE));
         }
     }
 
-/*
-    protected VirtualFile processOutput(@NotNull final DecompilationDescriptor descriptor,
-                                      @NotNull final DecompilationContext context,
-                                      @NotNull final VirtualFile file) throws DecompilationException
+    private VirtualFile attachSource(@NotNull final DecompilationDescriptor descriptor,
+                                     @NotNull final DecompilationContext context,
+                                     @NotNull final VirtualFile file)
     {
         final Project project = context.getProject();
         final LocalFileSystem vfs = getLocalFileSystem();
@@ -233,8 +262,8 @@ public class FileSystemDecompiler extends MemoryDecompiler
                         }
                     });
 
-                    FileEditorManager.getInstance(project).openFile(file,
-                                                                    true);
+//                    FileEditorManager.getInstance(project).openFile(file,
+//                                                                    true);
                 }
                 else
                 {
@@ -248,7 +277,6 @@ public class FileSystemDecompiler extends MemoryDecompiler
 
         return file;
     }
-*/
 
     private LocalFileSystem getLocalFileSystem()
     {
