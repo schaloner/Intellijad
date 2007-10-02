@@ -47,7 +47,7 @@
                     <li>The fallback decompilation file system is now the memory FS.</li>
                     <li>If decompilation is attempted with no, or an invalid, Jad path defined the user has the opportunity to cancel the decompilation or open the config.</li>
                     <li>Reformatting styles are now user-preferred OR debuggable.</li>
-                    <li>Local file system decompilation is now based on the memory decompilation to provide greater control over file content.<li>
+                    <li>Local file system decompilation is now based on the memory decompilation to provide greater control over file content.</li>
                 </ol>
             </li>
             <li>0.4 - Moved to IntelliJ 7-only compatibility.</li>
