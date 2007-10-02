@@ -164,7 +164,6 @@ public class IntelliJad implements ApplicationComponent,
         long startTime = System.currentTimeMillis();
         Project project = envContext.getProject();
         IntelliJadConsole console = consoleManager.getConsole(project);
-        console.openConsole();
         final ConsoleContext consoleContext = console.createConsoleContext("message.class",
                                                                            descriptor.getClassName());
         Config config = PluginUtil.getConfig(project);
@@ -231,8 +230,11 @@ public class IntelliJad implements ApplicationComponent,
                               IntelliJadConsole console,
                               ConsoleContext consoleContext)
     {
-        if (config.isClearAndCloseConsoleOnSuccess() &&
-            !consoleContext.isWorthDisplaying())
+        if (consoleContext.isWorthDisplaying())
+        {
+            console.openConsole();
+        }
+        else if (config.isClearAndCloseConsoleOnSuccess())
         {
             console.clearConsoleContent();
             console.closeConsole();

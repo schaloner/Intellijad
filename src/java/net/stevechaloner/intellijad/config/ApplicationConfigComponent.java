@@ -16,11 +16,11 @@
 package net.stevechaloner.intellijad.config;
 
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -36,7 +36,7 @@ import javax.swing.JComponent;
  * @author Steve Chaloner
  */
 public class ApplicationConfigComponent implements ApplicationComponent,
-                                                   Configurable,
+                                                   ConfigAccessor,
                                                    JDOMExternalizable
 {
     /**
