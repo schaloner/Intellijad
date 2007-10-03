@@ -15,7 +15,7 @@
 
 package net.stevechaloner.intellijad.decompilers;
 
-import net.stevechaloner.intellijad.EnvironmentContext;
+import net.stevechaloner.intellijad.environment.EnvironmentContext;
 
 /**
  * Listener for navigation-based decompilation that required the

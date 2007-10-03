@@ -234,6 +234,28 @@ public class Config implements DOMable
         commandLinePropertyDescriptors.add(clpd);
     }
 
+    public boolean isNocast()
+    {
+        return JadOptions.NOCAST.getValue(propertyContainer.get(JadOptions.NOCAST));
+    }
+
+    public void setNocast(boolean nocast)
+    {
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(JadOptions.NOCAST);
+        value.setValue(nocast);
+    }
+
+    public boolean isNoclass()
+    {
+        return JadOptions.NOCLASS.getValue(propertyContainer.get(JadOptions.NOCLASS));
+    }
+
+    public void setNoclass(boolean noclass)
+    {
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(JadOptions.NOCLASS);
+        value.setValue(noclass);
+    }
+
     public String getDecompileOnNavigation()
     {
         return DECOMPILE_ON_NAVIGATION.getValue(propertyContainer.get(DECOMPILE_ON_NAVIGATION));
@@ -419,28 +441,6 @@ public class Config implements DOMable
     {
         DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(JadOptions.NOCONV);
         value.setValue(noconv);
-    }
-
-    public boolean isNocast()
-    {
-        return JadOptions.NOCAST.getValue(propertyContainer.get(JadOptions.NOCAST));
-    }
-
-    public void setNocast(boolean nocast)
-    {
-        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(JadOptions.NOCAST);
-        value.setValue(nocast);
-    }
-
-    public boolean isNoclass()
-    {
-        return JadOptions.NOCLASS.getValue(propertyContainer.get(JadOptions.NOCLASS));
-    }
-
-    public void setNoclass(boolean noclass)
-    {
-        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(JadOptions.NOCLASS);
-        value.setValue(noclass);
     }
 
     public boolean isNocode()
@@ -866,5 +866,60 @@ public class Config implements DOMable
             }
         }
         return arguments;
+    }
+
+    public void copyFrom(Config config)
+    {
+        setNocast(config.isNocast());
+        setNoclass(config.isNoclass());
+        setDecompileOnNavigation(config.getDecompileOnNavigation());
+        setReadOnly(config.isReadOnly());
+        setAnnotate(config.isAnnotate());
+        setAnnotateFully(config.isAnnotateFully());
+        setRedundantBraces(config.isRedundantBraces());
+        setClearPrefixes(config.isClearPrefixes());
+        setOutputDirectory(config.getOutputDirectory());
+        setDead(config.isDead());
+        setDissassemblerOnly(config.isDissassemblerOnly());
+        setFullyQualifiedNames(config.isFullyQualifiedNames());
+        setFieldsFirst(config.isFieldsFirst());
+        setDefaultInitializers(config.isDefaultInitializers());
+        setMaxStringLength(config.getMaxStringLength());
+        setLineNumbersAsComments(config.isLineNumbersAsComments());
+        setLongRadix(config.getLongRadix());
+        setSplitStringsAtNewline(config.isSplitStringsAtNewline());
+        setNoconv(config.isNoconv());
+        setNocode(config.isNocode());
+        setNoctor(config.isNoctor());
+        setNodos(config.isNodos());
+        setNofd(config.isNofd());
+        setNoinner(config.isNoinner());
+        setNolvt(config.isNolvt());
+        setNonlb(config.isNonlb());
+        setIntRadix(config.getIntRadix());
+        setSafe(config.isSafe());
+        setSpaceAfterKeyword(config.isSpaceAfterKeyword());
+        setIndentation(config.getIndentation());
+        setUseTabs(config.isUseTabs());
+        setPrefixPackages(config.getPrefixPackages());
+        setPrefixNumericalClasses(config.getPrefixNumericalClasses());
+        setPrefixUnusedExceptions(config.getPrefixUnusedExceptions());
+        setPrefixNumericalFields(config.getPrefixNumericalFields());
+        setPrefixNumericalLocals(config.getPrefixNumericalLocals());
+        setPrefixNumericalMethods(config.getPrefixNumericalMethods());
+        setPrefixNumericalParameters(config.getPrefixNumericalParameters());
+        setPackFields(config.getPackFields());
+        setSort(config.isSort());
+        setVerbose(config.isVerbose());
+        setOverwrite(config.isOverwrite());
+        setStatistics(config.isStatistics());
+        setRestorePackages(config.isRestorePackages());
+        setJadPath(config.getJadPath());
+        setDecompileToMemory(config.isDecompileToMemory());
+        setCreateOutputDirectory(config.isCreateOutputDirectory());
+        setAlwaysExcludeRecursively(config.isAlwaysExcludeRecursively());
+        setClearAndCloseConsoleOnSuccess(config.isClearAndCloseConsoleOnSuccess());
+        setUseProjectSpecificSettings(config.isUseProjectSpecificSettings());
+        setReformatStyle(config.getReformatStyle());
     }
 }

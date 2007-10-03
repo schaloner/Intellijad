@@ -22,11 +22,11 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import net.stevechaloner.idea.util.events.DataContextUtil;
-import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
+import net.stevechaloner.intellijad.environment.EnvironmentContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 /**

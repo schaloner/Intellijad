@@ -24,7 +24,6 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
-import net.stevechaloner.intellijad.EnvironmentContext;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
@@ -33,6 +32,7 @@ import net.stevechaloner.intellijad.config.NavigationTriggeredDecompile;
 import net.stevechaloner.intellijad.decompilers.DecompilationChoiceListener;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
+import net.stevechaloner.intellijad.environment.EnvironmentContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;

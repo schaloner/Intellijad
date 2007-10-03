@@ -39,6 +39,9 @@ import net.stevechaloner.intellijad.decompilers.DecompilationException;
 import net.stevechaloner.intellijad.decompilers.Decompiler;
 import net.stevechaloner.intellijad.decompilers.FileSystemDecompiler;
 import net.stevechaloner.intellijad.decompilers.MemoryDecompiler;
+import net.stevechaloner.intellijad.environment.EnvironmentContext;
+import net.stevechaloner.intellijad.environment.EnvironmentValidator;
+import net.stevechaloner.intellijad.environment.ValidationResult;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -167,9 +170,10 @@ public class IntelliJad implements ApplicationComponent,
         final ConsoleContext consoleContext = console.createConsoleContext("message.class",
                                                                            descriptor.getClassName());
         Config config = PluginUtil.getConfig(project);
-        if (EnvironmentValidator.validateEnvironment(config,
-                                                     envContext,
-                                                     consoleContext))
+        ValidationResult validationResult = EnvironmentValidator.validateEnvironment(config,
+                                                                                     envContext,
+                                                                                     consoleContext);
+        if (!validationResult.isCancelled() && validationResult.isValid())
         {
             StringBuilder sb = new StringBuilder();
             sb.append(config.getJadPath()).append(' ');

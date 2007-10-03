@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>Integration with the Jad Java decompiler</description>
-    <version>0.4</version>
+    <version>0.5</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -42,6 +42,14 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.5 -
+                <ol>
+                    <li>The fallback decompilation file system is now the memory FS.</li>
+                    <li>If decompilation is attempted with no, or an invalid, Jad path defined the user has the opportunity to cancel the decompilation or open the config.</li>
+                    <li>Reformatting styles are now user-preferred OR debuggable.</li>
+                    <li>Local file system decompilation is now based on the memory decompilation to provide greater control over file content.</li>
+                </ol>
+            </li>
             <li>0.4 - Moved to IntelliJ 7-only compatibility.</li>
             <li>0.3 - Memory decompilation now results in source code that is debuggable.</li>
             <li>0.2 - Added more icons to console tree renderer; added more help content.</li>
