@@ -470,11 +470,11 @@ public class ConfigForm
         {
             return true;
         }
-        if (jadTextField.getText() != null ? !jadTextField.getText().equals(data.getJadPath()) : data.getJadPath() != null)
+        if (isModified(jadTextField.getText(), data.getJadPath()))
         {
             return true;
         }
-        if (outputDirectoryTextField.getText() != null ? !outputDirectoryTextField.getText().equals(data.getOutputDirectory()) : data.getOutputDirectory() != null)
+        if (isModified(outputDirectoryTextField.getText(), data.getOutputDirectory()))
         {
             return true;
         }
@@ -542,31 +542,31 @@ public class ConfigForm
         {
             return true;
         }
-        if (classesWithNumericalNamesTextField.getText() != null ? !classesWithNumericalNamesTextField.getText().equals(data.getPrefixNumericalClasses()) : data.getPrefixNumericalClasses() != null)
+        if (isModified(classesWithNumericalNamesTextField.getText(), data.getPrefixNumericalClasses()))
         {
             return true;
         }
-        if (fieldsWithNumericalNamesTextField.getText() != null ? !fieldsWithNumericalNamesTextField.getText().equals(data.getPrefixNumericalFields()) : data.getPrefixNumericalFields() != null)
+        if (isModified(fieldsWithNumericalNamesTextField.getText(), data.getPrefixNumericalFields()))
         {
             return true;
         }
-        if (localsWithNumericalNamesTextField.getText() != null ? !localsWithNumericalNamesTextField.getText().equals(data.getPrefixNumericalLocals()) : data.getPrefixNumericalLocals() != null)
+        if (isModified(localsWithNumericalNamesTextField.getText(), data.getPrefixNumericalLocals()))
         {
             return true;
         }
-        if (methodsWithNumericalNamesTextField.getText() != null ? !methodsWithNumericalNamesTextField.getText().equals(data.getPrefixNumericalMethods()) : data.getPrefixNumericalMethods() != null)
+        if (isModified(methodsWithNumericalNamesTextField.getText(), data.getPrefixNumericalMethods()))
         {
             return true;
         }
-        if (parametersWithNumericalNamesTextField.getText() != null ? !parametersWithNumericalNamesTextField.getText().equals(data.getPrefixNumericalParameters()) : data.getPrefixNumericalParameters() != null)
+        if (isModified(parametersWithNumericalNamesTextField.getText(), data.getPrefixNumericalParameters()))
         {
             return true;
         }
-        if (allPackagesTextField.getText() != null ? !allPackagesTextField.getText().equals(data.getPrefixPackages()) : data.getPrefixPackages() != null)
+        if (isModified(allPackagesTextField.getText(), data.getPrefixPackages()))
         {
             return true;
         }
-        if (unusedExceptionNamesTextField.getText() != null ? !unusedExceptionNamesTextField.getText().equals(data.getPrefixUnusedExceptions()) : data.getPrefixUnusedExceptions() != null)
+        if (isModified(unusedExceptionNamesTextField.getText(), data.getPrefixUnusedExceptions()))
         {
             return true;
         }
@@ -575,6 +575,22 @@ public class ConfigForm
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if the two strings are equal, equating null and empty strings as the same.
+     *
+     * @param s1 comparison string
+     * @param s2 comparison string
+     * @return true if the strings have content that is different
+     */
+    private static boolean isModified(@Nullable String s1,
+                                      @Nullable String s2)
+    {
+        s1 = (s1 == null) ? "" : s1;
+        s2 = (s2 == null) ? "" : s2;
+
+        return !s1.equals(s2);
     }
 
     /**
