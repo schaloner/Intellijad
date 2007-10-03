@@ -353,31 +353,31 @@ public class ConfigForm
      */
     private boolean isUnboundDataModified(Config data)
     {
-        if (data.getPackFields() != packFieldsWithTheSpinner.getValue())
+        if (!packFieldsWithTheSpinner.getValue().equals(data.getPackFields()))
         {
             return true;
         }
-        if (data.getMaxStringLength() != splitStringsIntoPiecesSpinner.getValue())
+        if (!splitStringsIntoPiecesSpinner.getValue().equals(data.getMaxStringLength()))
         {
             return true;
         }
-        if (data.getIndentation() != spacesForIndentationSpinner.getValue())
+        if (!spacesForIndentationSpinner.getValue().equals(data.getIndentation()))
         {
             return true;
         }
-        if (data.getLongRadix() != displayLongsUsingRadixSpinner.getValue())
+        if (!displayLongsUsingRadixSpinner.getValue().equals(data.getLongRadix()))
         {
             return true;
         }
-        if (data.getIntRadix() != displayIntegersUsingRadixSpinner.getValue())
+        if (!displayIntegersUsingRadixSpinner.getValue().equals(data.getIntRadix()))
         {
             return true;
         }
-        if (!data.getDecompileOnNavigation().equals(navTriggeredDecomp.getSelectedItem()))
+        if (!data.getDecompileOnNavigation().equals(((NavigationTriggeredDecompile)navTriggeredDecomp.getSelectedItem()).getName()))
         {
             return true;
         }
-        if (!data.getReformatStyle().equals(reformatStyle.getSelectedItem()))
+        if (!data.getReformatStyle().equals(((CodeStyle)reformatStyle.getSelectedItem()).getName()))
         {
             return true;
         }

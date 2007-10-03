@@ -22,8 +22,14 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.config.CodeStyle;
+import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.util.LibraryUtil;
@@ -32,10 +38,6 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -192,10 +194,12 @@ public class MemoryDecompiler extends AbstractDecompiler
     }
 
     /** {@inheritDoc} */
-    protected void updateCommand(StringBuilder command)
+    protected void updateCommand(StringBuilder command, 
+                                 Config config)
     {
         command.append(" -p ");
-        if (command.indexOf(" -lnc ") == -1)
+        if (command.indexOf(" -lnc ") == -1 &&
+            CodeStyle.DEBUGGABLE_STYLE.getName().equals(config.getReformatStyle()))
         {
             // technically it wouldn't hurt to have this present twice, but this is neater
             command.append(" -lnc ");

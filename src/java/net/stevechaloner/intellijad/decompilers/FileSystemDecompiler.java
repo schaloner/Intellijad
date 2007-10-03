@@ -261,9 +261,6 @@ public class FileSystemDecompiler extends MemoryDecompiler
                             }
                         }
                     });
-
-//                    FileEditorManager.getInstance(project).openFile(file,
-//                                                                    true);
                 }
                 else
                 {

@@ -502,7 +502,7 @@ public class SourceReorganiser
                     }
                     lastLineHadNumber = false;
                 }
-                out.write(line.getContent() + (line.hasNumber() && line.getLineNumberAsSuffix() ? " // " + line.getNumber() : ""));
+                out.write(line.getContent());// + (line.hasNumber() && line.getLineNumberAsSuffix() ? " // " + line.getNumber() : ""));
             }
         }
 
