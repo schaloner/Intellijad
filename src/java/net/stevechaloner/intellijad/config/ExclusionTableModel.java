@@ -15,15 +15,15 @@
 
 package net.stevechaloner.intellijad.config;
 
-import javax.swing.table.DefaultTableModel;
-
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  * Table model for managing automatic decompilation exclusions.
- * 
+ *
  * @author Steve Chaloner
  */
 public class ExclusionTableModel extends DefaultTableModel
@@ -62,7 +62,7 @@ public class ExclusionTableModel extends DefaultTableModel
                              boolean enabled)
     {
 
-        if (containsPackage(packageName) == ExclusionType.NOT_EXCLUDED)
+        if (getExclusionType(packageName) == ExclusionType.NOT_EXCLUDED)
         {
             this.addRow(new Object[]{packageName,
                                      recursive,
@@ -76,18 +76,46 @@ public class ExclusionTableModel extends DefaultTableModel
      * @param packageName the name of the package
      * @return the exclusion status of the package
      */
-    public ExclusionType containsPackage(@NotNull String packageName)
+    public ExclusionType getExclusionType(@NotNull String packageName)
     {
-        boolean containsPackage = false;
         ExclusionType exclusionType = ExclusionType.NOT_EXCLUDED;
-        for (int i = 0; !containsPackage && i < getRowCount(); i++)
+        int row = getPackageRow(packageName);
+        if (row != -1)
         {
-            containsPackage = packageName.equals(getValueAt(i, 0));
-            if (containsPackage)
-            {
-                exclusionType = ((Boolean)getValueAt(i, 2)) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
-            }
+            exclusionType = ((Boolean)getValueAt(row, 2)) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
         }
         return exclusionType;
+    }
+
+    /**
+     * Checks if the package is already in the model.  This works
+     * for exact package matches, and doesn't take recursive entries
+     * into account.
+     *
+     * @param packageName the name of the package
+     * @return true iff the package is in the model
+     */
+    boolean containsPackage(@NotNull String packageName)
+    {
+        return getPackageRow(packageName) != -1;
+    }
+
+    /**
+     * Gets the row, if any, of the package in the model.
+     *
+     * @param packageName the name of the package
+     * @return the row of the package, or -1 if it isn't in the table
+     */
+    int getPackageRow(@NotNull String packageName)
+    {
+        int row = -1;
+        for (int i = 0; row == -1 && i < getRowCount(); i++)
+        {
+            if (packageName.equals(getValueAt(i, 0)))
+            {
+                row = i;
+            }
+        }
+        return row;
     }
 }

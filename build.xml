@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="IntelliJad" default="build" basedir=".">
 
-    <!-- A build.properties file must exist -->
-    <property file="build.properties"/>
+    <!-- A build.properties file must exist containing: -->
+    <!-- idea.home.dir, e.g. idea.home.dir=/usr/local/ide/idea-6180 -->
+    <property file="${user.home}/build.properties"/>
 
     <property name="src.dir" value="src/"/>
     <property name="dist.dir" value="dist/"/>
@@ -50,15 +51,15 @@
         <zip zipfile="${dist.dir}/${sources.zip}">
             <fileset dir=".">
                 <include name="**/*.*"/>
+                <include name="*.iml"/>
+                <include name="*.ipr"/>
+                <include name="*.iws"/>
+                <exclude name="*.jar"/>
                 <exclude name="**/.*"/>
                 <exclude name="${compiled.dir}"/>
                 <exclude name="${dist.dir}"/>
                 <exclude name="${build.dir}"/>
                 <exclude name="classes/"/>
-                <exclude name="*.iml"/>
-                <exclude name="*.ipr"/>
-                <exclude name="*.iws"/>
-                <exclude name="*.jar"/>
                 <exclude name="*.zip"/>
             </fileset>
         </zip>

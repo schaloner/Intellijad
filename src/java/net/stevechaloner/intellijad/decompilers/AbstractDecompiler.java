@@ -200,7 +200,8 @@ public abstract class AbstractDecompiler implements Decompiler
      * @param command the process execution string
      * @param config the decompilation configuration
      */
-    protected abstract void updateCommand(StringBuilder command, Config config);
+    protected abstract void updateCommand(StringBuilder command,
+                                          Config config);
 
     /** {@inheritDoc} */
     public VirtualFile decompile(DecompilationDescriptor descriptor,

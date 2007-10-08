@@ -29,11 +29,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
@@ -43,8 +40,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -57,7 +54,8 @@ import java.lang.reflect.Field;
  */
 public class ConfigForm
 {
-    private JTabbedPane tabbedPane1;
+    private JPanel root;
+    private JCheckBox useProjectSpecificIntelliJadCheckBox;
     @Control private JTextField outputDirectoryTextField;
     @Control private JButton outputDirBrowseButton;
     @Control private JCheckBox markDecompiledFilesAsCheckBox;
@@ -86,20 +84,16 @@ public class ConfigForm
     @Control private JCheckBox insertANewlineBeforeCheckBox;
     @Control private JCheckBox outputFieldsBeforeMethodsCheckBox;
     @Control private JCheckBox splitStringsOnNewlineCheckBox;
-    private JPanel root;
     @Control private JTextField jadTextField;
-    @Control private JButton actionRemoveExclusionButton;
-    @Control private JButton addButton;
-    @Control private JScrollPane excludesScrollPane;
+    @Control private JButton removeExclusionButton;
+    @Control private JButton addExclusionButton;
     @Control private JTable exclusionTable;
     @Control private JComboBox navTriggeredDecomp;
     @Control private JCheckBox decompileToMemoryCheckBox;
-    @Control private JTextField pathTextField;
+    @Control private JTextField excludePackageTextField;
     @Control private JButton browseButton1;
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
-    private JLabel configReformatAccordingToLabel;
-    private JCheckBox useProjectSpecificIntelliJadCheckBox;
     @Control private JComboBox reformatStyle;
 
     private ExclusionTableModel exclusionTableModel;
@@ -154,44 +148,33 @@ public class ConfigForm
             }
         });
 
-        addButton.setEnabled(false);
-        pathTextField.addKeyListener(new KeyListener()
+        addExclusionButton.setEnabled(false);
+        excludePackageTextField.addKeyListener(new KeyAdapter()
         {
-
-            public void keyTyped(KeyEvent keyEvent)
-            {
-                // no-op
-            }
-
-            public void keyPressed(KeyEvent keyEvent)
-            {
-                // no-op
-            }
-
             public void keyReleased(KeyEvent keyEvent)
             {
                 switch (keyEvent.getKeyCode())
                 {
                     case KeyEvent.VK_ENTER:
-                        if (addButton.isEnabled())
+                        if (addExclusionButton.isEnabled())
                         {
                             addExclusion();
                         }
                         break;
                     default:
-                        String s = pathTextField.getText();
-                        addButton.setEnabled(s != null && s.length() != 0 && Character.isJavaIdentifierPart(s.charAt(s.length() - 1)));
+                        String s = excludePackageTextField.getText();
+                        addExclusionButton.setEnabled(s != null && s.length() != 0 && Character.isJavaIdentifierPart(s.charAt(s.length() - 1)));
                 }
             }
         });
-        addButton.addActionListener(new ActionListener()
+        addExclusionButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
                 addExclusion();
             }
         });
-        actionRemoveExclusionButton.addActionListener(new ActionListener()
+        removeExclusionButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent actionEvent)
             {
@@ -287,14 +270,14 @@ public class ConfigForm
     {
         if (exclusionTableModel != null)
         {
-            String path = pathTextField.getText();
+            String path = excludePackageTextField.getText();
             if (!StringUtil.isEmptyOrSpaces(path))
             {
                 exclusionTableModel.addExclusion(path,
                                                  alwaysExcludePackagesRecursivelyCheckBox.isSelected(),
                                                  true);
             }
-            pathTextField.setText("");
+            excludePackageTextField.setText("");
         }
     }
 
@@ -381,6 +364,10 @@ public class ConfigForm
         {
             return true;
         }
+        if (exclusionTableModel != null && exclusionTableModel.equals(data.getExclusionTableModel()))
+        {
+            return true;
+        }
         if (useProjectSpecificIntelliJadCheckBox.isSelected() != data.isUseProjectSpecificSettings())
         {
             return true;
@@ -400,10 +387,25 @@ public class ConfigForm
         return model;
     }
 
+    /**
+     * Checks if the two strings are equal, equating null and empty strings as the same.
+     *
+     * @param s1 comparison string
+     * @param s2 comparison string
+     * @return true if the strings have content that is different
+     */
+    private static boolean isModified(@Nullable String s1,
+                                      @Nullable String s2)
+    {
+        s1 = (s1 == null) ? "" : s1;
+        s2 = (s2 == null) ? "" : s2;
+
+        return !s1.equals(s2);
+    }
+
     public void setData(Config data)
     {
         setUnboundData(data);
-
         jadTextField.setText(data.getJadPath());
         outputDirectoryTextField.setText(data.getOutputDirectory());
         createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
@@ -435,7 +437,6 @@ public class ConfigForm
     public void getData(Config data)
     {
         getUnboundData(data);
-
         data.setJadPath(jadTextField.getText());
         data.setOutputDirectory(outputDirectoryTextField.getText());
         data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
@@ -575,22 +576,6 @@ public class ConfigForm
             return true;
         }
         return false;
-    }
-
-    /**
-     * Checks if the two strings are equal, equating null and empty strings as the same.
-     *
-     * @param s1 comparison string
-     * @param s2 comparison string
-     * @return true if the strings have content that is different
-     */
-    private static boolean isModified(@Nullable String s1,
-                                      @Nullable String s2)
-    {
-        s1 = (s1 == null) ? "" : s1;
-        s2 = (s2 == null) ? "" : s2;
-
-        return !s1.equals(s2);
     }
 
     /**

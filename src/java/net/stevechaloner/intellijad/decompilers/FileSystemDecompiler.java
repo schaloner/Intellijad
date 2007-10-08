@@ -25,13 +25,6 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
@@ -43,6 +36,13 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A decompiler that takes the file created by the memory decompiler and copies it to the file system.  This allows
@@ -116,6 +116,7 @@ public class FileSystemDecompiler extends MemoryDecompiler
             consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
                                       "error.storing-class-in-memory",
                                       descriptor.getClassName());
+            consoleContext.setWorthDisplaying(true);
         }
 
         return status;

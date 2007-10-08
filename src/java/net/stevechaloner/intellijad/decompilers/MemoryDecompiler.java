@@ -22,10 +22,6 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.List;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.CodeStyle;
@@ -38,6 +34,10 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -82,7 +82,7 @@ public class MemoryDecompiler extends AbstractDecompiler
     }
 
     /**
-     * 
+     *
      * @param descriptor the decompilation descriptor
      * @param context    the decompilation context
      * @param content    the content of the decompiled file
@@ -194,7 +194,7 @@ public class MemoryDecompiler extends AbstractDecompiler
     }
 
     /** {@inheritDoc} */
-    protected void updateCommand(StringBuilder command, 
+    protected void updateCommand(StringBuilder command,
                                  Config config)
     {
         command.append(" -p ");

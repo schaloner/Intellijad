@@ -177,8 +177,7 @@ public class NavigationListener implements FileEditorManagerListener
         boolean exclude = false;
         if (packageName != null)
         {
-            if (ExclusionTableModel.ExclusionType.NOT_EXCLUDED == exclusionModel.containsPackage(
-                    packageName))
+            if (ExclusionTableModel.ExclusionType.NOT_EXCLUDED == exclusionModel.getExclusionType(packageName))
             {
                 for (int i = 0; !exclude && i < exclusionModel.getRowCount(); i++)
                 {
@@ -211,6 +210,7 @@ public class NavigationListener implements FileEditorManagerListener
             }
             catch (IOException e)
             {
+                // todo handle this
                 e.printStackTrace();
             }
         }

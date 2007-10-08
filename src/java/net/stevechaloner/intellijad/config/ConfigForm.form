@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="75483" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="75483" default-binding="true">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
@@ -135,14 +135,6 @@
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.use-project-intellijad-settings"/>
                 </properties>
               </component>
-              <component id="2578e" class="javax.swing.JLabel" binding="configReformatAccordingToLabel" default-binding="true">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.reformat.to"/>
-                </properties>
-              </component>
               <component id="d105d" class="javax.swing.JComboBox" binding="reformatStyle">
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
@@ -154,6 +146,15 @@
                   <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
+              </component>
+              <component id="2578e" class="javax.swing.JLabel" default-binding="true">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <labelFor value="d105d"/>
+                  <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.reformat.to"/>
+                </properties>
               </component>
             </children>
           </grid>
@@ -526,7 +527,7 @@
               <size top="3" left="3" bottom="3" right="3"/>
             </border>
             <children>
-              <scrollpane id="c5d74" binding="excludesScrollPane">
+              <scrollpane id="c5d74">
                 <constraints>
                   <grid row="0" column="0" row-span="2" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -539,7 +540,7 @@
                   </component>
                 </children>
               </scrollpane>
-              <component id="ad353" class="javax.swing.JButton" binding="actionRemoveExclusionButton">
+              <component id="ad353" class="javax.swing.JButton" binding="removeExclusionButton">
                 <constraints>
                   <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -547,7 +548,7 @@
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.remove"/>
                 </properties>
               </component>
-              <component id="3b0b9" class="javax.swing.JTextField" binding="pathTextField" default-binding="true">
+              <component id="3b0b9" class="javax.swing.JTextField" binding="excludePackageTextField">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -555,7 +556,7 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="1248c" class="javax.swing.JButton" binding="addButton" default-binding="true">
+              <component id="1248c" class="javax.swing.JButton" binding="addExclusionButton">
                 <constraints>
                   <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
