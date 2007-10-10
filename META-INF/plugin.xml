@@ -42,6 +42,12 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.6
+                <ol>
+                    <li>Non-jarred classes are now opened and decompiled correctly.</li>
+                    <li>Project configuration view enables/disables controls on dialog opening.</li>
+                </ol>
+            </li>
             <li>0.5.3
                 <ol>
                     <li>Config is persisted alphabetically.</li>
