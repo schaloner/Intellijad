@@ -22,6 +22,10 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.CodeStyle;
@@ -34,10 +38,6 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -144,8 +144,8 @@ public class MemoryDecompiler extends AbstractDecompiler
                                                @NotNull MemoryVirtualFile file)
     {
         vfs.addFile(file);
-        MemoryVirtualFile packageFile = vfs.getFileForPackage(descriptor.getPackageName());
-        packageFile.addChild(file);
+        MemoryVirtualFile parentFile = "".equals(descriptor.getPackageName()) ? (MemoryVirtualFile)vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT) : vfs.getFileForPackage(descriptor.getPackageName());
+        parentFile.addChild(file);
 
         return file;
     }
@@ -243,7 +243,14 @@ public class MemoryDecompiler extends AbstractDecompiler
     public VirtualFile getVirtualFile(DecompilationDescriptor descriptor,
                                       DecompilationContext context)
     {
-        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
-        return vfs.findFileByPath(descriptor.getFullyQualifiedNameAsPath());
+        String fqNameAsPath = descriptor.getFullyQualifiedNameAsPath();
+        VirtualFile file = null;
+        if (fqNameAsPath != null)
+        {
+            final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+            file = vfs.findFileByPath(fqNameAsPath);
+
+        }
+        return file;
     }
 }

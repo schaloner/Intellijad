@@ -26,6 +26,9 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.stevechaloner.intellijad.actions.NavigationListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -45,9 +48,6 @@ import net.stevechaloner.intellijad.environment.ValidationResult;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The central component of the plugin.
@@ -234,11 +234,11 @@ public class IntelliJad implements ApplicationComponent,
                               IntelliJadConsole console,
                               ConsoleContext consoleContext)
     {
-        if (consoleContext.isWorthDisplaying())
+        if (consoleContext.isWorthDisplaying() || !config.isClearAndCloseConsoleOnSuccess())
         {
             console.openConsole();
         }
-        else if (config.isClearAndCloseConsoleOnSuccess())
+        else if (config.isClearAndCloseConsoleOnSuccess() && !consoleContext.isWorthDisplaying())
         {
             console.clearConsoleContent();
             console.closeConsole();

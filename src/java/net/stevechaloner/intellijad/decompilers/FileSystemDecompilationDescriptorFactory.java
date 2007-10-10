@@ -16,11 +16,13 @@
 package net.stevechaloner.intellijad.decompilers;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import net.stevechaloner.intellijad.IntelliJadConstants;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Factory for creating {@link FileSystemDecompilationDescriptor}s based on a virtual file representing the target class.
@@ -58,8 +60,15 @@ class FileSystemDecompilationDescriptorFactory extends DecompilationDescriptorFa
             }
             dd.setPackageNameAsPath(asPath);
             dd.setFqName(packageName + '.' + dd.getClassName());
-            dd.setFqNameAsPath(asPath + dd.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION
-            );
+            dd.setFqNameAsPath(asPath + dd.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
+        }
+        else
+        {
+            dd.setPackageName("");
+            dd.setPackageNameAsPath("");
+            dd.setFqName(dd.getClassName());
+            dd.setFqNameAsPath(dd.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION);
         }
     }
+
 }

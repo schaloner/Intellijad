@@ -3,8 +3,8 @@
 
 <idea-plugin>
     <name>IntelliJad</name>
-    <description>Integration with the Jad Java decompiler</description>
-    <version>0.5.2</version>
+    <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
+    <version>0.5.4</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -42,6 +42,12 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.5.3
+                <ol>
+                    <li>Config is persisted alphabetically.</li>
+                    <li>Console now appears when there is an issue.</li>
+                </ol>
+            </li>
             <li>0.5.2
                 <ol>
                     <li>ConfigForm now checks for modified data in unbound items correctly.</li>
