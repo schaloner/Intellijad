@@ -72,12 +72,12 @@ public class FileSystemDecompiler extends MemoryDecompiler
 
         if (status == OperationStatus.CONTINUE)
         {
-            final Config config = context.getConfig();
-            final String outputDirPath = config.getOutputDirectory();
+            Config config = context.getConfig();
+            String outputDirPath = config.getOutputDirectory();
             if (!StringUtil.isEmptyOrSpaces(outputDirPath))
             {
-                final File outputDirectory = new File(outputDirPath);
-                final boolean outputDirExists = outputDirectory.exists();
+                File outputDirectory = new File(outputDirPath);
+                boolean outputDirExists = outputDirectory.exists();
                 if (!outputDirExists && config.isCreateOutputDirectory())
                 {
                     if (!outputDirectory.mkdirs())
@@ -128,9 +128,8 @@ public class FileSystemDecompiler extends MemoryDecompiler
                                                @NotNull MemoryVirtualFileSystem vfs,
                                                @NotNull MemoryVirtualFile file)
     {
-        Boolean storeInMemory = context.getUserData(STORE_IN_MEMORY);
         VirtualFile insertFile;
-        if (storeInMemory)
+        if (context.getUserData(STORE_IN_MEMORY))
         {
             insertFile = super.insertIntoFileSystem(descriptor,
                                                     context,
@@ -140,9 +139,9 @@ public class FileSystemDecompiler extends MemoryDecompiler
         else
         {
             final LocalFileSystem lvfs = getLocalFileSystem();
-            final Config config = context.getConfig();
-            final File localPath = new File(config.getOutputDirectory() + '/' +
-                                            descriptor.getPackageNameAsPath());
+            Config config = context.getConfig();
+            File localPath = new File(config.getOutputDirectory() + '/' +
+                                      descriptor.getPackageNameAsPath());
             if (localPath.exists() & localPath.canWrite() || localPath.mkdirs())
             {
                 try
@@ -167,7 +166,6 @@ public class FileSystemDecompiler extends MemoryDecompiler
                 }
                 catch (IOException e)
                 {
-                    // todo log this
                     insertFile = super.insertIntoFileSystem(descriptor,
                                                             context,
                                                             vfs,
@@ -178,7 +176,6 @@ public class FileSystemDecompiler extends MemoryDecompiler
             }
             else
             {
-                // todo log this
                 insertFile = super.insertIntoFileSystem(descriptor,
                                                         context,
                                                         vfs,
@@ -197,8 +194,7 @@ public class FileSystemDecompiler extends MemoryDecompiler
                                            @NotNull MemoryVirtualFileSystem vfs,
                                            @NotNull List<Library> libraries)
     {
-        Boolean storeInMemory = context.getUserData(STORE_IN_MEMORY);
-        if (storeInMemory)
+        if (context.getUserData(STORE_IN_MEMORY))
         {
             // something has occurred to make storing the file on disk a problem, so
             // keep it in memory instead
@@ -220,9 +216,9 @@ public class FileSystemDecompiler extends MemoryDecompiler
                                      @NotNull final VirtualFile file)
     {
         final Project project = context.getProject();
-        final LocalFileSystem vfs = getLocalFileSystem();
-        final Config config = context.getConfig();
-        final File td = new File(config.getOutputDirectory());
+        LocalFileSystem vfs = getLocalFileSystem();
+        Config config = context.getConfig();
+        File td = new File(config.getOutputDirectory());
         final VirtualFile targetDirectory = vfs.findFileByIoFile(td);
 
         ApplicationManager.getApplication().runWriteAction(new Runnable()
@@ -274,6 +270,30 @@ public class FileSystemDecompiler extends MemoryDecompiler
 
 
         return file;
+    }
+
+    /**
+     * Locks the file against source changes
+     * @param context
+     * @param file
+     */
+    protected void lockFile(@NotNull DecompilationContext context,
+                            @NotNull MemoryVirtualFile file)
+    {
+        if (context.getUserData(STORE_IN_MEMORY))
+        {
+            super.lockFile(context,
+                           file);
+        }
+        else
+        {
+            Config config = context.getConfig();
+            if (config.isReadOnly())
+            {
+                VirtualFile fsFile = context.getUserData(LOCAL_FS_FILE);
+                new File(fsFile.getPath()).setReadOnly();
+            }
+        }
     }
 
     private LocalFileSystem getLocalFileSystem()

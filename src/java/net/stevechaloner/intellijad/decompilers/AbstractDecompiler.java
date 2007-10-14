@@ -41,7 +41,6 @@ import java.util.zip.ZipFile;
 /**
  * The generic decompilation operations required to decompile and display a class.
  *
- * @todo this class and its children need some serious refactoring to reduce duplication
  * @author Steve Chaloner
  */
 public abstract class AbstractDecompiler implements Decompiler
@@ -378,7 +377,7 @@ public abstract class AbstractDecompiler implements Decompiler
          * @return true if the class was prepared successfully
          * @throws DecompilationException if the class can't be prepared
          */
-        public boolean execute(DecompilationContext context,
-                               DecompilationDescriptor descriptor) throws DecompilationException;
+        boolean execute(DecompilationContext context,
+                        DecompilationDescriptor descriptor) throws DecompilationException;
     }
 }

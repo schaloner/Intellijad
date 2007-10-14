@@ -43,6 +43,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -95,6 +96,7 @@ public class ConfigForm
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     @Control private JComboBox reformatStyle;
+    private JCheckBox clearAndCloseConsoleCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
@@ -215,7 +217,7 @@ public class ConfigForm
      *
      * @param project the current project
      */
-    private void toggleToDiskControls(final Project project)
+    private void toggleToDiskControls(@Nullable Project project)
     {
         if (project == null ||
             useProjectSpecificIntelliJadCheckBox.isSelected())
@@ -237,7 +239,7 @@ public class ConfigForm
      * @param project the current project
      * @param enabled true iff the project has specific settings
      */
-    private void setControlsEnabled(@Nullable final Project project,
+    private void setControlsEnabled(@Nullable Project project,
                                     boolean enabled)
     {
         Class<? extends ConfigForm> thisClass = this.getClass();
@@ -404,78 +406,10 @@ public class ConfigForm
     private static boolean isModified(@Nullable String s1,
                                       @Nullable String s2)
     {
-        s1 = (s1 == null) ? "" : s1;
-        s2 = (s2 == null) ? "" : s2;
+        s1 = s1 == null ? "" : s1;
+        s2 = s2 == null ? "" : s2;
 
         return !s1.equals(s2);
-    }
-
-    public void setData(Config data)
-    {
-        setUnboundData(data);
-        jadTextField.setText(data.getJadPath());
-        outputDirectoryTextField.setText(data.getOutputDirectory());
-        createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
-        decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
-        markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
-        printDefaultInitializersForCheckBox.setSelected(data.isDefaultInitializers());
-        generateFullyQualifiedNamesCheckBox.setSelected(data.isFullyQualifiedNames());
-        clearAllPrefixesIncludingCheckBox.setSelected(data.isClearPrefixes());
-        generateRedundantBracesCheckBox.setSelected(data.isRedundantBraces());
-        suppressEmptyConstructorsCheckBox.setSelected(data.isNoctor());
-        donTGenerateAuxiliaryCheckBox.setSelected(data.isNocast());
-        donTDisambiguateFieldsCheckBox.setSelected(data.isNofd());
-        useTabsInsteadOfCheckBox.setSelected(data.isUseTabs());
-        spaceBetweenKeywordAndCheckBox.setSelected(data.isSpaceAfterKeyword());
-        originalLineNumbersAsCheckBox.setSelected(data.isLineNumbersAsComments());
-        outputFieldsBeforeMethodsCheckBox.setSelected(data.isFieldsFirst());
-        insertANewlineBeforeCheckBox.setSelected(data.isNonlb());
-        splitStringsOnNewlineCheckBox.setSelected(data.isSplitStringsAtNewline());
-        classesWithNumericalNamesTextField.setText(data.getPrefixNumericalClasses());
-        fieldsWithNumericalNamesTextField.setText(data.getPrefixNumericalFields());
-        localsWithNumericalNamesTextField.setText(data.getPrefixNumericalLocals());
-        methodsWithNumericalNamesTextField.setText(data.getPrefixNumericalMethods());
-        parametersWithNumericalNamesTextField.setText(data.getPrefixNumericalParameters());
-        allPackagesTextField.setText(data.getPrefixPackages());
-        unusedExceptionNamesTextField.setText(data.getPrefixUnusedExceptions());
-        alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
-
-        if (project != null)
-        {
-            setControlsEnabled(project,
-                               data.isUseProjectSpecificSettings());
-        }
-    }
-
-    public void getData(Config data)
-    {
-        getUnboundData(data);
-        data.setJadPath(jadTextField.getText());
-        data.setOutputDirectory(outputDirectoryTextField.getText());
-        data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
-        data.setDecompileToMemory(decompileToMemoryCheckBox.isSelected());
-        data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
-        data.setDefaultInitializers(printDefaultInitializersForCheckBox.isSelected());
-        data.setFullyQualifiedNames(generateFullyQualifiedNamesCheckBox.isSelected());
-        data.setClearPrefixes(clearAllPrefixesIncludingCheckBox.isSelected());
-        data.setRedundantBraces(generateRedundantBracesCheckBox.isSelected());
-        data.setNoctor(suppressEmptyConstructorsCheckBox.isSelected());
-        data.setNocast(donTGenerateAuxiliaryCheckBox.isSelected());
-        data.setNofd(donTDisambiguateFieldsCheckBox.isSelected());
-        data.setUseTabs(useTabsInsteadOfCheckBox.isSelected());
-        data.setSpaceAfterKeyword(spaceBetweenKeywordAndCheckBox.isSelected());
-        data.setLineNumbersAsComments(originalLineNumbersAsCheckBox.isSelected());
-        data.setFieldsFirst(outputFieldsBeforeMethodsCheckBox.isSelected());
-        data.setNonlb(insertANewlineBeforeCheckBox.isSelected());
-        data.setSplitStringsAtNewline(splitStringsOnNewlineCheckBox.isSelected());
-        data.setPrefixNumericalClasses(classesWithNumericalNamesTextField.getText());
-        data.setPrefixNumericalFields(fieldsWithNumericalNamesTextField.getText());
-        data.setPrefixNumericalLocals(localsWithNumericalNamesTextField.getText());
-        data.setPrefixNumericalMethods(methodsWithNumericalNamesTextField.getText());
-        data.setPrefixNumericalParameters(parametersWithNumericalNamesTextField.getText());
-        data.setPrefixPackages(allPackagesTextField.getText());
-        data.setPrefixUnusedExceptions(unusedExceptionNamesTextField.getText());
-        data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
     }
 
     public boolean isModified(Config data)
@@ -497,6 +431,10 @@ public class ConfigForm
             return true;
         }
         if (decompileToMemoryCheckBox.isSelected() != data.isDecompileToMemory())
+        {
+            return true;
+        }
+        if (clearAndCloseConsoleCheckBox.isSelected() != data.isClearAndCloseConsoleOnSuccess())
         {
             return true;
         }
@@ -591,6 +529,70 @@ public class ConfigForm
         return false;
     }
 
+    public void setData(Config data)
+    {
+        setUnboundData(data);
+        jadTextField.setText(data.getJadPath());
+        outputDirectoryTextField.setText(data.getOutputDirectory());
+        createIfDirectoryDoesnCheckBox.setSelected(data.isCreateOutputDirectory());
+        decompileToMemoryCheckBox.setSelected(data.isDecompileToMemory());
+        markDecompiledFilesAsCheckBox.setSelected(data.isReadOnly());
+        clearAndCloseConsoleCheckBox.setSelected(data.isClearAndCloseConsoleOnSuccess());
+        printDefaultInitializersForCheckBox.setSelected(data.isDefaultInitializers());
+        generateFullyQualifiedNamesCheckBox.setSelected(data.isFullyQualifiedNames());
+        clearAllPrefixesIncludingCheckBox.setSelected(data.isClearPrefixes());
+        generateRedundantBracesCheckBox.setSelected(data.isRedundantBraces());
+        suppressEmptyConstructorsCheckBox.setSelected(data.isNoctor());
+        donTGenerateAuxiliaryCheckBox.setSelected(data.isNocast());
+        donTDisambiguateFieldsCheckBox.setSelected(data.isNofd());
+        useTabsInsteadOfCheckBox.setSelected(data.isUseTabs());
+        spaceBetweenKeywordAndCheckBox.setSelected(data.isSpaceAfterKeyword());
+        originalLineNumbersAsCheckBox.setSelected(data.isLineNumbersAsComments());
+        outputFieldsBeforeMethodsCheckBox.setSelected(data.isFieldsFirst());
+        insertANewlineBeforeCheckBox.setSelected(data.isNonlb());
+        splitStringsOnNewlineCheckBox.setSelected(data.isSplitStringsAtNewline());
+        classesWithNumericalNamesTextField.setText(data.getPrefixNumericalClasses());
+        fieldsWithNumericalNamesTextField.setText(data.getPrefixNumericalFields());
+        localsWithNumericalNamesTextField.setText(data.getPrefixNumericalLocals());
+        methodsWithNumericalNamesTextField.setText(data.getPrefixNumericalMethods());
+        parametersWithNumericalNamesTextField.setText(data.getPrefixNumericalParameters());
+        allPackagesTextField.setText(data.getPrefixPackages());
+        unusedExceptionNamesTextField.setText(data.getPrefixUnusedExceptions());
+        alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
+    }
+
+    public void getData(Config data)
+    {
+        getUnboundData(data);
+        data.setJadPath(jadTextField.getText());
+        data.setOutputDirectory(outputDirectoryTextField.getText());
+        data.setCreateOutputDirectory(createIfDirectoryDoesnCheckBox.isSelected());
+        data.setDecompileToMemory(decompileToMemoryCheckBox.isSelected());
+        data.setReadOnly(markDecompiledFilesAsCheckBox.isSelected());
+        data.setClearAndCloseConsoleOnSuccess(clearAndCloseConsoleCheckBox.isSelected());
+        data.setDefaultInitializers(printDefaultInitializersForCheckBox.isSelected());
+        data.setFullyQualifiedNames(generateFullyQualifiedNamesCheckBox.isSelected());
+        data.setClearPrefixes(clearAllPrefixesIncludingCheckBox.isSelected());
+        data.setRedundantBraces(generateRedundantBracesCheckBox.isSelected());
+        data.setNoctor(suppressEmptyConstructorsCheckBox.isSelected());
+        data.setNocast(donTGenerateAuxiliaryCheckBox.isSelected());
+        data.setNofd(donTDisambiguateFieldsCheckBox.isSelected());
+        data.setUseTabs(useTabsInsteadOfCheckBox.isSelected());
+        data.setSpaceAfterKeyword(spaceBetweenKeywordAndCheckBox.isSelected());
+        data.setLineNumbersAsComments(originalLineNumbersAsCheckBox.isSelected());
+        data.setFieldsFirst(outputFieldsBeforeMethodsCheckBox.isSelected());
+        data.setNonlb(insertANewlineBeforeCheckBox.isSelected());
+        data.setSplitStringsAtNewline(splitStringsOnNewlineCheckBox.isSelected());
+        data.setPrefixNumericalClasses(classesWithNumericalNamesTextField.getText());
+        data.setPrefixNumericalFields(fieldsWithNumericalNamesTextField.getText());
+        data.setPrefixNumericalLocals(localsWithNumericalNamesTextField.getText());
+        data.setPrefixNumericalMethods(methodsWithNumericalNamesTextField.getText());
+        data.setPrefixNumericalParameters(parametersWithNumericalNamesTextField.getText());
+        data.setPrefixPackages(allPackagesTextField.getText());
+        data.setPrefixUnusedExceptions(unusedExceptionNamesTextField.getText());
+        data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
+    }
+
     /**
      * Restricted, non-contiguous spinner model.
      */
@@ -676,12 +678,12 @@ public class ConfigForm
     }
 
     /**
-     * Marker annotation to indicate a {@link javax.swing.JComponent} is considered
+     * Marker annotation to indicate a {@link JComponent} is considered
      * part of the general control set, as defined by whatever class is using this.
      */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)
-    @Target(java.lang.annotation.ElementType.FIELD)
+    @Target(ElementType.FIELD)
     public @interface Control
     {
     }

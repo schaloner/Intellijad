@@ -17,6 +17,7 @@ package net.stevechaloner.intellijad;
 
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
+
 import net.stevechaloner.intellijad.actions.NavigationListener;
 
 import java.util.List;
@@ -32,6 +33,11 @@ public class IntelliJadConstants
      * The extension used by Java files.
      */
     public static final String JAVA_EXTENSION = "java";
+
+    /**
+     * The extension used by class files.
+     */
+    public static final String CLASS_EXTENSION = "class";
 
     /**
      * The extension used by Java files, with a handy dot to save future appends.

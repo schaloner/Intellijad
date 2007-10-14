@@ -42,7 +42,7 @@ public enum CodeStyle
     /**
      * Mapping of the entry name to the entry.
      */
-    private final static Map<String, CodeStyle> MAP = new HashMap<String, CodeStyle>() {
+    private static final Map<String, CodeStyle> MAP = new HashMap<String, CodeStyle>() {
         {
             put(PREFERRED_STYLE.getName(),
                 PREFERRED_STYLE);

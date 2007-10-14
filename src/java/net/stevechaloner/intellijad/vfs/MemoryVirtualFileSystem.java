@@ -1,13 +1,16 @@
 package net.stevechaloner.intellijad.vfs;
 
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.newvfs.NewVirtualFileSystem;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +63,7 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
      *
      * @param file the file to add
      */
-    public void addFile(final MemoryVirtualFile file)
+    public void addFile(@NotNull MemoryVirtualFile file)
     {
         files.put(file.getName(),
                   file);
@@ -179,8 +182,8 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
                                              VirtualFile parent,
                                              String name) throws IOException
     {
-        final MemoryVirtualFile file = new MemoryVirtualFile(name,
-                                                             null);
+        MemoryVirtualFile file = new MemoryVirtualFile(name,
+                                                       null);
         file.setParent(parent);
         addFile(file);
         return file;
@@ -264,7 +267,7 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    Logger.getInstance(getClass().getName()).error(e);
                 }
             }
         }

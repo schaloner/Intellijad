@@ -2,6 +2,71 @@
 <project relativePaths="false" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
+    <buildFile url="file://$PROJECT_DIR$/build.xml">
+      <additionalClassPath>
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/oromatcher.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/log4j.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/extensions.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/boot.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/asm-commons.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/velocity.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/emma.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/annotations.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/xml-apis.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jaxen.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/nanoxml-2.2.3.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/resources_en.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/emma-agent.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jdom.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/xerces.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/alloy.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/yjp-controller-api-redist.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/org.eclipse.jdt.core.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/trove4j_src.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/junit-4.4.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/asm.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/commons-collections.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/javaee.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/servlet-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/idea.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/openapi.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jsf-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/javac2.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/commons-codec-1.3.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jgoodies-forms.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/resources.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/resolver.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jsp-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/microba.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/j2ee.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/JNIWrap.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/picocontainer.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/icons.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/saxpath.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/forms_rt.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/xmlrpc-2.0.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/xstream.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jh.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/trove4j.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/jasper2_rt.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/bootstrap.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/idea_rt.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/junit.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/cglib-nodep-2.1_3.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/xerces1.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/servlet.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/servlet-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jsp-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jasper-runtime.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jasper-compiler.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/commons-logging-api.jar" />
+        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/commons-el.jar" />
+      </additionalClassPath>
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -76,59 +141,59 @@
   </component>
   <component name="IntelliJadProjectConfigComponent">
     <config>
-      <read-only type="boolean">false</read-only>
-      <nl type="boolean">false</nl>
-      <lnc type="boolean">false</lnc>
-      <pp type="string">_prm</pp>
-      <nofd type="boolean">false</nofd>
       <a type="boolean">false</a>
-      <safe type="boolean">false</safe>
+      <af type="boolean">false</af>
+      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
       <b type="boolean">false</b>
-      <l type="integer">64</l>
-      <dis type="boolean">false</dis>
+      <clear type="boolean">false</clear>
+      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
       <create-output-directory type="boolean">false</create-output-directory>
-      <o type="boolean">false</o>
+      <d type="string" />
+      <dead type="boolean">false</dead>
+      <decompile-on-navigation type="string">Always</decompile-on-navigation>
+      <decompile-to-memory type="boolean">false</decompile-to-memory>
+      <dis type="boolean">false</dis>
+      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
+      <f type="boolean">false</f>
+      <ff type="boolean">false</ff>
+      <i type="boolean">false</i>
+      <indentation type="integer">4</indentation>
+      <jad-path type="string" />
+      <l type="integer">64</l>
+      <lnc type="boolean">false</lnc>
+      <lradix type="integer">10</lradix>
+      <nl type="boolean">false</nl>
+      <nocast type="boolean">false</nocast>
       <noclass type="boolean">false</noclass>
+      <nocode type="boolean">false</nocode>
+      <noconv type="boolean">false</noconv>
+      <noctor type="boolean">false</noctor>
+      <nodos type="boolean">false</nodos>
+      <nofd type="boolean">false</nofd>
+      <noinner type="boolean">false</noinner>
       <nolvt type="boolean">false</nolvt>
       <nonlb type="boolean">false</nonlb>
-      <clear-and-close-console-on-success type="boolean">false</clear-and-close-console-on-success>
-      <i type="boolean">false</i>
-      <sort type="boolean">false</sort>
-      <pm type="string">_mth</pm>
-      <radix type="integer">10</radix>
-      <lradix type="integer">10</lradix>
-      <noctor type="boolean">false</noctor>
-      <pe type="string">_ex</pe>
-      <jad-path type="string" />
-      <space type="boolean">false</space>
-      <pv type="integer">3</pv>
-      <reformat-according-to-style type="boolean">false</reformat-according-to-style>
-      <d type="string" />
-      <pf type="string">_fld</pf>
-      <nodos type="boolean">false</nodos>
-      <ff type="boolean">false</ff>
-      <always-exclude-recursively type="boolean">false</always-exclude-recursively>
-      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
+      <o type="boolean">false</o>
       <pa type="string" />
-      <noinner type="boolean">false</noinner>
-      <r type="boolean">false</r>
-      <decompile-to-memory type="boolean">false</decompile-to-memory>
-      <s type="string">java</s>
-      <stat type="boolean">false</stat>
-      <af type="boolean">false</af>
-      <dead type="boolean">false</dead>
-      <clear type="boolean">false</clear>
-      <noconv type="boolean">false</noconv>
-      <f type="boolean">false</f>
-      <t type="boolean">false</t>
-      <v type="boolean">false</v>
-      <nocast type="boolean">false</nocast>
-      <pl type="string">_lcl</pl>
-      <nocode type="boolean">false</nocode>
-      <decompile-on-navigation type="string">Always</decompile-on-navigation>
-      <indentation type="integer">4</indentation>
-      <exclusion-table-model type="table-model" model-class="net.stevechaloner.intellijad.config.ExclusionTableModel" content-types="string,boolean,boolean" />
       <pc type="string">_cls</pc>
+      <pe type="string">_ex</pe>
+      <pf type="string">_fld</pf>
+      <pl type="string">_lcl</pl>
+      <pm type="string">_mth</pm>
+      <pp type="string">_prm</pp>
+      <pv type="integer">3</pv>
+      <r type="boolean">false</r>
+      <radix type="integer">10</radix>
+      <read-only type="boolean">false</read-only>
+      <reformat-style type="string">Preferred-Style</reformat-style>
+      <s type="string">java</s>
+      <safe type="boolean">false</safe>
+      <sort type="boolean">false</sort>
+      <space type="boolean">false</space>
+      <stat type="boolean">false</stat>
+      <t type="boolean">false</t>
+      <use-project-specific-settings type="boolean">false</use-project-specific-settings>
+      <v type="boolean">false</v>
     </config>
   </component>
   <component name="JavacSettings">
@@ -296,7 +361,7 @@
       <module fileurl="file://$PROJECT_DIR$/intellijad.iml" filepath="$PROJECT_DIR$/intellijad.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7294" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7126" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="RMI Configuration">
@@ -341,7 +406,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
-  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>

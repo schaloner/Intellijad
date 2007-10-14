@@ -38,8 +38,8 @@ public class ValidationResult
      * @param valid true if the config is valid
      * @param cancelled true if the operation should be cancelled
      */
-    ValidationResult(final boolean valid,
-                     final boolean cancelled)
+    ValidationResult(boolean valid,
+                     boolean cancelled)
     {
         this.valid = valid;
         this.cancelled = cancelled;

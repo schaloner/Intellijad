@@ -22,10 +22,6 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.List;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.CodeStyle;
@@ -38,6 +34,10 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
 
 /**
  * An in-memory decompiler that catches the piped output of Jad and
@@ -93,22 +93,23 @@ public class MemoryDecompiler extends AbstractDecompiler
                                         @NotNull final DecompilationContext context,
                                         @NotNull final String content) throws DecompilationException
     {
-        final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+        MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
         MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION,
                                                        content);
 
-        this.reformatToStyle(context,
-                             file);
-
+        reformatToStyle(context,
+                        file);
 
         VirtualFile actualFile = insertIntoFileSystem(descriptor,
                                                       context,
                                                       vfs,
                                                       file);
+        lockFile(context,
+                 file);
 
-        final Project project = context.getProject();
-        final List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
-                                                                         project);
+        Project project = context.getProject();
+        List<Library> libraries = LibraryUtil.findLibrariesByClass(descriptor.getFullyQualifiedName(),
+                                                                   project);
 
         if (!libraries.isEmpty())
         {
@@ -127,6 +128,18 @@ public class MemoryDecompiler extends AbstractDecompiler
         file.setWritable(false);
 
         return actualFile;
+    }
+
+    /**
+     * Locks the file to prevent source code changes.
+     *
+     * @param context the decompilation context
+     * @param file the file to lock
+     */
+    protected void lockFile(@NotNull DecompilationContext context,
+                            @NotNull MemoryVirtualFile file)
+    {
+        file.setWritable(false);
     }
 
     /**
@@ -247,7 +260,7 @@ public class MemoryDecompiler extends AbstractDecompiler
         VirtualFile file = null;
         if (fqNameAsPath != null)
         {
-            final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+            MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
             file = vfs.findFileByPath(fqNameAsPath);
 
         }

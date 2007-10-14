@@ -56,8 +56,8 @@ public class DecompilePopup {
     @NotNull
     private final EnvironmentContext environmentContext;
 
-    public DecompilePopup(@NotNull final DecompilationDescriptor decompilationDescriptor,
-                           @NotNull final Project project)
+    public DecompilePopup(@NotNull DecompilationDescriptor decompilationDescriptor,
+                          @NotNull Project project)
     {
         this.decompilationDescriptor = decompilationDescriptor;
         this.environmentContext = new EnvironmentContext(project);

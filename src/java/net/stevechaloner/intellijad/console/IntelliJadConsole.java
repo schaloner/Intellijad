@@ -20,10 +20,16 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.peer.PeerFactory;
+import com.intellij.ui.content.Content;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
+import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.util.PluginUtil;
+
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,13 +40,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
-
-import net.stevechaloner.intellijad.IntelliJad;
-import net.stevechaloner.intellijad.IntelliJadConstants;
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginUtil;
-
-import org.jetbrains.annotations.NotNull;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * The console for IntelliJad messages to the user.
@@ -147,6 +149,7 @@ public class IntelliJadConsole implements NodeHandler
                     collapse(treeModel.getRootNode());
                 }
             });
+            initialised = true;
         }
     }
 
@@ -161,12 +164,18 @@ public class IntelliJadConsole implements NodeHandler
         ToolWindow window;
         if (toolWindowManager != null)
         {
-            window = toolWindowManager.getToolWindow(IntelliJadConsole.TOOL_WINDOW_ID);
+            window = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
             if (window == null)
             {
-                window = toolWindowManager.registerToolWindow(IntelliJadConsole.TOOL_WINDOW_ID,
-                                                              getRoot(),
+                window = toolWindowManager.registerToolWindow(TOOL_WINDOW_ID,
+                                                              true,
                                                               ToolWindowAnchor.BOTTOM);
+                PeerFactory pf = com.intellij.peer.PeerFactory.getInstance();
+
+                Content content = pf.getContentFactory().createContent(getRoot(),
+                                                                       TOOL_WINDOW_ID,
+                                                                       false);
+                window.getContentManager().addContent(content);
             }
             window.setIcon(LOGO);
             window.show(EMPTY_RUNNABLE);
@@ -271,7 +280,7 @@ public class IntelliJadConsole implements NodeHandler
 
     public void select(ConsoleTreeNode node)
     {
-        TreePath path = new TreePath((node.getPath()));
+        TreePath path = new TreePath(node.getPath());
         consoleTree.expandPath(path);
         consoleTree.setSelectionPath(path);
         consoleTree.fireTreeExpanded(path);

@@ -46,7 +46,7 @@ public enum NavigationTriggeredDecompile {
     /**
      * Mapping of the entry name to the entry.
      */
-    private final static Map<String, NavigationTriggeredDecompile> MAP = new HashMap<String, NavigationTriggeredDecompile>() {
+    private static final Map<String, NavigationTriggeredDecompile> MAP = new HashMap<String, NavigationTriggeredDecompile>() {
         {
             put(ALWAYS.getName(),
                 ALWAYS);

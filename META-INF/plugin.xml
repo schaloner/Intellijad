@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>0.5.4</version>
+    <version>0.6</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -28,7 +28,7 @@
     </project-components>
 
     <actions>
-        <action id="Decompile"
+        <action id="net.stevechaloner.intellijad.Decompile"
                 class="net.stevechaloner.intellijad.actions.DecompileAction"
                 text="Decompile"
                 description="Decompile classfile">
@@ -43,6 +43,14 @@
         <![CDATA[
         <ul>
             <li>0.6
+                <ol>
+                    <li>Added namespace to decompilation action ID.</li>
+                    <li>Sorted code maturity issues.</li>
+                    <li>Added "clear and close console" control to config editor.</li>
+                    <li>Read-only status set always on memory files, and as per config on local file-system files.</li>
+                </ol>
+            </li>
+            <li>0.5.4
                 <ol>
                     <li>Non-jarred classes are now opened and decompiled correctly.</li>
                     <li>Project configuration view enables/disables controls on dialog opening.</li>

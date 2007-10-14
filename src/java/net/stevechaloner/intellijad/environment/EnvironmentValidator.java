@@ -80,7 +80,6 @@ public class EnvironmentValidator
         ValidationResult result;
         if (message != null)
         {
-            // todo immediately work out what to do here
             result = showErrorDialog(config,
                                      envContext,
                                      consoleContext,
@@ -129,7 +128,7 @@ public class EnvironmentValidator
                 // this will cause recursive correction unless cancel is selected
                 Project project = envContext.getProject();
                 ConfigAccessor configAccessor = config.isUseProjectSpecificSettings() ? new ProjectConfigComponent(project) : new ApplicationConfigComponent();
-                // todo if this dialog is cancelled, should we assume the decompilation is cancelled?
+                // design point - if this dialog is cancelled, should we assume the decompilation is cancelled?
                 ShowSettingsUtil.getInstance().editConfigurable(project,
                                                                 configAccessor);
                 config.copyFrom(configAccessor.getConfig());

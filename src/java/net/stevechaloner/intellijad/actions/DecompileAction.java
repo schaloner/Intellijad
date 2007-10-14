@@ -23,6 +23,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import net.stevechaloner.idea.util.events.DataContextUtil;
 import net.stevechaloner.intellijad.IntelliJad;
+import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
@@ -47,7 +48,7 @@ public class DecompileAction extends AnAction
     public void actionPerformed(AnActionEvent e)
     {
         DataContext dataContext = e.getDataContext();
-        if ("class".equals(DataContextUtil.getFileExtension(dataContext)))
+        if (IntelliJadConstants.CLASS_EXTENSION.equals(DataContextUtil.getFileExtension(dataContext)))
         {
             IntelliJad intelliJad = PluginUtil.getComponent(IntelliJad.class);
             VirtualFile file = DataContextUtil.getFile(e.getDataContext());

@@ -17,13 +17,13 @@ package net.stevechaloner.intellijad.console;
 
 import com.intellij.openapi.ui.MultiLineLabelUI;
 
-import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Console tree node renderer to provide a more attractive view on what happened.
@@ -48,7 +48,7 @@ class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("fileTypes/java.png")));
             put(ConsoleEntryType.LIBRARY_OPERATION,
                 new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("modules/libraries.png")));
-            final ImageIcon infoIcon = new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource(
+            ImageIcon infoIcon = new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource(
                     "compiler/information.png"));
             put(ConsoleEntryType.MESSAGE,
                 infoIcon);
@@ -63,7 +63,6 @@ class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
      * Initialises a new instance of this class.
      */
     public ConsoleTreeCellRenderer() {
-        super();
         setUI(new MultiLineLabelUI());
     }
 

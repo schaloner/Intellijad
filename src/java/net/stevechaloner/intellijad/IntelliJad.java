@@ -26,9 +26,6 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.stevechaloner.intellijad.actions.NavigationListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -48,6 +45,9 @@ import net.stevechaloner.intellijad.environment.ValidationResult;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The central component of the plugin.
@@ -167,7 +167,7 @@ public class IntelliJad implements ApplicationComponent,
         long startTime = System.currentTimeMillis();
         Project project = envContext.getProject();
         IntelliJadConsole console = consoleManager.getConsole(project);
-        final ConsoleContext consoleContext = console.createConsoleContext("message.class",
+        ConsoleContext consoleContext = console.createConsoleContext("message.class",
                                                                            descriptor.getClassName());
         Config config = PluginUtil.getConfig(project);
         ValidationResult validationResult = EnvironmentValidator.validateEnvironment(config,
@@ -181,7 +181,7 @@ public class IntelliJad implements ApplicationComponent,
             DecompilationContext context = new DecompilationContext(project,
                                                                     consoleContext,
                                                                     sb.toString());
-            Decompiler decompiler = (config.isDecompileToMemory()) ? new MemoryDecompiler() : new FileSystemDecompiler();
+            Decompiler decompiler = config.isDecompileToMemory() ? new MemoryDecompiler() : new FileSystemDecompiler();
             try
             {
                 VirtualFile file = decompiler.getVirtualFile(descriptor,

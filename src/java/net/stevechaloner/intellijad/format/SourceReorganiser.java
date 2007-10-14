@@ -15,6 +15,9 @@
 
 package net.stevechaloner.intellijad.format;
 
+import com.intellij.openapi.diagnostic.Logger;
+
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 
@@ -35,7 +38,6 @@ import java.util.regex.Pattern;
  * This class is based on com.tagtraum.ideajad.LineSorter.java
  * </p>
  *
- * @todo handle exceptions
  * @author Steve Chaloner
  */
 public class SourceReorganiser
@@ -63,7 +65,7 @@ public class SourceReorganiser
             in = new LineNumberReader(new StringReader(file.getContent()));
             List<String> lines = reformat(in);
             Block currentBlock = new Block();
-            currentBlock.add(new Line("/* Decompiled through IntelliJad */",
+            currentBlock.add(new Line(IntelliJadResourceBundle.message("message.decompiled-through-intellijad"),
                                       1,
                                       false));
             for (String line : lines)
@@ -157,7 +159,7 @@ public class SourceReorganiser
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    Logger.getInstance(SourceReorganiser.class.getName()).error(e);
                 }
             }
             if (out != null)
@@ -168,7 +170,7 @@ public class SourceReorganiser
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    Logger.getInstance(SourceReorganiser.class.getName()).error(e);
                 }
             }
         }
@@ -201,7 +203,7 @@ public class SourceReorganiser
                     if ((thisIndent - lastIndent) / indent == 2 && lastLineHadNoNumber)
                     {
                         // add this line to the last line
-                        String l = (lines.get(lines.size() - 1)) + ' ' + lineString.trim();
+                        String l = lines.get(lines.size() - 1) + ' ' + lineString.trim();
                         lines.set(lines.size() - 1, l);
                     }
                     else
@@ -227,12 +229,12 @@ public class SourceReorganiser
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            Logger.getInstance(SourceReorganiser.class.getName()).error(e);
         }
         return lines;
     }
 
-    private static abstract class Element
+    private abstract static class Element
     {
         public abstract boolean hasNumber();
 
@@ -456,7 +458,7 @@ public class SourceReorganiser
                     lastLineHadNumber = true;
                     if (currentLine != line.getNumber())
                     {
-                        out.write("/*off*/");
+                        out.write("/*  */");
                     }
                 }
                 else

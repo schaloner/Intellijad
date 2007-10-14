@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.format;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
@@ -25,8 +26,10 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
+
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -64,7 +67,7 @@ public class StyleReformatter
                 }
                 catch (IncorrectOperationException e)
                 {
-                    e.printStackTrace();
+                    Logger.getInstance(StyleReformatter.class.getName()).error(e);
                 }
             }
         };
@@ -81,7 +84,7 @@ public class StyleReformatter
      * @return true if reindented
      */
     public static boolean reindent(@NotNull final DecompilationContext context,
-                                   @NotNull final VirtualFile file)
+                                   @NotNull VirtualFile file)
     {
         final boolean[] result = { false };
         Reformatter reformatter = new Reformatter()
@@ -99,7 +102,7 @@ public class StyleReformatter
                 }
                 catch (IncorrectOperationException e)
                 {
-                    e.printStackTrace();
+                    Logger.getInstance(getClass().getName()).error(e);
                 }
             }
         };
@@ -134,14 +137,14 @@ public class StyleReformatter
          * @param context the decompilation context
          * @param file the file representing the source
          */
-        void execute(@NotNull final DecompilationContext context,
-                     @NotNull final VirtualFile file)
+        void execute(@NotNull DecompilationContext context,
+                     @NotNull VirtualFile file)
         {
             fileDocManager = FileDocumentManager.getInstance();
             document = fileDocManager.getDocument(file);
             if (document != null)
             {
-                final Project project = context.getProject();
+                Project project = context.getProject();
                 psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
                 if (psiFile != null)
                 {

@@ -15,6 +15,7 @@
 
 package net.stevechaloner.intellijad.actions;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
@@ -66,8 +67,7 @@ public class NavigationListener implements FileEditorManagerListener
                                                       descriptor);
                         if (!excluded)
                         {
-                            decompilationListener.decompile(new EnvironmentContext(
-                                    project),
+                            decompilationListener.decompile(new EnvironmentContext(project),
                                                             descriptor);
                         }
                     }
@@ -76,24 +76,18 @@ public class NavigationListener implements FileEditorManagerListener
                 new NavigationOption()
                 {
                     public void execute(@NotNull Config config,
-                                        @NotNull final DecompilationDescriptor descriptor)
+                                        @NotNull DecompilationDescriptor descriptor)
                     {
                         boolean excluded = isExcluded(config,
                                                       descriptor);
                         if (!excluded)
                         {
                             DialogBuilder builder = new DialogBuilder(project);
-                            builder.setTitle(IntelliJadResourceBundle.message(
-                                    "plugin.name"));
-                            builder.addOkAction().setText(
-                                    IntelliJadResourceBundle.message(
-                                            "option.decompile"));
-                            builder.addCancelAction().setText(
-                                    IntelliJadResourceBundle.message(
-                                            "option.do-not-decompile"));
-                            final DecompilePopup decompilePopup = new DecompilePopup(
-                                    descriptor,
-                                    project);
+                            builder.setTitle(IntelliJadResourceBundle.message("plugin.name"));
+                            builder.addOkAction().setText(IntelliJadResourceBundle.message("option.decompile"));
+                            builder.addCancelAction().setText(IntelliJadResourceBundle.message("option.do-not-decompile"));
+                            DecompilePopup decompilePopup = new DecompilePopup(descriptor,
+                                                                               project);
                             builder.setCenterPanel(decompilePopup.getContentPane());
                             builder.setHelpId(IntelliJadConstants.CONFIGURATION_HELP_TOPIC);
                             builder.setOkActionEnabled(true);
@@ -202,7 +196,7 @@ public class NavigationListener implements FileEditorManagerListener
     {
         if (virtualFile instanceof MemoryVirtualFile)
         {
-            final MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+            MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
             try
             {
                 vfs.deleteFile(this,
@@ -210,8 +204,7 @@ public class NavigationListener implements FileEditorManagerListener
             }
             catch (IOException e)
             {
-                // todo handle this
-                e.printStackTrace();
+                Logger.getInstance(getClass().getName()).error(e);
             }
         }
     }

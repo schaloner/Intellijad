@@ -82,7 +82,7 @@ public class ExclusionTableModel extends DefaultTableModel
         int row = getPackageRow(packageName);
         if (row != -1)
         {
-            exclusionType = ((Boolean)getValueAt(row, 2)) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
+            exclusionType = (Boolean)getValueAt(row, 2) ? ExclusionType.EXCLUSION_DISABLED : ExclusionType.EXCLUDED;
         }
         return exclusionType;
     }

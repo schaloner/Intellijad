@@ -16,7 +16,9 @@
 package net.stevechaloner.intellijad.config.rules;
 
 import com.intellij.openapi.util.text.StringUtil;
+
 import net.stevechaloner.idea.util.properties.DOMable;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -68,7 +70,7 @@ public class RenderRuleFactory {
                         public boolean evaluate(@NotNull RuleContext ruleContext,
                                                 DOMable<Integer> domable) {
                             Integer value = domable.getValue();
-                            return (value != null) && value > -1;
+                            return value != null && value > -1;
                         }
                     });
         }
