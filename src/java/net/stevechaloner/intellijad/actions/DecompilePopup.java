@@ -17,6 +17,15 @@ package net.stevechaloner.intellijad.actions;
 
 import com.intellij.openapi.project.Project;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.config.ExclusionTableModel;
@@ -26,15 +35,6 @@ import net.stevechaloner.intellijad.environment.EnvironmentContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class DecompilePopup {
     private JPanel contentPane;
@@ -75,6 +75,7 @@ public class DecompilePopup {
                 excludeRecursivelyCheckBox.setEnabled(excludePackageCheckBox.isSelected());
             }
         });
+        excludeRecursivelyCheckBox.setEnabled(false);
 
         Config config = PluginUtil.getConfig(project);
         excludeRecursivelyCheckBox.setSelected(config.isAlwaysExcludeRecursively());

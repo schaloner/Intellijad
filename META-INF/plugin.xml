@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>0.6</version>
+    <version>0.6.1</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -42,6 +42,13 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.6.1
+                <ol>
+                    <li>Fixed some more GUI behaviour bugs.</li>
+                    <li>All screenshots replaced with up-to-date versions.</li>
+                    <li>More help documentation added.</li>
+                </ol>
+            </li>
             <li>0.6
                 <ol>
                     <li>Added namespace to decompilation action ID.</li>

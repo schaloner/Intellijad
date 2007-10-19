@@ -25,6 +25,7 @@ a {
 }
 
 .sectionheader {
+    font-weight: bold;
     border-bottom-color: #000000;
     border-bottom-style: solid;
     border-bottom-width: 1px;

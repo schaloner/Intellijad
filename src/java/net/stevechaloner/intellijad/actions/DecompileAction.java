@@ -24,7 +24,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import net.stevechaloner.idea.util.events.DataContextUtil;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadConstants;
-import net.stevechaloner.intellijad.console.IntelliJadConsole;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptor;
 import net.stevechaloner.intellijad.decompilers.DecompilationDescriptorFactory;
 import net.stevechaloner.intellijad.environment.EnvironmentContext;
@@ -57,11 +56,6 @@ public class DecompileAction extends AnAction
                 DecompilationDescriptor descriptor = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);
                 intelliJad.decompile(new EnvironmentContext(DataKeys.PROJECT.getData(e.getDataContext())),
                                      descriptor);
-            }
-            else
-            {
-                IntelliJadConsole console = PluginUtil.getComponent(IntelliJadConsole.class);
-//                console.addMessage("message.file-is-null");
             }
         }
     }

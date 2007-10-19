@@ -19,12 +19,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 
-import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
-import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
-import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
-
-import org.jetbrains.annotations.Nullable;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -48,6 +42,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+
+import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
+import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
+import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * IntelliJad configuration form.  This class deals with both application- and
@@ -287,6 +287,7 @@ public class ConfigForm
                                                  true);
             }
             excludePackageTextField.setText("");
+            addExclusionButton.setEnabled(false);
         }
     }
 
@@ -559,6 +560,12 @@ public class ConfigForm
         allPackagesTextField.setText(data.getPrefixPackages());
         unusedExceptionNamesTextField.setText(data.getPrefixUnusedExceptions());
         alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
+
+        if (project != null)
+        {
+            setControlsEnabled(project,
+                               data.isUseProjectSpecificSettings());
+        }
     }
 
     public void getData(Config data)
@@ -591,6 +598,12 @@ public class ConfigForm
         data.setPrefixPackages(allPackagesTextField.getText());
         data.setPrefixUnusedExceptions(unusedExceptionNamesTextField.getText());
         data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
+
+        if (project != null)
+        {
+            setControlsEnabled(project,
+                               data.isUseProjectSpecificSettings());
+        }
     }
 
     /**
