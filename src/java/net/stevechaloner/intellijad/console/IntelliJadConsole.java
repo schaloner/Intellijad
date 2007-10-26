@@ -23,15 +23,6 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.peer.PeerFactory;
 import com.intellij.ui.content.Content;
 
-import net.stevechaloner.intellijad.IntelliJad;
-import net.stevechaloner.intellijad.IntelliJadConstants;
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
-import net.stevechaloner.intellijad.util.PluginUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -44,6 +35,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import net.stevechaloner.intellijad.IntelliJadConstants;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.gui.IntelliJadIcons;
+import net.stevechaloner.intellijad.util.PluginUtil;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The console for IntelliJad messages to the user.
  *
@@ -51,11 +49,6 @@ import java.util.List;
  */
 public class IntelliJadConsole implements NodeHandler
 {
-    /**
-     * The display logo.
-     */
-    static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-12.png"));
-
     /**
      * The tool window ID.
      */
@@ -177,7 +170,7 @@ public class IntelliJadConsole implements NodeHandler
                                                                        false);
                 window.getContentManager().addContent(content);
             }
-            window.setIcon(LOGO);
+            window.setIcon(IntelliJadIcons.INTELLIJAD_LOGO_12X12);
             window.show(EMPTY_RUNNABLE);
         }
     }

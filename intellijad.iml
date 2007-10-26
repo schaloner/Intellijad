@@ -8,12 +8,23 @@
       <sourceFolder url="file://$MODULE_DIR$/src/icons" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="IDEA 7343" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="plugin-lib">
+      <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/plugin-lib.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../plugin-lib/src/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///opt/dev/lib/velocity-1.5/lib/commons-lang-2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

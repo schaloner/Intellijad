@@ -9,12 +9,6 @@ import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.newvfs.NewVirtualFileSystem;
 
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,6 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * A file system for content that resides only in memory.
  *
@@ -31,6 +31,11 @@ import java.util.StringTokenizer;
  */
 public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements ApplicationComponent
 {
+    /**
+     * The name of the component.
+     */
+    private static final String COMPONENT_NAME = "MemoryFileSystem";
+
     /**
      * The files.
      */
@@ -205,7 +210,7 @@ public class MemoryVirtualFileSystem extends NewVirtualFileSystem implements App
     @NotNull
     public String getComponentName()
     {
-        return "MemoryFileSystem";
+        return COMPONENT_NAME;
     }
 
     /** {@inheritDoc} */

@@ -21,20 +21,21 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
+
+import javax.swing.Icon;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.stevechaloner.idea.util.properties.DOMable;
-import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.rules.RuleContext;
+import net.stevechaloner.intellijad.gui.IntelliJadIcons;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Generic configuation component.
@@ -44,11 +45,6 @@ import java.util.Map;
 abstract class ConfigComponent implements Configurable,
                                           JDOMExternalizable
 {
-    /**
-     * The display logo.
-     */
-    private static final Icon LOGO = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-32.png"));
-
     /**
      * The rule execution context.
      */
@@ -78,7 +74,7 @@ abstract class ConfigComponent implements Configurable,
     /** {@inheritDoc} */
     public Icon getIcon()
     {
-        return LOGO;
+        return IntelliJadIcons.INTELLIJAD_LOGO_32X32;
     }
 
     /** {@inheritDoc} */

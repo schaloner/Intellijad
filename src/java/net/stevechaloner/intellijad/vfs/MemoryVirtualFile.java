@@ -4,12 +4,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
 
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,6 +11,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A memory-based file.
@@ -285,5 +285,11 @@ public class MemoryVirtualFile extends VirtualFile
     public void deleteChild(MemoryVirtualFile memoryVirtualFile)
     {
         children.remove(memoryVirtualFile.getName());
+    }
+
+    @NonNls
+    public String toString()
+    {
+        return name;
     }
 }

@@ -22,6 +22,9 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.MultiLineLabelUI;
 import com.intellij.openapi.util.text.StringUtil;
 
+import javax.swing.JLabel;
+import java.io.File;
+
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.ApplicationConfigComponent;
 import net.stevechaloner.intellijad.config.Config;
@@ -31,9 +34,6 @@ import net.stevechaloner.intellijad.console.ConsoleContext;
 import net.stevechaloner.intellijad.console.ConsoleEntryType;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.JLabel;
-import java.io.File;
 
 /**
  * Validates the environment and configuration as suitable for decompilation.  If it's not,
@@ -113,7 +113,7 @@ public class EnvironmentValidator
                                                     @NotNull String message)
     {
         DialogBuilder builder = new DialogBuilder(envContext.getProject());
-        builder.setTitle(IntelliJadResourceBundle.message("plugin.name"));
+        builder.setTitle(IntelliJadResourceBundle.message("plugin.IntelliJad.name"));
         builder.addOkAction().setText(IntelliJadResourceBundle.message("option.open-config"));
         builder.addCancelAction().setText(IntelliJadResourceBundle.message("option.cancel-decompilation"));
         JLabel label = new JLabel(message);

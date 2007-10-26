@@ -18,9 +18,9 @@ package net.stevechaloner.intellijad;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
 
-import net.stevechaloner.intellijad.actions.NavigationListener;
-
 import java.util.List;
+
+import net.stevechaloner.intellijad.actions.NavigationListener;
 
 /**
  * Constants used by IntelliJad.
@@ -29,6 +29,11 @@ import java.util.List;
  */
 public class IntelliJadConstants
 {
+    /**
+     * The name of the plugin.
+     */
+    public static final String INTELLIJAD = "IntelliJad";
+
     /**
      * The extension used by Java files.
      */

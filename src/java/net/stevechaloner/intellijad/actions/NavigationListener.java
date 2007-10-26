@@ -25,6 +25,10 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
@@ -39,10 +43,6 @@ import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Listens for navigation events such as files being opened or closed and reacts accordingly based on the individual file.
@@ -83,7 +83,7 @@ public class NavigationListener implements FileEditorManagerListener
                         if (!excluded)
                         {
                             DialogBuilder builder = new DialogBuilder(project);
-                            builder.setTitle(IntelliJadResourceBundle.message("plugin.name"));
+                            builder.setTitle(IntelliJadResourceBundle.message("plugin.IntelliJad.name"));
                             builder.addOkAction().setText(IntelliJadResourceBundle.message("option.decompile"));
                             builder.addCancelAction().setText(IntelliJadResourceBundle.message("option.do-not-decompile"));
                             DecompilePopup decompilePopup = new DecompilePopup(descriptor,

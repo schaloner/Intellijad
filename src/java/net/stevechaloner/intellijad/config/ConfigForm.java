@@ -17,7 +17,10 @@ package net.stevechaloner.intellijad.config;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.PackageChooser;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.peer.PeerFactory;
+import com.intellij.psi.PsiPackage;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,10 +45,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import net.stevechaloner.idea.util.fs.ApplicationFileSelectionAction;
 import net.stevechaloner.idea.util.fs.FileSelectionDescriptor;
 import net.stevechaloner.idea.util.fs.ProjectFileSelectionAction;
+import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -96,6 +101,7 @@ public class ConfigForm
     @Control private JCheckBox createIfDirectoryDoesnCheckBox;
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     @Control private JComboBox reformatStyle;
+    @Control private JButton packageChooserButton;
     private JCheckBox clearAndCloseConsoleCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
@@ -133,6 +139,37 @@ public class ConfigForm
         spacesForIndentationSpinner.setModel(createSpinnerModel());
         displayLongsUsingRadixSpinner.setModel(new SpinnerRadixModel());
         displayIntegersUsingRadixSpinner.setModel(new SpinnerRadixModel());
+
+        if (project != null)
+        {
+            packageChooserButton.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    PackageChooser packageChooser = PeerFactory.getInstance().getUIHelper().createPackageChooser(IntelliJadResourceBundle.message("message.exclude-package"),
+                                                                                                                 project);
+                    packageChooser.show();
+                    switch (packageChooser.getExitCode())
+                    {
+                        case PackageChooser.OK_EXIT_CODE:
+                            List<PsiPackage> selectedPackages = packageChooser.getSelectedPackages();
+                            for (PsiPackage selectedPackage : selectedPackages)
+                            {
+                                exclusionTableModel.addExclusion(selectedPackage.getQualifiedName(),
+                                                                 alwaysExcludePackagesRecursivelyCheckBox.isSelected(),
+                                                                 true);
+                            }
+                            break;
+                    }
+                }
+            });
+        }
+        else
+        {
+            // setControlsEnabled() won't be invoked during application-level
+            // config so no other special handling is required
+            packageChooserButton.setEnabled(false);
+        }
 
         outputDirBrowseButton.addActionListener(project == null ?
                                   new ApplicationFileSelectionAction(outputDirectoryTextField,

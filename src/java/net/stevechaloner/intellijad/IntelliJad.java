@@ -26,6 +26,9 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.stevechaloner.intellijad.actions.NavigationListener;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -46,9 +49,6 @@ import net.stevechaloner.intellijad.util.PluginUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The central component of the plugin.
  */
@@ -60,11 +60,6 @@ public class IntelliJad implements ApplicationComponent,
      * The name of the component.
      */
     public static final String COMPONENT_NAME = "net.stevechaloner.intellijad.IntelliJad";
-
-    /**
-     * The name of the plugin.
-     */
-    public static final String INTELLIJAD = "IntelliJad";
 
     /**
      * The manager for projects' consoles.
@@ -252,6 +247,6 @@ public class IntelliJad implements ApplicationComponent,
      */
     public static Logger getLogger()
     {
-        return Logger.getInstance(INTELLIJAD);
+        return Logger.getInstance(IntelliJadConstants.INTELLIJAD);
     }
 }

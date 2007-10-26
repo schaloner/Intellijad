@@ -18,12 +18,13 @@ package net.stevechaloner.intellijad.console;
 import com.intellij.openapi.ui.MultiLineLabelUI;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.stevechaloner.intellijad.gui.IntelliJadIcons;
 
 /**
  * Console tree node renderer to provide a more attractive view on what happened.
@@ -41,21 +42,19 @@ class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
             put(ConsoleEntryType.ROOT,
                 null);
             put(ConsoleEntryType.INTELLIJAD,
-                IntelliJadConsole.LOGO);
+                IntelliJadIcons.INTELLIJAD_LOGO_12X12);
             put(ConsoleEntryType.JAR_OPERATION,
-                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("fileTypes/archive.png")));
+                IntelliJadIcons.ARCHIVE);
             put(ConsoleEntryType.DECOMPILATION_OPERATION,
-                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("fileTypes/java.png")));
+                IntelliJadIcons.JAVA);
             put(ConsoleEntryType.LIBRARY_OPERATION,
-                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("modules/libraries.png")));
-            ImageIcon infoIcon = new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource(
-                    "compiler/information.png"));
+                IntelliJadIcons.LIBRARIES);
             put(ConsoleEntryType.MESSAGE,
-                infoIcon);
+                IntelliJadIcons.INFO);
             put(ConsoleEntryType.INFO,
-                infoIcon);
+                IntelliJadIcons.INFO);
             put(ConsoleEntryType.ERROR,
-                new ImageIcon(ConsoleTreeCellRenderer.class.getClassLoader().getResource("compiler/error.png")));
+                IntelliJadIcons.ERROR);
         }
     };
 

@@ -2,71 +2,6 @@
 <project relativePaths="false" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
-    <buildFile url="file://$PROJECT_DIR$/build.xml">
-      <additionalClassPath>
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/oromatcher.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/log4j.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/extensions.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/boot.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/asm-commons.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/velocity.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/emma.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/annotations.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/xml-apis.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jaxen.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/nanoxml-2.2.3.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/resources_en.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/emma-agent.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jdom.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/xerces.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/alloy.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/yjp-controller-api-redist.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/org.eclipse.jdt.core.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/trove4j_src.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/junit-4.4.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/asm.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/commons-collections.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/javaee.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/servlet-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/idea.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/openapi.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jsf-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/javac2.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/commons-codec-1.3.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jgoodies-forms.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/resources.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/resolver.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jsp-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/microba.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/j2ee.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/JNIWrap.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/picocontainer.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/icons.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/saxpath.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/forms_rt.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/xmlrpc-2.0.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/xstream.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jh.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/trove4j.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/jasper2_rt.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/bootstrap.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/idea_rt.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/junit.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/cglib-nodep-2.1_3.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/xerces1.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/servlet.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/servlet-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jsp-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jasper-runtime.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/jasper-compiler.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/commons-logging-api.jar" />
-        <entry path="file://$APPLICATION_HOME_DIR$/lib/rt/jasper2/commons-el.jar" />
-      </additionalClassPath>
-      <antReference projectDefault="true" />
-      <customJdkName value="" />
-      <maximumHeapSize value="128" />
-      <properties />
-    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -361,7 +296,7 @@
       <module fileurl="file://$PROJECT_DIR$/intellijad.iml" filepath="$PROJECT_DIR$/intellijad.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA 7126" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="RMI Configuration">
@@ -406,6 +341,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>

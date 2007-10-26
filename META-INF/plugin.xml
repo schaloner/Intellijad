@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>0.6.1</version>
+    <version>0.7</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -35,6 +35,15 @@
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
         </action>
+        <group id="net.stevechaloner.intellijad.group.toolmenu"
+               text="IntelliJad"
+               popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="ExternalToolsGroup"/>
+            <action id="net.stevechaloner.intellijad.ViewMemoryFS"
+                    class="net.stevechaloner.intellijad.actions.ViewMemoryFileSystemAction"
+                    text="Manage Memory File System"
+                    description="Open the Memory File System Manager"/>
+        </group>
     </actions>
 
     <helpset file="intellijad-help.jar" path="/helpset.hs"/>
@@ -42,6 +51,11 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.7
+                <ol>
+                    <li>Added a basic manager for the memory file system.</li>
+                </ol>
+            </li>
             <li>0.6.1
                 <ol>
                     <li>Fixed some more GUI behaviour bugs.</li>

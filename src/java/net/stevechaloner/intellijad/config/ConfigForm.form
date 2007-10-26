@@ -22,7 +22,7 @@
           <grid id="93c5b" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title-resource-bundle="net/stevechaloner/intellijad/messages-i18n" title-key="plugin.name"/>
+              <tabbedpane title-resource-bundle="net/stevechaloner/intellijad/messages-i18n" title-key="plugin.IntelliJad.name"/>
             </constraints>
             <properties/>
             <border type="empty">
@@ -525,7 +525,7 @@
               </component>
             </children>
           </grid>
-          <grid id="7fb26" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="7fb26" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title-resource-bundle="net/stevechaloner/intellijad/messages-i18n" title-key="config.exclusions"/>
@@ -537,7 +537,7 @@
             <children>
               <scrollpane id="c5d74">
                 <constraints>
-                  <grid row="0" column="0" row-span="2" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="2" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -550,7 +550,7 @@
               </scrollpane>
               <component id="ad353" class="javax.swing.JButton" binding="removeExclusionButton">
                 <constraints>
-                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.remove"/>
@@ -566,7 +566,7 @@
               </component>
               <component id="1248c" class="javax.swing.JButton" binding="addExclusionButton">
                 <constraints>
-                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.add"/>
@@ -574,7 +574,7 @@
               </component>
               <vspacer id="2d75">
                 <constraints>
-                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="9b5c9" class="javax.swing.JLabel">
@@ -588,10 +588,19 @@
               </component>
               <component id="1fc7e" class="javax.swing.JCheckBox" binding="alwaysExcludePackagesRecursivelyCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="config.always-exclude-recursively"/>
+                </properties>
+              </component>
+              <component id="d0cb5" class="javax.swing.JButton" binding="packageChooserButton">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="general/openProject.png"/>
+                  <text value="" noi18n="true"/>
                 </properties>
               </component>
             </children>
