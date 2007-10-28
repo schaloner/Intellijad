@@ -15,8 +15,6 @@
 
 package net.stevechaloner.intellijad.gui.tree;
 
-import net.stevechaloner.intellijad.gui.IntelliJadIcons;
-
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -41,7 +39,8 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
 
     /**
      * Initialises a new instance of this class.
-     * @param tree
+     * 
+     * @param tree the tree to render the editor for
      */
     public CheckBoxTreeNodeEditor(JTree tree)
     {
@@ -77,21 +76,10 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
         checkBox.setSelected(cbtn.isSelected());
         JLabel label = iconicCheckBox.getLabel();
         label.setText(cbtn.getText());
-        if (leaf)
-        {
-            label.setIcon(IntelliJadIcons.JAVA);
-        }
-        else
-        {
-            if (value.equals(jTree.getModel().getRoot()))
-            {
-                label.setIcon(IntelliJadIcons.INTELLIJAD_LOGO_12X12);
-            }
-            else
-            {
-                label.setIcon(expanded ? IntelliJadIcons.PACKAGE_OPEN : IntelliJadIcons.PACKAGE_CLOSED);
-            }
-        }
+        label.setIcon(NodeIconUtil.getIconFor(jTree,
+                                              value,
+                                              expanded,
+                                              leaf));
 
         checkBox.addItemListener(new ItemListener()
         {

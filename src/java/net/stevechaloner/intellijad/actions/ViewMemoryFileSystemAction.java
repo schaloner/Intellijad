@@ -26,7 +26,7 @@ import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.vfs.MemoryFileSystemManager;
 
 /**
- *
+ * Action for opening the memory VFS manager.
  */
 public class ViewMemoryFileSystemAction extends AnAction
 {
@@ -41,6 +41,7 @@ public class ViewMemoryFileSystemAction extends AnAction
             MemoryFileSystemManager mfsPopup = new MemoryFileSystemManager(DataKeys.PROJECT.getData(e.getDataContext()));
             builder.setCenterPanel(mfsPopup.getRoot());
             builder.setHelpId(IntelliJadConstants.CONFIGURATION_HELP_TOPIC);
+            builder.setTitle(IntelliJadResourceBundle.message("message.intellijad-memory-fs-manager"));
             builder.show();
         }
     }

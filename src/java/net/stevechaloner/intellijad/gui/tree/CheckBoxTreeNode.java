@@ -18,21 +18,38 @@ package net.stevechaloner.intellijad.gui.tree;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
+ * A wrapper for tree node user objects that adds selection state.
  */
 public class CheckBoxTreeNode
 {
+    /**
+     * The user object.
+     */
     @NotNull
     private final Object userObject;
 
+    /**
+     * The selection state of the node.
+     */
     private boolean selected = false;
 
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param userObject the user object
+     */
     public CheckBoxTreeNode(@NotNull Object userObject)
     {
         this(userObject,
              false);
     }
 
+    /**
+     * Initialises a new instance of this class.
+     *
+     * @param userObject the user object
+     * @param selected the selection state of the node
+     */
     public CheckBoxTreeNode(@NotNull Object userObject,
                             boolean selected)
     {
@@ -40,21 +57,41 @@ public class CheckBoxTreeNode
         this.selected = selected;
     }
 
+    /**
+     * Gets the selection state of the node.
+     *
+     * @return true if the node is selected
+     */
     public boolean isSelected()
     {
         return selected;
     }
 
+    /**
+     * Sets the selection state of the node.
+     *
+     * @param selected true if the node is selected
+     */
     public void setSelected(boolean selected)
     {
         this.selected = selected;
     }
 
+    /**
+     * Gets a text representation of the node, provided by the user object.
+     *
+     * @return a text representation
+     */
     public String getText()
     {
         return userObject.toString();
     }
 
+    /**
+     * Gets the user object.
+     *
+     * @return the user object
+     */
     @NotNull
     public Object getUserObject()
     {

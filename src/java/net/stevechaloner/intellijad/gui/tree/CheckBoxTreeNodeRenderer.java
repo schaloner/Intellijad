@@ -15,8 +15,6 @@
 
 package net.stevechaloner.intellijad.gui.tree;
 
-import net.stevechaloner.intellijad.gui.IntelliJadIcons;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -32,6 +30,7 @@ import java.awt.Component;
  */
 class CheckBoxTreeNodeRenderer implements TreeCellRenderer
 {
+    /* UI defaults for tree colouration. */
     private static final Color SELECTION_FOREGROUND = UIManager.getColor("Tree.selectionForeground");
     private static final Color SELECTION_BACKGROUND = UIManager.getColor("Tree.selectionBackground");
     private static final Color TEXT_FOREGROUND = UIManager.getColor("Tree.textForeground");
@@ -39,7 +38,7 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer
 
     /** {@inheritDoc} */
     public Component getTreeCellRendererComponent(JTree jTree,
-                                                  Object o,
+                                                  Object value,
                                                   boolean selected,
                                                   boolean expanded,
                                                   boolean leaf,
@@ -47,29 +46,17 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer
                                                   boolean hasFocus)
     {
         IconicCheckBox cb = new IconicCheckBox();
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)o;
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
 
         JLabel label = cb.getLabel();
         label.setText(cbtn.getText());
         JCheckBox checkBox = cb.getCheckBox();
         checkBox.setSelected(cbtn.isSelected());
-
-        if (leaf)
-        {
-            label.setIcon(IntelliJadIcons.JAVA);
-        }
-        else
-        {
-            if (o.equals(jTree.getModel().getRoot()))
-            {
-                label.setIcon(IntelliJadIcons.INTELLIJAD_LOGO_12X12);
-            }
-            else
-            {
-                label.setIcon(expanded ? IntelliJadIcons.PACKAGE_OPEN : IntelliJadIcons.PACKAGE_CLOSED);
-            }
-        }
+        label.setIcon(NodeIconUtil.getIconFor(jTree,
+                                              value,
+                                              expanded,
+                                              leaf));
 
         prepare(label,
                 selected);
@@ -79,6 +66,12 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer
         return cb.getContentPane();
     }
 
+    /**
+     * Prepares the component for correct rendering.
+     *
+     * @param component the component to prepare
+     * @param selected the tree-selection state of the component
+     */
     private void prepare(JComponent component,
                          boolean selected)
     {

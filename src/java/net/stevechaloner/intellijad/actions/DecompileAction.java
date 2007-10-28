@@ -30,7 +30,7 @@ import net.stevechaloner.intellijad.environment.EnvironmentContext;
 import net.stevechaloner.intellijad.util.PluginUtil;
 
 /**
- *
+ * Action for triggering decompilation.
  */
 public class DecompileAction extends AnAction
 {

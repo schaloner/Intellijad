@@ -21,7 +21,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- *
+ * Icons used by the IntelliJad GUI.
  */
 public class IntelliJadIcons
 {
