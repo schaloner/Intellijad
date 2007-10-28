@@ -1,8 +1,15 @@
 package net.stevechaloner.intellijad.vfs;
 
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
+
+import net.stevechaloner.intellijad.IntelliJadConstants;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,12 +18,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.stevechaloner.intellijad.IntelliJadConstants;
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A memory-based file.
@@ -29,6 +30,8 @@ public class MemoryVirtualFile extends VirtualFile
      * The name of the file.
      */
     private final String name;
+
+    private final String nameWithoutExtension;
 
     /**
      * The content of the file.
@@ -63,7 +66,7 @@ public class MemoryVirtualFile extends VirtualFile
      * @param name the name of the file
      * @param content the content of the file
      */
-    public MemoryVirtualFile(String name,
+    public MemoryVirtualFile(@NotNull String name,
                              String content)
     {
         this(name,
@@ -76,7 +79,7 @@ public class MemoryVirtualFile extends VirtualFile
      *
      * @param name the name of the file
      */
-    public MemoryVirtualFile(String name)
+    public MemoryVirtualFile(@NotNull String name)
     {
         this(name,
              null,
@@ -92,11 +95,12 @@ public class MemoryVirtualFile extends VirtualFile
      * @param isDirectory true iff this file is a directory.  This is mutually exclusive
      * with <code>content<code>.
      */
-    private MemoryVirtualFile(String name,
+    private MemoryVirtualFile(@NotNull String name,
                               String content,
                               boolean isDirectory)
     {
         this.name = name;
+        nameWithoutExtension = FileUtil.getNameWithoutExtension(name);
         this.content = content;
         this.isDirectory = isDirectory;
     }
@@ -279,17 +283,18 @@ public class MemoryVirtualFile extends VirtualFile
     }
 
     /**
+     * Deletes the specified file.
      *
-     * @param memoryVirtualFile
+     * @param file the file to delete
      */
-    public void deleteChild(MemoryVirtualFile memoryVirtualFile)
+    public void deleteChild(MemoryVirtualFile file)
     {
-        children.remove(memoryVirtualFile.getName());
+        children.remove(file.getName());
     }
 
     @NonNls
     public String toString()
     {
-        return name;
+        return nameWithoutExtension;
     }
 }

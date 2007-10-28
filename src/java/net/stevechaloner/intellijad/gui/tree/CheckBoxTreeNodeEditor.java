@@ -15,8 +15,11 @@
 
 package net.stevechaloner.intellijad.gui.tree;
 
+import net.stevechaloner.intellijad.gui.IntelliJadIcons;
+
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
@@ -60,16 +63,36 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
 
     /** {@inheritDoc} */
     public Component getTreeCellEditorComponent(JTree jTree,
-                                                Object o,
-                                                boolean b,
-                                                boolean b1,
-                                                boolean b2,
-                                                int i)
+                                                Object value,
+                                                boolean selected,
+                                                boolean expanded,
+                                                boolean leaf,
+                                                int row)
     {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)o;
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         final CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
-        final JCheckBox checkBox = new JCheckBox(cbtn.getText(),
-                                           cbtn.isSelected());
+        IconicCheckBox iconicCheckBox = new IconicCheckBox();
+
+        final JCheckBox checkBox = iconicCheckBox.getCheckBox();
+        checkBox.setSelected(cbtn.isSelected());
+        JLabel label = iconicCheckBox.getLabel();
+        label.setText(cbtn.getText());
+        if (leaf)
+        {
+            label.setIcon(IntelliJadIcons.JAVA);
+        }
+        else
+        {
+            if (value.equals(jTree.getModel().getRoot()))
+            {
+                label.setIcon(IntelliJadIcons.INTELLIJAD_LOGO_12X12);
+            }
+            else
+            {
+                label.setIcon(expanded ? IntelliJadIcons.PACKAGE_OPEN : IntelliJadIcons.PACKAGE_CLOSED);
+            }
+        }
+
         checkBox.addItemListener(new ItemListener()
         {
             public void itemStateChanged(ItemEvent event)
@@ -78,6 +101,6 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
                 fireEditingStopped();
             }
         });
-        return checkBox;
+        return iconicCheckBox.getContentPane();
     }
 }

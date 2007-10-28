@@ -15,27 +15,33 @@
 
 package net.stevechaloner.intellijad.gui;
 
+import net.stevechaloner.intellijad.IntelliJad;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import net.stevechaloner.intellijad.IntelliJad;
 
 /**
  *
  */
 public class IntelliJadIcons
 {
+    public static final Icon ARCHIVE = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("fileTypes/archive.png"));
+
+    public static final Icon ERROR = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("compiler/error.png"));
+
+    public static final Icon INFO = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("compiler/information.png"));
+
     public static final Icon INTELLIJAD_LOGO_12X12 = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("scn-idea-12.png"));
 
-    public static final Icon INTELLIJAD_LOGO_32X32 = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-32.png"));
+    public static final Icon INTELLIJAD_LOGO_16X16 = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("scn-idea-16-inset.png"));
 
-    public static final Icon ARCHIVE = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("fileTypes/archive.png"));
+    public static final Icon INTELLIJAD_LOGO_32X32 = new ImageIcon(IntelliJad.class.getClassLoader().getResource("scn-idea-32.png"));
 
     public static final Icon JAVA = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("fileTypes/java.png"));
 
     public static final Icon LIBRARIES = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("modules/libraries.png"));
 
-    public static final Icon INFO = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("compiler/information.png"));
+    public static final Icon PACKAGE_CLOSED = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("nodes/packageClosed.png"));
 
-    public static final Icon ERROR = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("compiler/error.png"));
+    public static final Icon PACKAGE_OPEN = new ImageIcon(IntelliJadIcons.class.getClassLoader().getResource("nodes/packageOpen.png"));
 }

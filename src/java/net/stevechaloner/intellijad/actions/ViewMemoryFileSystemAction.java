@@ -23,6 +23,7 @@ import com.intellij.openapi.ui.DialogBuilder;
 
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.vfs.MemoryFileSystemManager;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ViewMemoryFileSystemAction extends AnAction
             builder.setTitle(IntelliJadResourceBundle.message("plugin.IntelliJad.name"));
             builder.addCloseButton();
             MemoryFileSystemManager mfsPopup = new MemoryFileSystemManager(DataKeys.PROJECT.getData(e.getDataContext()));
-            builder.setCenterPanel(mfsPopup.getContentPane());
+            builder.setCenterPanel(mfsPopup.getRoot());
             builder.setHelpId(IntelliJadConstants.CONFIGURATION_HELP_TOPIC);
             builder.show();
         }

@@ -54,6 +54,7 @@
             <li>0.7
                 <ol>
                     <li>Added a basic manager for the memory file system.</li>
+                    <li>Added a package browser to the exclusion UI.</li>
                 </ol>
             </li>
             <li>0.6.1

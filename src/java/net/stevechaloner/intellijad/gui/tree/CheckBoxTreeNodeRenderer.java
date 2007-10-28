@@ -15,7 +15,11 @@
 
 package net.stevechaloner.intellijad.gui.tree;
 
+import net.stevechaloner.intellijad.gui.IntelliJadIcons;
+
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -26,7 +30,7 @@ import java.awt.Component;
 /**
  * Tree node renderer for checkbox trees.
  */
-class CheckBoxTreeNodeRenderer extends JCheckBox implements TreeCellRenderer
+class CheckBoxTreeNodeRenderer implements TreeCellRenderer
 {
     private static final Color SELECTION_FOREGROUND = UIManager.getColor("Tree.selectionForeground");
     private static final Color SELECTION_BACKGROUND = UIManager.getColor("Tree.selectionBackground");
@@ -42,16 +46,44 @@ class CheckBoxTreeNodeRenderer extends JCheckBox implements TreeCellRenderer
                                                   int row,
                                                   boolean hasFocus)
     {
+        IconicCheckBox cb = new IconicCheckBox();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)o;
         CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
 
-        this.setText(cbtn.getText());
-        this.setSelected(cbtn.isSelected());
+        JLabel label = cb.getLabel();
+        label.setText(cbtn.getText());
+        JCheckBox checkBox = cb.getCheckBox();
+        checkBox.setSelected(cbtn.isSelected());
 
-        setOpaque(selected);
-        setForeground(selected ? SELECTION_FOREGROUND : TEXT_FOREGROUND);
-        setBackground(selected ? SELECTION_BACKGROUND : TEXT_BACKGROUND);
+        if (leaf)
+        {
+            label.setIcon(IntelliJadIcons.JAVA);
+        }
+        else
+        {
+            if (o.equals(jTree.getModel().getRoot()))
+            {
+                label.setIcon(IntelliJadIcons.INTELLIJAD_LOGO_12X12);
+            }
+            else
+            {
+                label.setIcon(expanded ? IntelliJadIcons.PACKAGE_OPEN : IntelliJadIcons.PACKAGE_CLOSED);
+            }
+        }
 
-        return this;
+        prepare(label,
+                selected);
+        prepare(checkBox,
+                selected);
+
+        return cb.getContentPane();
+    }
+
+    private void prepare(JComponent component,
+                         boolean selected)
+    {
+        component.setOpaque(selected);
+        component.setForeground(selected ? SELECTION_FOREGROUND : TEXT_FOREGROUND);
+        component.setBackground(selected ? SELECTION_BACKGROUND : TEXT_BACKGROUND);
     }
 }
