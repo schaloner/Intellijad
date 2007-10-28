@@ -47,6 +47,7 @@
               <icon value="actions/expandall.png"/>
               <margin top="3" left="5" bottom="3" right="5"/>
               <text value="" noi18n="true"/>
+              <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.expand"/>
             </properties>
           </component>
           <component id="eb662" class="javax.swing.JButton" binding="collapseButton">
@@ -55,6 +56,7 @@
               <icon value="actions/collapseall.png"/>
               <margin top="3" left="5" bottom="3" right="5"/>
               <text value="" noi18n="true"/>
+              <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="action.collapse"/>
             </properties>
           </component>
           <component id="b39d8" class="javax.swing.JButton" binding="deleteButton">
@@ -62,7 +64,8 @@
             <properties>
               <icon value="actions/delete.png"/>
               <margin top="3" left="5" bottom="3" right="5"/>
-              <text value="" noi18n="true"/>
+              <text value=""/>
+              <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="message.delete-selected-files"/>
             </properties>
           </component>
         </children>
