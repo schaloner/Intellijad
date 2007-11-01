@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+    <title>Memory VFS Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="style.css" TYPE="text/css">
+</head>
+
+<body>
+<div class="mainheader">Memory VFS Manager</div>
+<div style="margin-bottom:5px; margin-top:5px;">
+    The memory VFS manager allows you to view and remove decompiled files from memory.  It's accessible through the
+    Tools/IntelliJad menu.
+</div>
+<div style="margin-bottom:5px; margin-top:5px;">
+    <img src="images/mvfs-manager.jpg" alt="The IntelliJad memory virtual file system manager"/>
+</div>
+<div style="margin-bottom:5px; margin-top:5px;">
+    Files can be viewed by expanding the tree, and selected by using the checkbox in each tree node.  The checkbox
+    selection is hierarchical, so all nodes below the selected node are also selected/deselected depending on the state
+    of the current checkbox.
+</div>
+<div style="margin-bottom:5px; margin-top:5px;">
+    <div class="sectionheader">Using the manager</div>
+    The manager has the following controls, situated to the left of the tree.
+    <table>
+        <tr>
+            <td>Expand</td>
+            <td>If a node is selected, expand it.  If nothing is selected, expand the entire tree.</td>
+        </tr>
+        <tr>
+            <td>Collapse</td>
+            <td>If a node is selected, collapse it.  If nothing is selected, collapse the entire tree.</td>
+        </tr>
+        <tr>
+            <td>Delete</td>
+            <td>Delete all selected files.</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
