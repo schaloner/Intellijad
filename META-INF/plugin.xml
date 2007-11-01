@@ -51,6 +51,12 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>0.7.1
+                <ol>
+                    <li>Various GUI tweaks.</li>
+                    <li>Added help documentation for the memory VFS manager.</li>
+                </ol>
+            </li>
             <li>0.7
                 <ol>
                     <li>Added a basic manager for the memory file system.</li>

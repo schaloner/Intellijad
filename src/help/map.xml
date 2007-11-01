@@ -21,4 +21,5 @@
     <mapID target="excludes" url="help-content/config-exclusions.html"/>
     <mapID target="navigation-triggered-decompilation" url="help-content/navigation-triggered-decompilation.html"/>
     <mapID target="intellijad-console" url="help-content/intellijad-console.html"/>
+    <mapID target="mvfs-manager" url="help-content/memory-vfs-manager.html"/>
 </map>

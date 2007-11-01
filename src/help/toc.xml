@@ -13,5 +13,6 @@
         </tocitem>
         <tocitem text="Navigation-triggered decompilation" target="navigation-triggered-decompilation"/>
         <tocitem text="IntelliJad console" target="intellijad-console"/>
+        <tocitem text="Memory VFS manager" target="mvfs-manager"/>
     </tocitem>
 </toc>

@@ -12,4 +12,5 @@
     <indexitem text="Excludes" target="excludes"/>
     <indexitem text="Navigation-triggered decompilation" target="navigation-triggered-decompilation"/>
     <indexitem text="IntelliJad console" target="intellijad-console"/>
+    <indexitem text="Memory VFS manager" target="mvfs-manager"/>
 </index>
