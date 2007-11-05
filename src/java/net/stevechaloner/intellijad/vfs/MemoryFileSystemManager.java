@@ -52,9 +52,25 @@ public class MemoryFileSystemManager
      * The content pane.
      */
     private JPanel root;
+
+    /**
+     * The file tree.
+     */
     private JTree fsTree;
+
+    /**
+     * The node expansion button.
+     */
     private JButton expandButton;
+
+    /**
+     * The node collapse button.
+     */
     private JButton collapseButton;
+
+    /**
+     * The node delete button.
+     */
     private JButton deleteButton;
 
     /**
@@ -217,18 +233,12 @@ public class MemoryFileSystemManager
      */
     public void collapse(DefaultMutableTreeNode node)
     {
-        if (node.isLeaf() && node.getParent() != null)
+        int count = node.getChildCount();
+        for (int i = 0; i < count; i++)
         {
-            fsTree.collapsePath(new TreePath(((DefaultMutableTreeNode)node.getParent()).getPath()));
+            collapse((DefaultMutableTreeNode)node.getChildAt(i));
         }
-        else
-        {
-            int count = node.getChildCount();
-            for (int i = 0; i < count; i++)
-            {
-                collapse((DefaultMutableTreeNode)node.getChildAt(i));
-            }
-        }
+        fsTree.collapsePath(new TreePath(node.getPath()));
     }
 
     /**
