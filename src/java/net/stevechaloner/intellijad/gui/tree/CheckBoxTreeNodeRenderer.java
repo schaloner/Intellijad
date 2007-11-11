@@ -18,6 +18,7 @@ package net.stevechaloner.intellijad.gui.tree;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -63,7 +64,11 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer
         prepare(checkBox,
                 selected);
 
-        return cb.getContentPane();
+        JPanel contentPane = cb.getContentPane();
+        prepare(contentPane,
+                selected);
+
+        return contentPane;
     }
 
     /**

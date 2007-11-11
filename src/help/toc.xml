@@ -9,7 +9,7 @@
             <tocitem text="Jad options" target="jad-options"/>
             <tocitem text="Limits" target="limits"/>
             <tocitem text="Prefixes" target="prefixes"/>
-            <tocitem text="Excludes" target="excludes"/>
+            <tocitem text="Exclusions" target="exclusions"/>
         </tocitem>
         <tocitem text="Navigation-triggered decompilation" target="navigation-triggered-decompilation"/>
         <tocitem text="IntelliJad console" target="intellijad-console"/>

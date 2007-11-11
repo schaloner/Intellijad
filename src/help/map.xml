@@ -18,7 +18,7 @@
     <mapID target="jad-options" url="help-content/config-jad.html"/>
     <mapID target="limits" url="help-content/config-limits.html"/>
     <mapID target="prefixes" url="help-content/config-prefixes.html"/>
-    <mapID target="excludes" url="help-content/config-exclusions.html"/>
+    <mapID target="exclusions" url="help-content/config-exclusions.html"/>
     <mapID target="navigation-triggered-decompilation" url="help-content/navigation-triggered-decompilation.html"/>
     <mapID target="intellijad-console" url="help-content/intellijad-console.html"/>
     <mapID target="mvfs-manager" url="help-content/memory-vfs-manager.html"/>
