@@ -51,6 +51,12 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.0.1
+                <ol>
+                    <li>Added quotes to decompiled class paths if a space exists.</li>
+                    <li>Normalised some documentation.</li>
+                </ol>
+            </li>
             <li>1.0
                 <ol>
                     <li>All help documentation now present and hopefully useful.</li>
