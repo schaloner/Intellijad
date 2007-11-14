@@ -18,7 +18,6 @@ package net.stevechaloner.intellijad.decompilers;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-
 import net.stevechaloner.intellijad.config.CodeStyle;
 import net.stevechaloner.intellijad.config.Config;
 import net.stevechaloner.intellijad.console.ConsoleContext;
@@ -27,7 +26,6 @@ import net.stevechaloner.intellijad.format.SourceReorganiser;
 import net.stevechaloner.intellijad.format.StyleReformatter;
 import net.stevechaloner.intellijad.util.StreamPumper;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -218,8 +216,15 @@ public abstract class AbstractDecompiler implements Decompiler
                 File targetClass = descriptor.getSourceFile(context.getTargetDirectory());
 
                 StringBuilder command = new StringBuilder(context.getCommand());
-                updateCommand(command, context.getConfig());
-                command.append(targetClass.getAbsolutePath());
+                updateCommand(command,
+                              context.getConfig());
+
+                String path = targetClass.getAbsolutePath();
+                if (path.indexOf(' ') != -1)
+                {
+                    path = "\"" + path + "\"";
+                }
+                command.append(path);
                 consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
                                           "message.executing-jad",
                                           command.toString());
