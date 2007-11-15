@@ -1,12 +1,11 @@
 package net.stevechaloner.intellijad.vfs;
 
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.DeprecatedVirtualFile;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,7 @@ import java.util.Map;
  *
  * @author Steve Chaloner
  */
-public class MemoryVirtualFile extends VirtualFile
+public class MemoryVirtualFile extends DeprecatedVirtualFile
 {
     /**
      * The name of the file.
