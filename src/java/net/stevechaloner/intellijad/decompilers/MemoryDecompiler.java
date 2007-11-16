@@ -96,6 +96,8 @@ public class MemoryDecompiler extends AbstractDecompiler
         MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
         MemoryVirtualFile file = new MemoryVirtualFile(descriptor.getClassName() + IntelliJadConstants.DOT_JAVA_EXTENSION,
                                                        content);
+        file.putUserData(IntelliJadConstants.DECOMPILED_BY_INTELLIJAD,
+                         true);
 
         reformatToStyle(context,
                         file);

@@ -83,4 +83,9 @@ public class IntelliJadConstants
      * The key for retrieving the decompilation listener from the user data.
      */
     public static final Key<NavigationListener> DECOMPILE_LISTENER = new Key<NavigationListener>("decompile-listener");
+
+    /**
+     * The key for checking if a file was decompiled by IntelliJad.
+     */
+    public static final Key<Boolean> DECOMPILED_BY_INTELLIJAD = new Key<Boolean>("decompiled-by-intellijad");
 }
