@@ -33,13 +33,31 @@
                 class="net.stevechaloner.intellijad.actions.DecompileAction"
                 text="Decompile"
                 description="Decompile classfile">
-            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Compile"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Compile"/>
+            <add-to-group group-id="EditorPopupMenu"
+                          anchor="after"
+                          relative-to-action="Compile"/>
+            <add-to-group group-id="ProjectViewPopupMenu"
+                          anchor="after"
+                          relative-to-action="Compile"/>
+        </action>
+        <action id="net.stevechaloner.intellijad.CloseAllDecompiledFiles"
+                class="net.stevechaloner.intellijad.actions.CloseAllDecompiledFilesAction"
+                text="Close All IntelliJad-decompiled Files"
+                description="Closes all files open due to decompilation by IntelliJad">
+            <add-to-group group-id="WindowMenu"
+                          anchor="before"
+                          relative-to-action="CloseAllUnpinnedEditors"/>
+            <add-to-group group-id="EditorTabPopupMenu"
+                          anchor="before"
+                          relative-to-action="CloseAllUnpinnedEditors"/>
+
         </action>
         <group id="net.stevechaloner.intellijad.group.toolmenu"
                text="IntelliJad"
                popup="true">
-            <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="ExternalToolsGroup"/>
+            <add-to-group group-id="ToolsMenu"
+                          anchor="before"
+                          relative-to-action="ExternalToolsGroup"/>
             <action id="net.stevechaloner.intellijad.ViewMemoryFS"
                     class="net.stevechaloner.intellijad.actions.ViewMemoryFileSystemAction"
                     text="Manage Memory File System"
@@ -56,6 +74,7 @@
                 <ol>
                     <li>The memory VFS is now based entirely on the deprecated VFS to sort out issues with library
                     attachment and file creation.</li>
+                    <li>Added CloseAllX-like functionality for decompiled file editors.</li>
                 </ol>
             </li>
             <li>1.0.1
