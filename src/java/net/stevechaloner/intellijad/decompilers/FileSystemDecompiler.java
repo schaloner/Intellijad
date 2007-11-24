@@ -24,7 +24,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.config.Config;
@@ -33,7 +32,6 @@ import net.stevechaloner.intellijad.console.ConsoleEntryType;
 import net.stevechaloner.intellijad.util.LibraryUtil;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFileSystem;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -261,6 +259,9 @@ public class FileSystemDecompiler extends MemoryDecompiler
                 }
                 else
                 {
+                    // there are two reasons we could be in here - the class file was opened from an arbitrary location
+                    // outside of the project, or the class is found in the SDK.  In the first instance, there is no
+                    // library
                     context.getConsoleContext().addMessage(ConsoleEntryType.LIBRARY_OPERATION,
                                                            "message.library-not-found-for-class",
                                                            descriptor.getClassName());
