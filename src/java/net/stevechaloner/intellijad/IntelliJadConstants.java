@@ -88,4 +88,9 @@ public class IntelliJadConstants
      * The key for checking if a file was decompiled by IntelliJad.
      */
     public static final Key<Boolean> DECOMPILED_BY_INTELLIJAD = new Key<Boolean>("decompiled-by-intellijad");
+
+    /**
+     * The key for checking if a project SDK has the IntelliJad source root attached.
+     */
+    public static final Key<Boolean> SDK_SOURCE_ROOT_ATTACHED = new Key<Boolean>("sdk-source-root-attached");
 }
