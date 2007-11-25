@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -70,11 +70,18 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.2.0
+                <ol>
+                    <li>Added source to SDK to enable SDK-class attachment.</li>
+                    <li>Decompilation is attemped up to three more times per class if the resulting output is empty.</li>
+                </ol>
+            </li>
             <li>1.1.0
                 <ol>
                     <li>The memory VFS is now based entirely on the deprecated VFS to sort out issues with library
                     attachment and file creation.</li>
                     <li>Added CloseAllX-like functionality for decompiled file editors.</li>
+                    <li>Project-level configurations are now stored in the workspace file.</li>
                 </ol>
             </li>
             <li>1.0.1

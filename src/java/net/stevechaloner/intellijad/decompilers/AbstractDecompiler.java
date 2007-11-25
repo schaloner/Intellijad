@@ -241,6 +241,20 @@ public abstract class AbstractDecompiler implements Decompiler
                                                                       context,
                                                                       output,
                                                                       err);
+
+                        // occasionally the result will be empty - there's no point in endlessly
+                        // decompiling, so it gives a couple of more chances
+                        int count = 0;
+                        while (output.size() == 0 && count++ < 3)
+                        {
+                            consoleContext.addMessage(ConsoleEntryType.DECOMPILATION_OPERATION,
+                                                      "message.reexecuting-jad",
+                                                      command.toString());
+                            resultType = runExternalDecompiler(command.toString(),
+                                                               context,
+                                                               output,
+                                                               err);
+                        }
                         decompiledFile = getDecompilationAftermathHandler(resultType).execute(context,
                                                                                               descriptor,
                                                                                               targetClass,

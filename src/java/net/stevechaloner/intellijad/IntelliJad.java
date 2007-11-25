@@ -22,13 +22,13 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
-import com.intellij.openapi.projectRoots.ProjectRootType;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.ProjectJdk;
+import com.intellij.openapi.projectRoots.ProjectRootType;
+import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.actions.NavigationListener;
@@ -120,8 +120,7 @@ public class IntelliJad implements ApplicationComponent,
         project.putUserData(IntelliJadConstants.DECOMPILE_LISTENER,
                             navigationListener);
 
-        List<Runnable> taskList = projectClosingTasks.get(project);
-        taskList.add(new Runnable()
+        projectClosingTasks.get(project).add(new Runnable()
         {
             public void run()
             {
@@ -141,28 +140,6 @@ public class IntelliJad implements ApplicationComponent,
                     if (files.length > 0)
                     {
                         model.commit();
-                    }
-                }
-            }
-        });
-        taskList.add(new Runnable()
-        {
-            public void run()
-            {
-                if (project.getUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED) != null)
-                {
-                    ProjectJdk projectJdk = ProjectRootManager.getInstance(project).getProjectJdk();
-                    if (projectJdk != null)
-                    {
-                        SdkModificator sdkModificator = projectJdk.getSdkModificator();
-                        if (sdkModificator != null)
-                        {
-                            MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
-                            VirtualFile root = vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT);
-                            sdkModificator.removeRoot(root,
-                                                      ProjectRootType.SOURCE);
-                            sdkModificator.commitChanges();
-                        }
                     }
                 }
             }
@@ -226,17 +203,26 @@ public class IntelliJad implements ApplicationComponent,
         long startTime = System.currentTimeMillis();
         Project project = envContext.getProject();
 
-        checkSDKRoot(project);
-
         IntelliJadConsole console = consoleManager.getConsole(project);
         ConsoleContext consoleContext = console.createConsoleContext("message.class",
-                                                                           descriptor.getClassName());
+                                                                     descriptor.getClassName());
         Config config = PluginUtil.getConfig(project);
         ValidationResult validationResult = EnvironmentValidator.validateEnvironment(config,
                                                                                      envContext,
                                                                                      consoleContext);
         if (!validationResult.isCancelled() && validationResult.isValid())
         {
+            if (config.isDecompileToMemory())
+            {
+                checkSDKRoot(project);
+            }
+            else
+            {
+                LocalFileSystem lfs = (LocalFileSystem)VirtualFileManager.getInstance().getFileSystem(LocalFileSystem.PROTOCOL);
+                checkSDKRoot(project,
+                             lfs.findFileByPath(config.getOutputDirectory()));
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.append(config.getJadPath()).append(' ');
             sb.append(config.renderCommandLinePropertyDescriptors());
@@ -260,7 +246,6 @@ public class IntelliJad implements ApplicationComponent,
                 {
                     file = decompiler.decompile(descriptor,
                                                 context);
-                    // todo check if file is already open in case of FS decomp
                     if (file != null)
                     {
                         editorManager.closeFile(descriptor.getClassFile());
@@ -285,6 +270,8 @@ public class IntelliJad implements ApplicationComponent,
         }
     }
 
+
+
     /**
      * Checks if the project SDK has the IntelliJad source root attached, and attaches it if it is not.
      * <p>
@@ -298,40 +285,75 @@ public class IntelliJad implements ApplicationComponent,
     {
         if (project.getUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED) == null)
         {
-            ApplicationManager.getApplication().runWriteAction(new Runnable()
-            {
-                public void run()
-                {
-                    ProjectJdk projectJdk = ProjectRootManager.getInstance(project).getProjectJdk();
-                    if (projectJdk != null)
-                    {
-                        SdkModificator sdkModificator = projectJdk.getSdkModificator();
-                        if (sdkModificator != null)
-                        {
-                            MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
-                            VirtualFile root = vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT);
-                            VirtualFile[] files = sdkModificator.getRoots(ProjectRootType.SOURCE);
-                            boolean attached = false;
-                            for (int i = 0; !attached && i < files.length; i++)
-                            {
-                                if (files[i].equals(root))
-                                {
-                                    attached = true;
-                                }
-                            }
-                            if (!attached)
-                            {
-                                sdkModificator.addRoot(root,
-                                                       ProjectRootType.SOURCE);
-                                sdkModificator.commitChanges();
-                            }
-                        }
-                    }
-                }
-            });
+            MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+            checkSDKRoot(project,
+                         vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT));
             project.putUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED,
                                 Boolean.TRUE);
         }
+    }
+
+    /**
+     * Checks if the project SDK has the given source root attached, and attaches it if it is not.
+     * <p>
+     * This has to be done just-in-time to ensure the SDK directory index has been initialised; it can't be done in the
+     * {@link IntelliJad#projectOpened} method.
+     * </p>
+     *
+     * @param project the project
+     * @param root the source root
+     */
+    private void checkSDKRoot(final Project project,
+                              final VirtualFile root)
+    {
+        ApplicationManager.getApplication().runWriteAction(new Runnable()
+        {
+            public void run()
+            {
+                ProjectJdk projectJdk = ProjectRootManager.getInstance(project).getProjectJdk();
+                if (projectJdk != null)
+                {
+                    SdkModificator sdkModificator = projectJdk.getSdkModificator();
+                    if (sdkModificator != null)
+                    {
+                        VirtualFile[] files = sdkModificator.getRoots(ProjectRootType.SOURCE);
+                        boolean attached = false;
+                        for (int i = 0; !attached && i < files.length; i++)
+                        {
+                            if (files[i].equals(root))
+                            {
+                                attached = true;
+                            }
+                        }
+                        if (!attached)
+                        {
+                            sdkModificator.addRoot(root,
+                                                   ProjectRootType.SOURCE);
+                            sdkModificator.commitChanges();
+                            projectClosingTasks.get(project).add(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    ProjectJdk projectJdk = ProjectRootManager.getInstance(project).getProjectJdk();
+                                    if (projectJdk != null)
+                                    {
+                                        SdkModificator sdkModificator = projectJdk.getSdkModificator();
+                                        if (sdkModificator != null)
+                                        {
+                                            sdkModificator.removeRoot(root,
+                                                                      ProjectRootType.SOURCE);
+                                            sdkModificator.commitChanges();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        project.putUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED,
+                            Boolean.TRUE);
     }
 
     /**
