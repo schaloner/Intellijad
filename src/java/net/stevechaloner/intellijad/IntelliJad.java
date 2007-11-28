@@ -283,7 +283,7 @@ public class IntelliJad implements ApplicationComponent,
      */
     private void checkSDKRoot(final Project project)
     {
-        if (project.getUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED) == null)
+        if (project.getUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED) != Boolean.TRUE)
         {
             MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
             checkSDKRoot(project,

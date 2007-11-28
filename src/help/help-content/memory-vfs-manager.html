@@ -36,7 +36,25 @@
         </tr>
         <tr>
             <td>Delete</td>
-            <td>Delete all selected files.</td>
+            <td>Delete all selected files from the memory VFS.  This only affects decompiled sources, it will not
+                affect classes in any way.</td>
+        </tr>
+        <tr>
+            <td>Attach IntelliJad memory VFS as source root</td>
+            <td>
+                Manually attaches the memory VFS to the project SDK's source roots.  This operation occurs automatically
+                on decompilation, but this option allows you to attach it if you have removed it, either using the
+                "Remove IntelliJad memory VFS from source root" option or via the JDK manager.  If the memory VFS is
+                already attached to the project SDK, this option will be disabled.
+            </td>
+        </tr>
+        <tr>
+            <td>Remove IntelliJad memory VFS from source root</td>
+            <td>
+                Removes the memory VFS from the project SDK's source roots.  This is the same as manually removing the
+                source root using the JDK manager.  If the memory VFS is not attached to the project SDK, this option
+                will be disabled.
+            </td>
         </tr>
     </table>
 </div>

@@ -14,17 +14,21 @@
  */
 package net.stevechaloner.intellijad.vfs;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.ProjectJdk;
+import com.intellij.openapi.projectRoots.ProjectRootType;
+import com.intellij.openapi.projectRoots.SdkModificator;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTree;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTreeNode;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,6 +76,8 @@ public class MemoryFileSystemManager
      * The node delete button.
      */
     private JButton deleteButton;
+    private JButton attachIntelliJadRootButton;
+    private JButton detachIntelliJadRootButton;
 
     /**
      * Initialises a new instance of this
@@ -100,6 +106,91 @@ public class MemoryFileSystemManager
             public void actionPerformed(ActionEvent e)
             {
                 delete(project);
+            }
+        });
+
+        if (project == null)
+        {
+            attachIntelliJadRootButton.setEnabled(false);
+            detachIntelliJadRootButton.setEnabled(false);
+        }
+        else
+        {
+            initSourceRootControls(project);
+        }
+    }
+
+    /**
+     * Initialises the controls to attach/detach the memory VFS root as
+     * a source root to the project SDK.
+     *
+     * @param project the project
+     */
+    private void initSourceRootControls(@NotNull final Project project)
+    {
+        boolean attached = false;
+        MemoryVirtualFileSystem vfs = (MemoryVirtualFileSystem) VirtualFileManager.getInstance().getFileSystem(IntelliJadConstants.INTELLIJAD_PROTOCOL);
+        final VirtualFile sourceRoot = vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT);
+        ProjectJdk projectJdk = ProjectRootManager.getInstance(project).getProjectJdk();
+        final SdkModificator sdkModificator = (projectJdk != null) ? projectJdk.getSdkModificator() : null;
+        if (sdkModificator != null)
+        {
+            VirtualFile[] files = sdkModificator.getRoots(ProjectRootType.SOURCE);
+            for (int i = 0; !attached && i < files.length; i++)
+            {
+                if (files[i].equals(sourceRoot))
+                {
+                    attached = true;
+                }
+            }
+        }
+
+        attachIntelliJadRootButton.setEnabled(!attached);
+        detachIntelliJadRootButton.setEnabled(attached);
+
+        final Application application = ApplicationManager.getApplication();
+        detachIntelliJadRootButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+                application.runWriteAction(new Runnable()
+                {
+                    public void run()
+                    {
+                        if (sdkModificator != null)
+                        {
+                            sdkModificator.removeRoot(sourceRoot,
+                                                      ProjectRootType.SOURCE);
+                            sdkModificator.commitChanges();
+                        }
+                    }
+                });
+                attachIntelliJadRootButton.setEnabled(true);
+                detachIntelliJadRootButton.setEnabled(false);
+                project.putUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED,
+                                    Boolean.TRUE);
+            }
+        });
+        attachIntelliJadRootButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+                application.runWriteAction(new Runnable()
+                {
+                    public void run()
+                    {
+                        if (sdkModificator != null)
+                        {
+                            sdkModificator.addRoot(sourceRoot,
+                                                   ProjectRootType.SOURCE);
+                            sdkModificator.commitChanges();
+                        }
+                    }
+                });
+                attachIntelliJadRootButton.setEnabled(false);
+                detachIntelliJadRootButton.setEnabled(true);
+                project.putUserData(IntelliJadConstants.SDK_SOURCE_ROOT_ATTACHED,
+                                    Boolean.FALSE);
             }
         });
     }

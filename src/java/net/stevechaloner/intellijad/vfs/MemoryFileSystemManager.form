@@ -68,6 +68,24 @@
               <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="message.delete-selected-files"/>
             </properties>
           </component>
+          <component id="73b8e" class="javax.swing.JButton" binding="attachIntelliJadRootButton">
+            <constraints/>
+            <properties>
+              <icon value="general/add.png"/>
+              <margin top="3" left="5" bottom="3" right="5"/>
+              <text value="" noi18n="true"/>
+              <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="message.attach-intellijad-memory-source-root"/>
+            </properties>
+          </component>
+          <component id="9b05" class="javax.swing.JButton" binding="detachIntelliJadRootButton">
+            <constraints/>
+            <properties>
+              <icon value="general/remove.png"/>
+              <margin top="3" left="5" bottom="3" right="5"/>
+              <text value="" noi18n="true"/>
+              <toolTipText resource-bundle="net/stevechaloner/intellijad/messages-i18n" key="message.detach-intellijad-memory-source-root"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
     </children>

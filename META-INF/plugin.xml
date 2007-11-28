@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -70,6 +70,11 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.2.1
+                <ol>
+                    <li>Added attach/detech memory VFS source root controls to memory VFS manager.</li>
+                </ol>
+            </li>
             <li>1.2.0
                 <ol>
                     <li>Added source to SDK to enable SDK-class attachment.</li>
