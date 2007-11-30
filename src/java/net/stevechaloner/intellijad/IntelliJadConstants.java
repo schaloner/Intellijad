@@ -1,5 +1,3 @@
-package net.stevechaloner.intellijad;
-
 /*
  * Copyright 2007 Steve Chaloner
  *
@@ -15,12 +13,13 @@ package net.stevechaloner.intellijad;
  * specific language governing permissions and limitations under the License.
  */
 
+package net.stevechaloner.intellijad;
+
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.Key;
+import net.stevechaloner.intellijad.actions.NavigationListener;
 
 import java.util.List;
-
-import net.stevechaloner.intellijad.actions.NavigationListener;
 
 /**
  * Constants used by IntelliJad.
