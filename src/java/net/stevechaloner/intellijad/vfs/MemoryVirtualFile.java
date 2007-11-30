@@ -208,7 +208,7 @@ public class MemoryVirtualFile extends DeprecatedVirtualFile
     /** {@inheritDoc} */
     public byte[] contentsToByteArray() throws IOException
     {
-        return content.getBytes();
+        return content == null ? new byte[0] : content.getBytes();
     }
 
     /** {@inheritDoc} */
@@ -220,7 +220,7 @@ public class MemoryVirtualFile extends DeprecatedVirtualFile
     /** {@inheritDoc} */
     public long getLength()
     {
-        return content.getBytes().length;
+        return content == null ? 0 : content.getBytes().length;
     }
 
     /** {@inheritDoc} */
@@ -233,7 +233,7 @@ public class MemoryVirtualFile extends DeprecatedVirtualFile
     /** {@inheritDoc} */
     public InputStream getInputStream() throws IOException
     {
-        return new ByteArrayInputStream(content.getBytes());
+        return new ByteArrayInputStream(contentsToByteArray());
     }
 
     /**

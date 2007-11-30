@@ -27,8 +27,11 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import net.stevechaloner.intellijad.IntelliJad;
 import net.stevechaloner.intellijad.IntelliJadConstants;
 import net.stevechaloner.intellijad.IntelliJadResourceBundle;
+import net.stevechaloner.intellijad.gui.Visitable;
+import net.stevechaloner.intellijad.gui.Visitor;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTree;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTreeNode;
+import net.stevechaloner.intellijad.gui.tree.VisitableTreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +39,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JLabel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
@@ -45,6 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -78,6 +82,7 @@ public class MemoryFileSystemManager
     private JButton deleteButton;
     private JButton attachIntelliJadRootButton;
     private JButton detachIntelliJadRootButton;
+    private JLabel fileSizeLabel;
 
     /**
      * Initialises a new instance of this
@@ -90,7 +95,7 @@ public class MemoryFileSystemManager
             public void actionPerformed(ActionEvent e)
             {
                 Object o = fsTree.getLastSelectedPathComponent();
-                expand(o == null ? (DefaultMutableTreeNode)fsTree.getModel().getRoot() : (DefaultMutableTreeNode)o);
+                expand(o == null ? (VisitableTreeNode)fsTree.getModel().getRoot() : (VisitableTreeNode)o);
             }
         });
         collapseButton.addActionListener(new ActionListener()
@@ -98,7 +103,7 @@ public class MemoryFileSystemManager
             public void actionPerformed(ActionEvent e)
             {
                 Object o = fsTree.getLastSelectedPathComponent();
-                collapse(o == null ? (DefaultMutableTreeNode)fsTree.getModel().getRoot() : (DefaultMutableTreeNode)o);
+                collapse(o == null ? (VisitableTreeNode)fsTree.getModel().getRoot() : (VisitableTreeNode)o);
             }
         });
         deleteButton.addActionListener(new ActionListener()
@@ -254,11 +259,11 @@ public class MemoryFileSystemManager
     {
         List<MemoryVirtualFile> files = new ArrayList<MemoryVirtualFile>();
 
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)fsTree.getModel().getRoot();
+        VisitableTreeNode root = (VisitableTreeNode)fsTree.getModel().getRoot();
         int count = root.getChildCount();
         for (int i = 0; i < count; i++)
         {
-            getSelectedFiles((DefaultMutableTreeNode)root.getChildAt(i),
+            getSelectedFiles((VisitableTreeNode)root.getChildAt(i),
                              files);
         }
 
@@ -280,7 +285,7 @@ public class MemoryFileSystemManager
      * @param node the root node
      * @param files the list of files
      */
-    private void getSelectedFiles(DefaultMutableTreeNode node,
+    private void getSelectedFiles(VisitableTreeNode node,
                                   List<MemoryVirtualFile> files)
     {
         CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
@@ -291,7 +296,7 @@ public class MemoryFileSystemManager
         int count = node.getChildCount();
         for (int i = 0; i < count; i++)
         {
-            getSelectedFiles((DefaultMutableTreeNode)node.getChildAt(i),
+            getSelectedFiles((VisitableTreeNode)node.getChildAt(i),
                              files);
         }
     }
@@ -301,18 +306,18 @@ public class MemoryFileSystemManager
      *
      * @param node the node to expand
      */
-    private void expand(DefaultMutableTreeNode node)
+    private void expand(VisitableTreeNode node)
     {
         if (node.isLeaf() && node.getParent() != null)
         {
-            fsTree.expandPath(new TreePath(((DefaultMutableTreeNode)node.getParent()).getPath()));
+            fsTree.expandPath(new TreePath(((VisitableTreeNode)node.getParent()).getPath()));
         }
         else
         {
             int count = node.getChildCount();
             for (int i = 0; i < count; i++)
             {
-                expand((DefaultMutableTreeNode)node.getChildAt(i));
+                expand((VisitableTreeNode)node.getChildAt(i));
             }
         }
     }
@@ -322,12 +327,12 @@ public class MemoryFileSystemManager
      *
      * @param node the node to collapse
      */
-    public void collapse(DefaultMutableTreeNode node)
+    public void collapse(VisitableTreeNode node)
     {
         int count = node.getChildCount();
         for (int i = 0; i < count; i++)
         {
-            collapse((DefaultMutableTreeNode)node.getChildAt(i));
+            collapse((VisitableTreeNode)node.getChildAt(i));
         }
         fsTree.collapsePath(new TreePath(node.getPath()));
     }
@@ -337,14 +342,14 @@ public class MemoryFileSystemManager
      *
      * @param node the current node
      */
-    private void populateChildren(DefaultMutableTreeNode node)
+    private void populateChildren(VisitableTreeNode node)
     {
         CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
         MemoryVirtualFile file = (MemoryVirtualFile)cbtn.getUserObject();
         for (VirtualFile childFile : file.getChildren())
         {
             CheckBoxTreeNode childPayload = new CheckBoxTreeNode(childFile);
-            DefaultMutableTreeNode child = new DefaultMutableTreeNode(childPayload);
+            VisitableTreeNode child = new VisitableTreeNode(childPayload);
             node.add(child);
             populateChildren(child);
         }
@@ -362,7 +367,27 @@ public class MemoryFileSystemManager
 
     private void createUIComponents()
     {
+        fileSizeLabel = new JLabel();
         rebuildTreeModel();
+    }
+
+    private void updateFileSizeInfo()
+    {
+        VisitableTreeNode root = (VisitableTreeNode)fsTree.getModel().getRoot();
+        FileByteCounter fileByteCounter = new FileByteCounter();
+        root.accept(fileByteCounter);
+
+        SelectedByteCounter selectedByteCounter = new SelectedByteCounter();
+        root.accept(selectedByteCounter);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(IntelliJadResourceBundle.message("message.total-file-size"));
+        sb.append(fileByteCounter.getByteCount());
+        sb.append("b ");
+        sb.append(IntelliJadResourceBundle.message("message.selected-file-size"));
+        sb.append(selectedByteCounter.getByteCount());
+        sb.append('b');
+        fileSizeLabel.setText(sb.toString());
     }
 
     /**
@@ -374,7 +399,7 @@ public class MemoryFileSystemManager
         MemoryVirtualFile rootFile = (MemoryVirtualFile) vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT);
 
         CheckBoxTreeNode rootPayload = new CheckBoxTreeNode(rootFile);
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootPayload);
+        VisitableTreeNode root = new VisitableTreeNode(rootPayload);
         populateChildren(root);
         DefaultTreeModel model = new DefaultTreeModel(root);
 
@@ -385,6 +410,58 @@ public class MemoryFileSystemManager
         else
         {
             fsTree.setModel(model);
+        }
+        updateFileSizeInfo();
+    }
+
+    /**
+     * Counts the bytes in every file encountered.
+     */
+    private class FileByteCounter implements Visitor
+    {
+        private long byteCount;
+
+        public void visit(Visitable visitable)
+        {
+            VisitableTreeNode node = (VisitableTreeNode)visitable;
+            CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();
+            if (cbtn != null)
+            {
+                byteCount += getByteCountForNode(cbtn);
+            }
+
+            for (Enumeration children = node.children(); children.hasMoreElements();)
+            {
+                ((VisitableTreeNode)children.nextElement()).accept(this);
+            }
+        }
+
+        protected long getByteCountForNode(CheckBoxTreeNode node)
+        {
+            MemoryVirtualFile file = (MemoryVirtualFile) node.getUserObject();
+            long byteCount = 0;
+            if (file != null)
+            {
+                byteCount = file.getLength();
+            }
+            return byteCount;
+        }
+
+        long getByteCount()
+        {
+            return byteCount;
+        }
+    }
+
+    private class SelectedByteCounter extends FileByteCounter
+    {
+        protected long getByteCountForNode(CheckBoxTreeNode node) {
+            long byteCount = 0;
+            if (node.isSelected())
+            {
+                byteCount = super.getByteCountForNode(node);
+            }
+            return byteCount;
         }
     }
 }
