@@ -31,15 +31,17 @@ import net.stevechaloner.intellijad.gui.Visitable;
 import net.stevechaloner.intellijad.gui.Visitor;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTree;
 import net.stevechaloner.intellijad.gui.tree.CheckBoxTreeNode;
+import net.stevechaloner.intellijad.gui.tree.CheckBoxTreeNodeListener;
+import net.stevechaloner.intellijad.gui.tree.TreeEvent;
 import net.stevechaloner.intellijad.gui.tree.VisitableTreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.JLabel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
@@ -54,7 +56,7 @@ import java.util.List;
 /**
  * A basic management GUI for the memory file system, allowing users to see and delete files.
  */
-public class MemoryFileSystemManager
+public class MemoryFileSystemManager implements CheckBoxTreeNodeListener
 {
     /**
      * The content pane.
@@ -80,8 +82,20 @@ public class MemoryFileSystemManager
      * The node delete button.
      */
     private JButton deleteButton;
+
+    /**
+     * Button for attaching the memory VFS to the SDK source root.
+     */
     private JButton attachIntelliJadRootButton;
+
+    /**
+     * Button for detaching the memory VFS from the SDK source root.
+     */
     private JButton detachIntelliJadRootButton;
+
+    /**
+     * Used to display total/selected file sizes.
+     */
     private JLabel fileSizeLabel;
 
     /**
@@ -123,6 +137,8 @@ public class MemoryFileSystemManager
         {
             initSourceRootControls(project);
         }
+
+        updateFileSizeInfo();
     }
 
     /**
@@ -245,6 +261,7 @@ public class MemoryFileSystemManager
                     IntelliJad.getLogger().error(ioe);
                 }
             }
+            updateFileSizeInfo();
         }
     }
 
@@ -349,6 +366,7 @@ public class MemoryFileSystemManager
         for (VirtualFile childFile : file.getChildren())
         {
             CheckBoxTreeNode childPayload = new CheckBoxTreeNode(childFile);
+            childPayload.addListener(this);
             VisitableTreeNode child = new VisitableTreeNode(childPayload);
             node.add(child);
             populateChildren(child);
@@ -367,7 +385,6 @@ public class MemoryFileSystemManager
 
     private void createUIComponents()
     {
-        fileSizeLabel = new JLabel();
         rebuildTreeModel();
     }
 
@@ -383,7 +400,7 @@ public class MemoryFileSystemManager
         StringBuilder sb = new StringBuilder();
         sb.append(IntelliJadResourceBundle.message("message.total-file-size"));
         sb.append(fileByteCounter.getByteCount());
-        sb.append("b ");
+        sb.append("b     ");
         sb.append(IntelliJadResourceBundle.message("message.selected-file-size"));
         sb.append(selectedByteCounter.getByteCount());
         sb.append('b');
@@ -399,6 +416,7 @@ public class MemoryFileSystemManager
         MemoryVirtualFile rootFile = (MemoryVirtualFile) vfs.findFileByPath(IntelliJadConstants.INTELLIJAD_ROOT);
 
         CheckBoxTreeNode rootPayload = new CheckBoxTreeNode(rootFile);
+        rootPayload.addListener(this);
         VisitableTreeNode root = new VisitableTreeNode(rootPayload);
         populateChildren(root);
         DefaultTreeModel model = new DefaultTreeModel(root);
@@ -411,6 +429,17 @@ public class MemoryFileSystemManager
         {
             fsTree.setModel(model);
         }
+    }
+
+    /** {@inheritDoc} */
+    public void nodeSelected(TreeEvent<CheckBoxTreeNode> e)
+    {
+        updateFileSizeInfo();
+    }
+
+    /** {@inheritDoc} */
+    public void nodeDeselected(TreeEvent<CheckBoxTreeNode> e)
+    {
         updateFileSizeInfo();
     }
 
@@ -421,7 +450,7 @@ public class MemoryFileSystemManager
     {
         private long byteCount;
 
-        public void visit(Visitable visitable)
+        public void visit(@NotNull Visitable visitable)
         {
             VisitableTreeNode node = (VisitableTreeNode)visitable;
             CheckBoxTreeNode cbtn = (CheckBoxTreeNode)node.getUserObject();

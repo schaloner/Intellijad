@@ -12,19 +12,25 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package net.stevechaloner.intellijad.gui;
 
-import org.jetbrains.annotations.NotNull;
+package net.stevechaloner.intellijad.gui.tree;
 
 /**
- * Visitable objects can be visited by {@link Visitor}s.
+ * Listener interface for {@link CheckBoxTreeNode}s.
  */
-public interface Visitable
+public interface CheckBoxTreeNodeListener
 {
     /**
-     * Accept the visitor.
+     * Fired when the node becomes selected.
      *
-     * @param visitor the visitor
+     * @param e the event
      */
-    void accept(@NotNull Visitor visitor);
+    void nodeSelected(TreeEvent<CheckBoxTreeNode> e);
+
+    /**
+     * Fired when the node becomes unselected.
+     *
+     * @param e the event
+     */
+    void nodeDeselected(TreeEvent<CheckBoxTreeNode> e);
 }

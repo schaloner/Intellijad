@@ -70,6 +70,11 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.2.2
+                <ol>
+                    <li>Added total/selected file size counter to memory VFS manager.</li>
+                </ol>
+            </li>
             <li>1.2.1
                 <ol>
                     <li>Added attach/detech memory VFS source root controls to memory VFS manager.</li>

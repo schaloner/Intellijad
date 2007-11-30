@@ -17,6 +17,9 @@ package net.stevechaloner.intellijad.gui.tree;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A wrapper for tree node user objects that adds selection state.
  */
@@ -32,6 +35,11 @@ public class CheckBoxTreeNode
      * The selection state of the node.
      */
     private boolean selected = false;
+
+    /**
+     * Selection event listeners.
+     */
+    private final List<CheckBoxTreeNodeListener> listeners = new ArrayList<CheckBoxTreeNodeListener>();
 
     /**
      * Initialises a new instance of this class.
@@ -75,6 +83,24 @@ public class CheckBoxTreeNode
     public void setSelected(boolean selected)
     {
         this.selected = selected;
+        TreeEvent<CheckBoxTreeNode> e = new TreeEvent<CheckBoxTreeNode>()
+        {
+            public CheckBoxTreeNode getSource()
+            {
+                return CheckBoxTreeNode.this;
+            }
+        };
+        for (CheckBoxTreeNodeListener listener : listeners)
+        {
+            if (selected)
+            {
+                listener.nodeSelected(e);
+            }
+            else
+            {
+                listener.nodeDeselected(e);
+            }
+        }
     }
 
     /**
@@ -102,5 +128,20 @@ public class CheckBoxTreeNode
     public String toString()
     {
         return getText();
+    }
+
+    /**
+     * Registers a listener with this node.
+     *
+     * @param listener the listener
+     */
+    public void addListener(@NotNull CheckBoxTreeNodeListener listener)
+    {
+        listeners.add(listener);
+    }
+
+    public void removeListener(CheckBoxTreeNodeListener listener)
+    {
+        listeners.remove(listener);
     }
 }
