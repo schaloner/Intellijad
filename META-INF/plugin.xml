@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>1.2.2</version>
+    <version>1.2.2.1</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -70,6 +70,12 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.2.2.1
+                <ol>
+                    <li>Flush release to synchronize svn repository and released version inconsistencies due to server issues recently.</li>
+                    <li>Fixed a couple of typos in the help.</li>
+                </ol>
+            </li>
             <li>1.2.2
                 <ol>
                     <li>Added total/selected file size counter to memory VFS manager.</li>
