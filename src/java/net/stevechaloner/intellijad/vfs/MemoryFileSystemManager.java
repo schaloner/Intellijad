@@ -468,12 +468,12 @@ public class MemoryFileSystemManager implements CheckBoxTreeNodeListener
         protected long getByteCountForNode(CheckBoxTreeNode node)
         {
             MemoryVirtualFile file = (MemoryVirtualFile) node.getUserObject();
-            long byteCount = 0;
+            long bc = 0;
             if (file != null)
             {
-                byteCount = file.getLength();
+                bc = file.getLength();
             }
-            return byteCount;
+            return bc;
         }
 
         long getByteCount()

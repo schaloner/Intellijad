@@ -151,6 +151,6 @@ class JarDecompilationDescriptorFactory extends DecompilationDescriptorFactory
         {
             packageName = packageName + "/";
         }
-        return packageName == null ? "" : packageName;
+        return packageName;
     }
 }

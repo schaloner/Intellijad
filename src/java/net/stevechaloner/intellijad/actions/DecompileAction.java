@@ -50,7 +50,7 @@ public class DecompileAction extends AnAction
         if (IntelliJadConstants.CLASS_EXTENSION.equals(DataContextUtil.getFileExtension(dataContext)))
         {
             IntelliJad intelliJad = PluginUtil.getComponent(IntelliJad.class);
-            VirtualFile file = DataContextUtil.getFile(e.getDataContext());
+            VirtualFile file = DataKeys.VIRTUAL_FILE.getData(e.getDataContext());
             if (file != null)
             {
                 DecompilationDescriptor descriptor = DecompilationDescriptorFactory.getFactoryForFile(file).create(file);

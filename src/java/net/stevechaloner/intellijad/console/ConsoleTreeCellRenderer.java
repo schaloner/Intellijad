@@ -36,7 +36,6 @@ class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
      * Mapping for console entry types to icons.
      */
     private static final Map<ConsoleEntryType, Icon> ICONS = new HashMap<ConsoleEntryType, Icon>()
-
     {
         {
             put(ConsoleEntryType.ROOT,
@@ -61,7 +60,8 @@ class ConsoleTreeCellRenderer extends DefaultTreeCellRenderer
     /**
      * Initialises a new instance of this class.
      */
-    public ConsoleTreeCellRenderer() {
+    public ConsoleTreeCellRenderer()
+    {
         setUI(new MultiLineLabelUI());
     }
 

@@ -94,33 +94,39 @@ public class ProjectConfigComponent implements ProjectComponent,
     {
     }
 
+    /** {@inheritDoc} */
     @NotNull
     public String getComponentName()
     {
         return COMPONENT_NAME;
     }
 
+    /** {@inheritDoc} */
     public void projectOpened()
     {
-        // called when project is opened
+        // no-op
     }
 
+    /** {@inheritDoc} */
     public void projectClosed()
     {
-        // called when project is being closed
+        // no-op
     }
 
+    /** {@inheritDoc} */
     @Nls
     public String getDisplayName()
     {
         return configComponent.getDisplayName();
     }
 
+    /** {@inheritDoc} */
     public Icon getIcon()
     {
         return configComponent.getIcon();
     }
 
+    /** {@inheritDoc} */
     @Nullable
     @NonNls
     public String getHelpTopic()
@@ -128,39 +134,51 @@ public class ProjectConfigComponent implements ProjectComponent,
         return configComponent.getHelpTopic();
     }
 
+    /** {@inheritDoc} */
     public JComponent createComponent()
     {
         return configComponent.createComponent();
     }
 
+    /** {@inheritDoc} */
     public boolean isModified()
     {
         return configComponent.isModified();
     }
 
+    /** {@inheritDoc} */
     public void apply() throws ConfigurationException
     {
         configComponent.apply();
     }
 
+    /** {@inheritDoc} */
     public void reset()
     {
         configComponent.reset();
     }
 
+    /** {@inheritDoc} */
     public void disposeUIResources()
     {
         configComponent.disposeUIResources();
     }
 
+    /** {@inheritDoc} */
     public void readExternal(Element element) throws InvalidDataException
     {
         configComponent.readExternal(element);
     }
 
+    /** {@inheritDoc} */
     public void writeExternal(Element element) throws WriteExternalException
     {
-        configComponent.writeExternal(element);
+        // only persist the configuration when it's actually used
+        Config config = configComponent.getConfig();
+        if (config.isUseProjectSpecificSettings())
+        {
+            configComponent.writeExternal(element);
+        }
     }
 
     /**

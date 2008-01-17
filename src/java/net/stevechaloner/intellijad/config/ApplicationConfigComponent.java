@@ -66,6 +66,7 @@ public class ApplicationConfigComponent implements ApplicationComponent,
         }
     };
 
+    /** {@inheritDoc} */
     @NonNls
     @NotNull
     public String getComponentName()

@@ -30,6 +30,7 @@ import net.stevechaloner.intellijad.vfs.MemoryFileSystemManager;
  */
 public class ViewMemoryFileSystemAction extends AnAction
 {
+    /** {@inheritDoc} */
     public void actionPerformed(AnActionEvent e)
     {
         Project project = DataKeys.PROJECT.getData(e.getDataContext());
