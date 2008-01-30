@@ -171,10 +171,15 @@ public class IntelliJad implements ApplicationComponent,
      */
     public void projectClosing(final Project project)
     {
-        List<Runnable> tasks= projectClosingTasks.get(project);
-        for (Runnable task : tasks)
+        Config config = PluginUtil.getConfig(project);
+
+        if (config.isCleanupSourceRoots())
         {
-            ApplicationManager.getApplication().runWriteAction(task);
+            List<Runnable> tasks= projectClosingTasks.get(project);
+            for (Runnable task : tasks)
+            {
+                ApplicationManager.getApplication().runWriteAction(task);
+            }
         }
     }
 

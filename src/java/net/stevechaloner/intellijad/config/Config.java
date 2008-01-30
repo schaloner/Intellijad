@@ -53,6 +53,8 @@ public class Config implements DOMable
     private static final PropertyDescriptor<Boolean> USE_PROJECT_SPECIFIC_SETTINGS = new ImmutablePropertyDescriptor<Boolean>("use-project-specific-settings");
     private static final PropertyDescriptor<String> REFORMAT_STYLE = new ImmutablePropertyDescriptor<String>("reformat-style",
                                                                                                              CodeStyle.PREFERRED_STYLE.getName());
+    private static final PropertyDescriptor<Boolean> CLEANUP_SOURCE_ROOTS = new ImmutablePropertyDescriptor<Boolean>("cleanup-source-roots",
+                                                                                                                     Boolean.TRUE);
 
     /**
      * The persistence model.
@@ -126,6 +128,7 @@ public class Config implements DOMable
         registerStringProperty(JAD_PATH, dpc);
         registerBooleanProperty(USE_PROJECT_SPECIFIC_SETTINGS, dpc);
         registerStringProperty(REFORMAT_STYLE, dpc);
+        registerBooleanProperty(CLEANUP_SOURCE_ROOTS, dpc);
 
         dpc.put(EXCLUSION_TABLE_MODEL,
                 new DOMableTableModel(EXCLUSION_TABLE_MODEL,
@@ -802,6 +805,17 @@ public class Config implements DOMable
         value.setValue(reformatStyle);
     }
 
+    public boolean isCleanupSourceRoots()
+    {
+        return CLEANUP_SOURCE_ROOTS.getValue(propertyContainer.get(CLEANUP_SOURCE_ROOTS));
+    }
+
+    public void setCleanupSourceRoots(boolean cleanupSourceRoots)
+    {
+        DOMableGeneric<Boolean> value = (DOMableGeneric<Boolean>) propertyContainer.get(CLEANUP_SOURCE_ROOTS);
+        value.setValue(cleanupSourceRoots);
+    }
+
     @NotNull
     public PropertyDescriptor getPropertyDescriptor()
     {
@@ -921,5 +935,6 @@ public class Config implements DOMable
         setClearAndCloseConsoleOnSuccess(config.isClearAndCloseConsoleOnSuccess());
         setUseProjectSpecificSettings(config.isUseProjectSpecificSettings());
         setReformatStyle(config.getReformatStyle());
+        setCleanupSourceRoots(config.isCleanupSourceRoots());
     }
 }

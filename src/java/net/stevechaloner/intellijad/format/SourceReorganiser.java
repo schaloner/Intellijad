@@ -17,7 +17,6 @@ package net.stevechaloner.intellijad.format;
 
 import com.intellij.openapi.diagnostic.Logger;
 
-import net.stevechaloner.intellijad.IntelliJadResourceBundle;
 import net.stevechaloner.intellijad.decompilers.DecompilationContext;
 import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 
@@ -65,9 +64,6 @@ public class SourceReorganiser
             in = new LineNumberReader(new StringReader(file.getContent()));
             List<String> lines = reformat(in);
             Block currentBlock = new Block();
-            currentBlock.add(new Line(IntelliJadResourceBundle.message("message.decompiled-through-intellijad"),
-                                      1,
-                                      false));
             for (String line : lines)
             {
                 Matcher lineNumberMatcher = LINE_NUMBER_PATTERN.matcher(line);

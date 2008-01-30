@@ -61,7 +61,13 @@ public class MemoryDecompiler extends AbstractDecompiler
                                        @NotNull ByteArrayOutputStream output,
                                        @NotNull ByteArrayOutputStream err) throws DecompilationException
             {
-                String content = output.toString();
+                StringBuilder sb = new StringBuilder(output.toString());
+                sb.insert(0,
+                          System.getProperty("line.separator"));
+                sb.insert(0,
+                          IntelliJadResourceBundle.message("message.decompiled-through-intellijad"));
+
+                String content = sb.toString();
                 if (DecompilationDescriptor.ClassPathType.FS == descriptor.getClassPathType())
                 {
                     DecompilationDescriptorFactory.getFactoryForFile(targetClass).update(descriptor,

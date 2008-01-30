@@ -102,7 +102,8 @@ public class ConfigForm
     @Control private JCheckBox alwaysExcludePackagesRecursivelyCheckBox;
     @Control private JComboBox reformatStyle;
     @Control private JButton packageChooserButton;
-    private JCheckBox clearAndCloseConsoleCheckBox;
+    @Control private JCheckBox cleanupSourceRootsCheckBox;
+    @Control private JCheckBox clearAndCloseConsoleCheckBox;
 
     private ExclusionTableModel exclusionTableModel;
 
@@ -564,6 +565,10 @@ public class ConfigForm
         {
             return true;
         }
+        if (cleanupSourceRootsCheckBox.isSelected() != data.isCleanupSourceRoots())
+        {
+            return true;
+        }
         return false;
     }
 
@@ -597,7 +602,8 @@ public class ConfigForm
         allPackagesTextField.setText(data.getPrefixPackages());
         unusedExceptionNamesTextField.setText(data.getPrefixUnusedExceptions());
         alwaysExcludePackagesRecursivelyCheckBox.setSelected(data.isAlwaysExcludeRecursively());
-
+        cleanupSourceRootsCheckBox.setSelected(data.isCleanupSourceRoots());
+        
         if (project != null)
         {
             setControlsEnabled(project,
@@ -635,6 +641,7 @@ public class ConfigForm
         data.setPrefixPackages(allPackagesTextField.getText());
         data.setPrefixUnusedExceptions(unusedExceptionNamesTextField.getText());
         data.setAlwaysExcludeRecursively(alwaysExcludePackagesRecursivelyCheckBox.isSelected());
+        data.setCleanupSourceRoots(cleanupSourceRootsCheckBox.isSelected());
 
         if (project != null)
         {
