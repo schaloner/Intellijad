@@ -74,6 +74,11 @@ public class IntelliJadConstants
     public static final String CONFIGURATION_HELP_TOPIC = "intellijad";
 
     /**
+     * The key for checking if a project is primed for IntelliJad's updates.
+     */
+    public static final Key<Boolean> INTELLIJAD_PRIMED = new Key<Boolean>("intellijad-primed");
+
+    /**
      * The key for retrieving generated source libraries from the user data.
      */
     public static final Key<List<Library>> GENERATED_SOURCE_LIBRARIES = new Key<List<Library>>("generated-source-libraries");

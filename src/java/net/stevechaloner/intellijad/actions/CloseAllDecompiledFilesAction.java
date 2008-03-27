@@ -36,10 +36,11 @@ public class CloseAllDecompiledFilesAction extends AnAction
     public void update(AnActionEvent e) {
         Project project = DataKeys.PROJECT.getData(e.getDataContext());
         boolean enabled = false;
-	if (project != null)
+        if (project != null)
+        {
             List<VirtualFile> files = new ArrayList<VirtualFile>(Arrays.asList(FileEditorManager.getInstance(project).getOpenFiles()));
 
-            for (int i = 0; !hasDecompiledFiles && i < files.size(); i++) {
+            for (int i = 0; !enabled && i < files.size(); i++) {
                 if (files.get(i).getUserData(IntelliJadConstants.DECOMPILED_BY_INTELLIJAD) != null)
                 {
                     enabled = true;

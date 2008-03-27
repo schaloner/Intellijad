@@ -111,6 +111,16 @@ public class IntelliJad implements ApplicationComponent,
      */
     public void projectOpened(final Project project)
     {
+        primeProject(project);
+    }
+
+    /**
+     * Primes the project for any alterations and updates made by IntelliJad.
+     *
+     * @param project the project
+     */
+    public void primeProject(final Project project)
+    {
         project.putUserData(IntelliJadConstants.GENERATED_SOURCE_LIBRARIES,
                             new ArrayList<Library>());
 
@@ -144,6 +154,8 @@ public class IntelliJad implements ApplicationComponent,
                 }
             }
         });
+        project.putUserData(IntelliJadConstants.INTELLIJAD_PRIMED,
+                            true);
     }
 
     /**
@@ -151,7 +163,17 @@ public class IntelliJad implements ApplicationComponent,
      */
     public boolean canCloseProject(Project project)
     {
-        // no-op
+        Config config = PluginUtil.getConfig(project);
+        if (config.isCleanupSourceRoots())
+        {
+            List<Runnable> tasks= projectClosingTasks.get(project);
+            for (Runnable task : tasks)
+            {
+                ApplicationManager.getApplication().runWriteAction(task);
+            }
+        }
+        project.putUserData(IntelliJadConstants.INTELLIJAD_PRIMED,
+                            false);
         return true;
     }
 
@@ -171,16 +193,7 @@ public class IntelliJad implements ApplicationComponent,
      */
     public void projectClosing(final Project project)
     {
-        Config config = PluginUtil.getConfig(project);
-
-        if (config.isCleanupSourceRoots())
-        {
-            List<Runnable> tasks= projectClosingTasks.get(project);
-            for (Runnable task : tasks)
-            {
-                ApplicationManager.getApplication().runWriteAction(task);
-            }
-        }
+        // no-op
     }
 
     /**
@@ -206,7 +219,15 @@ public class IntelliJad implements ApplicationComponent,
                           DecompilationDescriptor descriptor)
     {
         long startTime = System.currentTimeMillis();
+
         Project project = envContext.getProject();
+
+        // this allows recovery from a canProjectClose method vetoed by another manager
+        Boolean isPrimed = project.getUserData(IntelliJadConstants.INTELLIJAD_PRIMED);
+        if (isPrimed == null || !isPrimed)
+        {
+            primeProject(project);
+        }
 
         IntelliJadConsole console = consoleManager.getConsole(project);
         ConsoleContext consoleContext = console.createConsoleContext("message.class",

@@ -4,7 +4,7 @@
 <idea-plugin>
     <name>IntelliJad</name>
     <description>IntelliJad integrates the Jad decompiler into IntelliJ.</description>
-    <version>1.4.0</version>
+    <version>1.4.2</version>
     <vendor logo="/scn-idea-16.png">Steve Chaloner</vendor>
     <idea-version since-build="7126"/>
 
@@ -70,6 +70,16 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.4.2
+                <ol>
+                    <li>NPE when opening Window menu with no project open fixed.</li>
+                </ol>
+            </li>
+            <li>1.4.1
+                <ol>
+                    <li>Project cleanup is now triggered from canProjectClose to circumvent a deadlock issue.</li>
+                </ol>
+            </li>
             <li>1.4.0
                 <ol>
                     <li>Project cleanup is optional, based on a config flag.  This is a temporary facility while project-closing deadlock issues are examined.</li>
