@@ -78,8 +78,7 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
         label.setText(cbtn.getText());
         label.setIcon(NodeIconUtil.getIconFor(jTree,
                                               value,
-                                              expanded,
-                                              leaf));
+                                              expanded));
 
         checkBox.addItemListener(new ItemListener()
         {

@@ -56,8 +56,7 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer
         checkBox.setSelected(cbtn.isSelected());
         label.setIcon(NodeIconUtil.getIconFor(jTree,
                                               value,
-                                              expanded,
-                                              leaf));
+                                              expanded));
 
         prepare(label,
                 selected);

@@ -16,6 +16,7 @@
 package net.stevechaloner.intellijad.gui.tree;
 
 import net.stevechaloner.intellijad.gui.IntelliJadIcons;
+import net.stevechaloner.intellijad.vfs.MemoryVirtualFile;
 
 import javax.swing.Icon;
 import javax.swing.JTree;
@@ -27,8 +28,7 @@ class NodeIconUtil
 {
     static Icon getIconFor(JTree jTree,
                            Object value,
-                           boolean expanded,
-                           boolean leaf)
+                           boolean expanded)
     {
         Icon icon = IntelliJadIcons.JAVA;
         if (value.equals(jTree.getModel().getRoot()))
@@ -37,11 +37,23 @@ class NodeIconUtil
         }
         else
         {
-            if (!leaf)
+            if (isDirectory((VisitableTreeNode)value))
             {
                 icon = expanded ? IntelliJadIcons.PACKAGE_OPEN : IntelliJadIcons.PACKAGE_CLOSED;
             }
         }
         return icon;
+    }
+
+    private static boolean isDirectory(VisitableTreeNode node)
+    {
+        boolean isDirectory = false;
+        Object o = node.getUserObject();
+        if (o instanceof CheckBoxTreeNode)
+        {
+            MemoryVirtualFile file = (MemoryVirtualFile)((CheckBoxTreeNode)o).getUserObject();
+            isDirectory = file.isDirectory();
+        }
+        return isDirectory;
     }
 }
